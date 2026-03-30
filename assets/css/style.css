@@ -177,13 +177,15 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px var(--pad-x);
+  padding: calc(24px + var(--safe-top)) var(--pad-x) 24px;
   transition: background 0.4s var(--r), backdrop-filter 0.4s;
 }
 #nav.scrolled {
   background: rgba(11,9,6,0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  padding-top: calc(14px + var(--safe-top));
+  padding-bottom: 14px;
 }
 .nav-logo {
   font-family: 'Cormorant Garamond', serif;
@@ -1471,6 +1473,104 @@ footer {
   .sec-divider { margin: 72px 0 44px; }
   .nav-links { display: none !important; }
 }
+
+@media (max-width: 768px) {
+
+  /* ── Nav ── */
+  #nav { padding: 20px var(--pad-x); }
+
+  /* ── Hero (landing) ── */
+  .hero-v2-title {
+    font-size: clamp(44px, 11vw, 72px);
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow { font-size: .6rem; letter-spacing: .35em; }
+  .hero-scroll { bottom: 32px; }
+
+  /* ── Works grid (landing) ── */
+  .works-grid {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+  .work-card.wide { grid-column: 1/2; aspect-ratio: 16/9; }
+  .work-card.tall { aspect-ratio: 3/4; max-height: 70vh; }
+
+  /* ── Photo masonry ── */
+  .photo-grid {
+    columns: 2;
+    column-gap: 3px;
+  }
+  .photo-grid .photo-item {
+    margin-bottom: 3px;
+  }
+
+  /* ── Page hero ── */
+  .page-hero { height: 45vh; min-height: 320px; }
+  .page-title { font-size: clamp(44px, 8vw, 80px); }
+  .page-hero-content { bottom: 32px; }
+
+  /* ── Brookside narrative ── */
+  .bs-opener { height: 80vh; min-height: 480px; }
+  .bs-title h1 { font-size: clamp(56px, 12vw, 100px); }
+  .bs-wide { height: 55vh; min-height: 320px; }
+  .bs-duo { grid-template-columns: 1fr; }
+  .bs-duo-cell { height: 60vh; min-height: 340px; }
+  .bs-trio { grid-template-columns: 1fr 1fr; }
+  .bs-trio-cell { height: 44vh; min-height: 260px; }
+  .bs-asym, .bs-asym-r { grid-template-columns: 1fr; }
+  .bs-cell { height: 58vh; min-height: 320px; }
+  .bs-bw { height: 70vh; min-height: 400px; }
+  .bs-statement {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 64px var(--pad-x);
+  }
+
+  /* ── Retratos editorial ── */
+  .rt-hero { height: 75vh; min-height: 420px; }
+  .rt-split { grid-template-columns: 1fr; }
+  .rt-cell { height: 62vh; min-height: 360px; }
+  .rt-single { height: 72vh; min-height: 400px; }
+  .rt-text {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 64px var(--pad-x);
+  }
+
+  /* ── Services ── */
+  .services-hero {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    padding: calc(var(--pad-y) + 60px) var(--pad-x) var(--pad-y);
+  }
+  .services-headline { font-size: clamp(44px, 10vw, 80px); }
+  .service-row { grid-template-columns: auto 1fr; gap: 20px; }
+  .service-tags { display: none; }
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+
+  /* ── About strip ── */
+  .about-strip {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 80px var(--pad-x);
+  }
+
+  /* ── Sec divider ── */
+  .sec-divider { margin: 64px 0 40px; }
+
+  /* ── Film strip (if present) ── */
+  .film-frame { height: 220px; }
+  .film-frame.wide { width: 320px; }
+
+  /* ── Footer ── */
+  footer {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 36px var(--pad-x);
+  }
+  .footer-copy { order: 3; width: 100%; text-align: center; }
+}
+
 
 @media (max-width: 560px) {
   .photo-grid { columns: 1; }
