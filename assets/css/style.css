@@ -1919,3 +1919,22 @@ footer {
     color: var(--ink);
   }
 }
+
+/* ── Layout containment ──────────────────────────────────── */
+.photo-grid {
+  contain: layout style;
+}
+.bs-grid {
+  contain: layout style;
+}
+
+/* ── Content visibility (skip rendering off-screen) ─────── */
+@supports (content-visibility: auto) {
+  .photo-grid,
+  .bs-grid,
+  .retratos-grid,
+  .services-list {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 600px;
+  }
+}
