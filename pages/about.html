@@ -62,6 +62,7 @@
     </ul>
     <div class="nav-right">
       <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." class="nav-hire-landing" target="_blank" rel="noopener"><span>Hire Me</span></a>
+      <button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma" title="Switch language">ES</button>
       <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
@@ -136,5 +137,19 @@
   <script src="../assets/js/main.js"></script>
   <script>(function(){var h=document.getElementById('hamburger'),o=document.getElementById('navOverlay'),c=document.getElementById('overlayClose');function op(){o.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}function cl(){o.classList.remove('open');h.classList.remove('open');document.body.style.overflow='';}h&&h.addEventListener('click',function(){o.classList.contains('open')?cl():op();});c&&c.addEventListener('click',cl);o&&o.querySelectorAll('.overlay-link,.overlay-hire').forEach(function(a){a.addEventListener('click',cl);});document.addEventListener('keydown',function(e){if(e.key==='Escape')cl();});}());</script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+  (function(){
+    var btn = document.getElementById('langToggle');
+    var lang = localStorage.getItem('gcLang') || 'es';
+    function apply(l){
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-es]').forEach(function(el){ el.textContent = el.getAttribute('data-'+l); });
+      if(btn) btn.textContent = l === 'es' ? 'EN' : 'ES';
+      localStorage.setItem('gcLang', l);
+    }
+    apply(lang);
+    if(btn) btn.addEventListener('click', function(){ apply(localStorage.getItem('gcLang')==='es'?'en':'es'); });
+  })();
+  </script>
 </body>
 </html>
