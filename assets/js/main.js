@@ -239,4 +239,24 @@
     revealTargets.forEach(el => revealObs.observe(el));
   }
 
+  /* ── Photo cursor ──────────────────────────────────── */
+  const photoCursor = document.getElementById('photoCursor');
+  if (photoCursor) {
+    let cx = 0, cy = 0, tx = 0, ty = 0;
+    document.addEventListener('mousemove', e => {
+      tx = e.clientX; ty = e.clientY;
+      photoCursor.style.left = tx + 'px';
+      photoCursor.style.top  = ty + 'px';
+    });
+
+    const photoTargets = document.querySelectorAll(
+      '.photo-item, .work-card, .bs-opener, .bs-wide, .bs-duo-cell, ' +
+      '.bs-trio-cell, .bs-cell, .bs-bw, .rt-hero, .rt-cell, .rt-single, .section-card'
+    );
+    photoTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => photoCursor.classList.add('active'));
+      el.addEventListener('mouseleave', () => photoCursor.classList.remove('active'));
+    });
+  }
+
 })();

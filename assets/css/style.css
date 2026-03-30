@@ -1600,3 +1600,36 @@ footer {
   .film-frame { height: 200px; width: 150px; }
   .film-frame.wide { width: 280px; }
 }
+
+/* ── Custom photo cursor ────────────────────────────── */
+.photo-item,
+.work-card,
+.bs-opener,
+.bs-wide,
+.bs-duo-cell,
+.bs-trio-cell,
+.bs-cell,
+.bs-bw,
+.bs-single,
+.rt-hero,
+.rt-cell,
+.rt-single,
+.section-card {
+  cursor: none;
+}
+
+.photo-cursor {
+  position: fixed;
+  width: 40px; height: 40px;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity .25s ease, transform .1s ease;
+}
+.photo-cursor svg {
+  width: 100%; height: 100%;
+}
+.photo-cursor.active {
+  opacity: 1;
+}
