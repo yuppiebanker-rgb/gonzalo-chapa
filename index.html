@@ -38,6 +38,99 @@
   </style>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b0906">
+
+  <style id="image-fix">
+    /* ═══ FORCE ALL IMAGES TO SHOW ═══════════════════════════ */
+
+    /* HERO BACKGROUND */
+    .hero-bg {
+      position: absolute !important;
+      inset: 0 !important;
+      overflow: hidden !important;
+      z-index: 0 !important;
+    }
+    .hero-bg img,
+    .hero-bg picture img {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center 35% !important;
+      display: block !important;
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      filter: brightness(0.72) contrast(1.06) !important;
+    }
+    .hero-content {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+    .hero-v2::after {
+      z-index: 1 !important;
+    }
+
+    /* FILM STRIP */
+    .film-frame {
+      flex: 0 0 auto !important;
+      height: 260px !important;
+      overflow: hidden !important;
+      display: block !important;
+      position: relative !important;
+    }
+    .film-frame img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      filter: brightness(0.82) contrast(1.04) !important;
+    }
+
+    /* WORK CARDS */
+    .work-card {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    .work-card-img {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      filter: brightness(0.72) contrast(1.05) !important;
+      z-index: 0 !important;
+    }
+    .work-card::after {
+      z-index: 1 !important;
+    }
+    .work-card-info {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+    .work-card-arrow {
+      z-index: 2 !important;
+    }
+
+    /* GALLERY PAGES - img.ph */
+    img.ph {
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    .photo-item.img-revealed img.ph,
+    .narr-item.img-revealed img.ph,
+    .narr-full.img-revealed img.ph {
+      clip-path: none !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -115,8 +208,7 @@
                 srcset="assets/images/brookside/4-_DSC8092.jpg" />
         <img src="assets/images/brookside/5-_DSC8118.jpg"
              alt="Gonzalo Chapa — Photography" loading="eager"
-             fetchpriority="high"
-             style="object-position: center 35%;" />
+             fetchpriority="high" />
       </picture>
     </div>
     <div class="hero-content">
