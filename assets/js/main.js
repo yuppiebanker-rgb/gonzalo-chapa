@@ -289,4 +289,16 @@
     });
   }
 
+})(
+  /* ── Film strip drag ── */
+  (function(){
+    var strip=document.getElementById('filmStrip');
+    if(!strip)return;
+    var down=false,sx,sl;
+    strip.addEventListener('mousedown',function(e){down=true;sx=e.pageX-strip.offsetLeft;sl=strip.scrollLeft;});
+    strip.addEventListener('mouseleave',function(){down=false;});
+    strip.addEventListener('mouseup',function(){down=false;});
+    strip.addEventListener('mousemove',function(e){if(!down)return;e.preventDefault();strip.scrollLeft=sl-(e.pageX-strip.offsetLeft-sx)*1.4;});
+  })();
+
 })();
