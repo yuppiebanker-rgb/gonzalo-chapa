@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /pages/delivery.html
+Sitemap: https://gchapa.com/sitemap.xml
