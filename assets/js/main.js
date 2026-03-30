@@ -216,4 +216,25 @@
     });
   });
 
+  /* ── Image reveal on scroll ────────────────────────── */
+  const revealTargets = document.querySelectorAll(
+    '.photo-item, .work-card, .bs-opener, .bs-wide, .bs-duo-cell, ' +
+    '.bs-trio-cell, .bs-cell, .bs-bw, .rt-hero, .rt-cell, .rt-single, .page-hero'
+  );
+
+  if (revealTargets.length) {
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('img-revealed');
+          }, Math.min(i * 60, 300));
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+    revealTargets.forEach(el => revealObs.observe(el));
+  }
+
 })();
