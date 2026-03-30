@@ -104,6 +104,7 @@
   var lb = document.getElementById('lightbox');
   var lbImg = lb ? lb.querySelector('img') : null;
   var lbCaption = lb ? lb.querySelector('.lb-caption') : null;
+  var lbCounter = document.getElementById('lb-counter');
   var gallery = [];
   var lbIdx = 0;
 
@@ -130,6 +131,7 @@
     setTimeout(function () {
       lbImg.src = gallery[lbIdx].src;
       if (lbCaption) lbCaption.textContent = gallery[lbIdx].caption;
+      if (lbCounter) lbCounter.textContent = (lbIdx + 1) + ' / ' + gallery.length;
       lbImg.style.opacity = '1';
     }, 130);
   }

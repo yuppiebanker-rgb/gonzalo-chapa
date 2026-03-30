@@ -1454,6 +1454,33 @@ footer {
   transition: transform 10s ease;
 }
 
+/* ── Lightbox counter ───────────────────────────────── */
+.lb-counter {
+  position: absolute;
+  top: 28px; left: 36px;
+  font-size: .6rem; letter-spacing: .28em;
+  text-transform: uppercase; color: rgba(244,239,230,.4);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Gallery scroll counter ─────────────────────────── */
+.gallery-counter {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 400;
+  font-size: .58rem; letter-spacing: .32em;
+  text-transform: uppercase; color: rgba(192,164,110,.5);
+  font-family: 'DM Sans', sans-serif;
+  background: rgba(11,9,6,.7);
+  backdrop-filter: blur(8px);
+  padding: 6px 16px; border-radius: 20px;
+  pointer-events: none;
+  transition: opacity .4s ease;
+  opacity: 0;
+}
+.gallery-counter.visible { opacity: 1; }
+
 @media (prefers-reduced-motion: reduce) {
   .photo-item img,
   .work-card img,

@@ -60,6 +60,7 @@
     <button class="lb-next">&#8594;</button>
     <img src="" alt="">
     <div class="lb-caption"></div>
+    <p id="lb-counter" class="lb-counter"></p>
   </div>
 
   <!-- ═══ OPENING HERO ═══ -->
@@ -203,5 +204,27 @@
   </footer>
 
   <script src="../assets/js/main.js"></script>
+<div class="gallery-counter" id="galleryCounter">01</div>
+<script>
+(function() {
+  const counter = document.getElementById('galleryCounter');
+  const items = document.querySelectorAll('.photo-item, .bs-cell, .bs-duo-cell, .bs-trio-cell, .bs-wide, .bs-bw, .bs-single, .bs-opener');
+  if (!items.length || !counter) return;
+  const total = items.length;
+  let hideTimer;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = [...items].indexOf(e.target) + 1;
+        counter.textContent = String(idx).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+        counter.classList.add('visible');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => counter.classList.remove('visible'), 2200);
+      }
+    });
+  }, { threshold: 0.4 });
+  items.forEach(el => obs.observe(el));
+})();
+</script>
 </body>
 </html>
