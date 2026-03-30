@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gonzalo Chapa · Photography</title>
+  <meta name="description" content="Gonzalo Chapa — Photography portfolio. Street, Eventos, Retratos, Brookside. Monterrey, México.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- Head -->
+      <ellipse cx="70" cy="38" rx="16" ry="19"/>
+      <!-- Torso -->
+      <rect x="52" y="55" width="36" height="50" rx="4"/>
+      <!-- Left arm (holding camera) -->
+      <rect x="88" y="58" width="40" height="12" rx="4"/>
+      <!-- Upper arm angle -->
+      <rect x="118" y="36" width="12" height="36" rx="4"/>
+      <!-- Camera body -->
+      <rect x="108" y="24" width="42" height="28" rx="3"/>
+      <!-- Lens barrel -->
+      <ellipse cx="160" cy="38" rx="14" ry="12"/>
+      <!-- Viewfinder bump -->
+      <rect x="112" y="18" width="14" height="8" rx="2"/>
+      <!-- Grip -->
+      <rect x="108" y="28" width="8" height="22" rx="2"/>
+      <!-- Shutter button -->
+      <circle cx="130" cy="22" r="3"/>
+    </svg>
+    <div class="loader-line"></div>
+    <div class="loader-text">Gonzalo Chapa · Photography</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div id="progress"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">G. Chapa</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="pages/street.html">Street</a>
+        <a href="pages/eventos.html">Eventos</a>
+        <a href="pages/retratos.html">Retratos</a>
+        <a href="pages/brookside.html">Brookside</a>
+        <a href="pages/hire.html">Services</a>
+      </div>
+      <a href="pages/hire.html" class="hire-btn">Hire Me</a>
+      <button id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV OVERLAY -->
+  <div class="nav-overlay">
+    <button id="overlayClose" aria-label="Close menu">&times;</button>
+    <div class="nav-overlay-links">
+      <a href="pages/street.html">Street</a>
+      <a href="pages/eventos.html">Eventos</a>
+      <a href="pages/retratos.html">Retratos</a>
+      <a href="pages/brookside.html">Brookside</a>
+      <a href="pages/hire.html">Services</a>
+    </div>
+    <a href="https://wa.me/528187997500" target="_blank" class="nav-overlay-cta">Hire Me on WhatsApp</a>
+    <div class="nav-overlay-footer">
+      +52 81 8799 7500<br>
+      @my_memories.jpeg<br>
+      gchapa2602@gmail.com
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button class="lb-close">&times;</button>
+    <button class="lb-prev">&#8592;</button>
+    <button class="lb-next">&#8594;</button>
+    <img src="" alt="">
+    <div class="lb-caption"></div>
+  </div>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero-v2">
+    <div class="hero-content">
+      <p class="hero-eyebrow fi">Monterrey · M&eacute;xico</p>
+      <h1 class="hero-title fi d1">
+        <em>Fotograf&iacute;a</em>
+        <span>Gonzalo Chapa</span>
+      </h1>
+      <div class="hero-btns fi d2">
+        <a href="pages/hire.html" class="btn-ghost">Ver Servicios &rarr;</a>
+        <a href="https://wa.me/528187997500" target="_blank" class="btn-gold">Contratar</a>
+      </div>
+    </div>
+    <div class="scroll-cue">
+      <span class="arrow">&darr;</span>
+      <span class="label">scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══ TICKER ═══ -->
+  <section class="ticker-section">
+    <div class="ticker-row left">
+      <div class="ticker-inner">G. Chapa &middot; Fotograf&iacute;a &middot; Monterrey &middot; Street &middot; Eventos &middot; Retratos &middot; Brookside &middot; </div>
+    </div>
+    <div class="ticker-row right">
+      <div class="ticker-inner">STREET &middot; PORTRAIT &middot; EVENTS &middot; SIERRA MADRE &middot; CARRETERA &middot; SPGG &middot; AVAILABLE FOR HIRE &middot; MONTERREY NL &middot; </div>
+    </div>
+  </section>
+
+  <!-- ═══ DIVIDER ═══ -->
+  <div class="sec-divider fi">
+    <span>Selected Works</span>
+  </div>
+
+  <!-- ═══ WORKS GRID ═══ -->
+  <section class="works-grid">
+    <a href="pages/street.html" class="work-card tall fi">
+      <div class="work-card-bg" style="background:#1a1610;"></div>
+      <div class="work-card-info">
+        <h3>Street</h3>
+        <div class="count">38 IMAGES</div>
+      </div>
+      <div class="work-card-arrow">&nearr;</div>
+    </a>
+    <a href="pages/retratos.html" class="work-card tall fi d1">
+      <div class="work-card-bg" style="background:#1e1a14;"></div>
+      <div class="work-card-info">
+        <h3>Retratos</h3>
+        <div class="count">4 IMAGES</div>
+      </div>
+      <div class="work-card-arrow">&nearr;</div>
+    </a>
+    <a href="pages/eventos.html" class="work-card wide fi">
+      <div class="work-card-bg" style="background:#141210;"></div>
+      <div class="work-card-info">
+        <h3>Eventos</h3>
+        <div class="count">14 IMAGES</div>
+      </div>
+      <div class="work-card-arrow">&nearr;</div>
+    </a>
+    <a href="pages/brookside.html" class="work-card tall bw fi">
+      <div class="work-card-bg" style="background:#161412;"></div>
+      <div class="work-card-info">
+        <h3>Brookside</h3>
+        <div class="count">17 IMAGES</div>
+      </div>
+      <div class="work-card-arrow">&nearr;</div>
+    </a>
+    <a href="pages/hire.html" class="work-card tall fi d1">
+      <div class="work-card-bg" style="background:#0e0c08;"></div>
+      <div class="work-card-info">
+        <h3>Services</h3>
+        <div class="count">HIRE ME</div>
+      </div>
+      <div class="work-card-arrow">&nearr;</div>
+    </a>
+  </section>
+
+  <!-- ═══ ABOUT STRIP ═══ -->
+  <section class="about-strip fi">
+    <blockquote>
+      Every frame is a<br>
+      <span class="highlight">declaration</span><br>
+      of where we are.
+    </blockquote>
+    <div class="about-body">
+      <p>Monterrey-based photographer specializing in street, events, and portrait work. Documenting the city's energy — one honest frame at a time.</p>
+      <a href="https://wa.me/528187997500" target="_blank" class="btn-wa">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.725-1.393A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.697-6.332-1.893l-.442-.296-3.26.961.882-3.412-.315-.462A9.935 9.935 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Hire on WhatsApp
+      </a>
+      <a href="pages/hire.html" class="text-link">Ver Servicios &rarr;</a>
+    </div>
+  </section>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/528187997500" target="_blank" class="wa-float">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.725-1.393A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.697-6.332-1.893l-.442-.296-3.26.961.882-3.412-.315-.462A9.935 9.935 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+    Hire Me
+    <span class="wa-pulse"></span>
+  </a>
+
+  <!-- BACK TO TOP -->
+  <button class="back-top" aria-label="Back to top">&uarr;</button>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">G. Chapa</div>
+    <div class="footer-center">&copy; 2025 Gonzalo Chapa &middot; Monterrey, M&eacute;xico</div>
+    <div class="footer-right">
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank">Instagram</a>
+      <a href="https://wa.me/528187997500" target="_blank">WhatsApp</a>
+      <a href="pages/hire.html">Hire</a>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
