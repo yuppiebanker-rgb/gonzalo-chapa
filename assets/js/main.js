@@ -194,4 +194,26 @@
     if (href === path) a.classList.add('active');
   });
 
+  /* ── Page transitions ──────────────────────────────── */
+  document.body.classList.add('page-transition-in');
+
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (
+      !href ||
+      href.startsWith('#') ||
+      href.startsWith('http') ||
+      href.startsWith('mailto') ||
+      href.startsWith('tel') ||
+      link.target === '_blank'
+    ) return;
+
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = link.href;
+      document.body.classList.add('page-transition-out');
+      setTimeout(() => { window.location.href = target; }, 340);
+    });
+  });
+
 })();
