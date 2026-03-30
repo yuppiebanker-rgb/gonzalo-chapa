@@ -49,30 +49,20 @@
   var progress = document.getElementById('progress');
   var backTop = document.querySelector('.back-top');
 
-  function onScroll() {
-    var y = window.scrollY;
-    var docH = document.documentElement.scrollHeight - window.innerHeight;
-
-    // Nav
-    if (nav) {
-      if (y > 50) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        const y    = window.scrollY;
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        nav?.classList.toggle('scrolled', y > 50);
+        if (progress) progress.style.width = Math.min((y / docH) * 100, 100) + '%';
+        backTop?.classList.toggle('show', y > 400);
+        scrollTicking = false;
+      });
+      scrollTicking = true;
     }
-
-    // Progress
-    if (progress && docH > 0) {
-      progress.style.width = (y / docH * 100) + '%';
-    }
-
-    // Back to top
-    if (backTop) {
-      if (y > 400) backTop.classList.add('show');
-      else backTop.classList.remove('show');
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  }, { passive: true });
 
   /* ── 4. HAMBURGER + OVERLAY ── */
   var hamburger = document.getElementById('hamburger');
@@ -247,25 +237,17 @@
     if (href === path) a.classList.add('active');
   });
 
-  /* ── Page transitions ──────────────────────────────── */
-  document.body.classList.add('page-transition-in');
-
+  /* ── Page transitions ──────────────────────────────────── */
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
-    if (
-      !href ||
-      href.startsWith('#') ||
-      href.startsWith('http') ||
-      href.startsWith('mailto') ||
-      href.startsWith('tel') ||
-      link.target === '_blank'
-    ) return;
-
+    if (!href || href.startsWith('#') || href.startsWith('http') ||
+        href.startsWith('mailto') || href.startsWith('tel') ||
+        link.target === '_blank' || link.hasAttribute('download')) return;
     link.addEventListener('click', e => {
       e.preventDefault();
       const target = link.href;
-      document.body.classList.add('page-transition-out');
-      setTimeout(() => { window.location.href = target; }, 340);
+      document.body.classList.add('page-exit');
+      setTimeout(() => { window.location.href = target; }, 280);
     });
   });
 

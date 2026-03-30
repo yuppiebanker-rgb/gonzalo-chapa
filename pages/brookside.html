@@ -286,26 +286,35 @@
   </footer>
 
   <script src="../assets/js/main.js"></script>
-<div class="gallery-counter" id="galleryCounter">01</div>
+<div id="galleryCounter" style="
+  position:fixed; bottom:calc(28px + env(safe-area-inset-bottom,0px));
+  left:50%; transform:translateX(-50%); z-index:400;
+  font-size:.56rem; letter-spacing:.3em; text-transform:uppercase;
+  color:rgba(192,164,110,.55); font-family:'DM Sans',sans-serif;
+  background:rgba(11,9,6,.75); backdrop-filter:blur(8px);
+  padding:6px 18px; border-radius:20px; pointer-events:none;
+  opacity:0; transition:opacity .4s ease;
+  white-space:nowrap;
+"></div>
 <script>
-(function() {
-  const counter = document.getElementById('galleryCounter');
-  const items = document.querySelectorAll('.photo-item, .bs-cell, .bs-duo-cell, .bs-trio-cell, .bs-wide, .bs-bw, .bs-single, .bs-opener');
-  if (!items.length || !counter) return;
-  const total = items.length;
-  let hideTimer;
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const idx = [...items].indexOf(e.target) + 1;
-        counter.textContent = String(idx).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-        counter.classList.add('visible');
-        clearTimeout(hideTimer);
-        hideTimer = setTimeout(() => counter.classList.remove('visible'), 2200);
+(function(){
+  var counter=document.getElementById('galleryCounter');
+  if(!counter)return;
+  var items=[].slice.call(document.querySelectorAll('.photo-item[data-src],.bs-cell,.bs-duo-cell,.bs-trio-cell,.bs-wide,.bs-bw,.bs-opener'));
+  if(!items.length)return;
+  var total=items.length, timer;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx=items.indexOf(e.target)+1;
+        counter.textContent=('0'+idx).slice(-2)+' / '+('0'+total).slice(-2);
+        counter.style.opacity='1';
+        clearTimeout(timer);
+        timer=setTimeout(function(){counter.style.opacity='0';},2000);
       }
     });
-  }, { threshold: 0.4 });
-  items.forEach(el => obs.observe(el));
+  },{threshold:0.45});
+  items.forEach(function(el){io.observe(el);});
 })();
 </script>
 <script>

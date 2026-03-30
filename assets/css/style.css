@@ -21,48 +21,44 @@
   --safe-right:  env(safe-area-inset-right, 0px);
 }
 
+/* ── Light mode theme ───────────────────────────────────── */
 [data-theme="light"] {
-  --ink:      #f4efe6;
-  --cream:    #0b0906;
-  --dust:     #8b6914;
-  --dust-dim: rgba(139,105,20,.1);
-  --mist:     rgba(11,9,6,.06);
+  --ink:      #f0ece3;
+  --cream:    #1a1612;
+  --dust:     #8b6a1a;
+  --dust-dim: rgba(139,106,26,.1);
+  --mist:     rgba(26,22,18,.05);
 }
-[data-theme="light"] body {
-  background: #f4efe6;
-  color: #0b0906;
-}
-[data-theme="light"] #nav {
-  background: transparent;
-}
-[data-theme="light"] #nav.scrolled {
-  background: rgba(244,239,230,.95);
-  border-bottom-color: rgba(139,105,20,.15);
-}
-[data-theme="light"] .nav-overlay {
-  background: rgba(244,239,230,.98);
-}
-[data-theme="light"] .overlay-link {
-  color: rgba(11,9,6,.75);
-}
-[data-theme="light"] .overlay-link:hover { color: var(--dust); }
-[data-theme="light"] body::after { opacity: .015; }
-[data-theme="light"] #loader { background: #f4efe6; }
-[data-theme="light"] .ticker-section { background: #f4efe6; }
-[data-theme="light"] .contact-section {
-  background: linear-gradient(135deg, #e8e0d0 0%, #f0ebe0 100%);
+[data-theme="light"] body        { background:#f0ece3; color:#1a1612; }
+[data-theme="light"] #nav.scrolled  { background:rgba(240,236,227,.94); border-bottom-color:rgba(139,106,26,.15); }
+[data-theme="light"] #nav::before   { background:linear-gradient(to bottom,rgba(240,236,227,.7) 0%,transparent 100%); }
+[data-theme="light"] .nav-overlay   { background:rgba(240,236,227,.98); }
+[data-theme="light"] .overlay-link  { color:rgba(26,22,18,.7); }
+[data-theme="light"] .overlay-link:hover { color:var(--dust); }
+[data-theme="light"] body::after    { opacity:.015; }
+[data-theme="light"] #loader        { background:#f0ece3; }
+[data-theme="light"] .ticker-section{ background:#f0ece3; }
+[data-theme="light"] .tick1         { color:rgba(139,106,26,.3); }
+[data-theme="light"] .tick2         { color:rgba(26,22,18,.18); }
+[data-theme="light"] .contact-section { background:linear-gradient(135deg,#e0d8cc 0%,#ece6da 100%); }
+[data-theme="light"] .contact-section::before { color:rgba(0,0,0,.04); }
+[data-theme="light"] .nav-logo      { color:#1a1612; }
+[data-theme="light"] .hamburger span{ background:#1a1612; }
+[data-theme="light"] .photo-item img, [data-theme="light"] .work-card img {
+  filter:brightness(.95) contrast(1.04) saturate(.9);
 }
 
-/* ── Theme toggle ───────────────────────────────────── */
+/* Theme toggle button */
 .theme-toggle {
-  background: none; border: none;
-  color: rgba(244,239,230,.45);
-  cursor: pointer; padding: 6px;
-  display: flex; align-items: center;
-  transition: color .3s; position: relative; z-index: 1;
+  background:none; border:none;
+  color:rgba(244,239,230,.4); cursor:pointer;
+  padding:6px; display:flex; align-items:center;
+  transition:color .3s; position:relative; z-index:1;
+  min-width:36px; min-height:36px; justify-content:center;
 }
-.theme-toggle:hover { color: var(--dust); }
-[data-theme="light"] .theme-toggle { color: rgba(11,9,6,.45); }
+.theme-toggle:hover { color:var(--dust); }
+[data-theme="light"] .theme-toggle { color:rgba(26,22,18,.4); }
+[data-theme="light"] .theme-toggle:hover { color:var(--dust); }
 
 /* ── RESET ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -1674,21 +1670,9 @@ footer {
   }
 }
 
-/* ── Page transitions ───────────────────────────────── */
-.page-transition-out {
-  animation: pageOut 0.35s cubic-bezier(.4,0,1,1) forwards;
-}
-.page-transition-in {
-  animation: pageIn 0.45s cubic-bezier(0,0,.2,1) forwards;
-}
-@keyframes pageOut {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-12px); }
-}
-@keyframes pageIn {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* ── Page transitions ────────────────────────────────────── */
+body { opacity:1; transition:opacity .3s ease; }
+body.page-exit { opacity:0; }
 
 /* ── Image reveal animation ─────────────────────────── */
 .photo-item img,
