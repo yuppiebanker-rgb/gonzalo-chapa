@@ -404,6 +404,46 @@ body::after {
   max-width: 80vw;
 }
 
+/* ── Lightbox mobile improvements ───────────────────────── */
+@media (max-width: 768px) {
+  #lb-img {
+    max-width: 100vw;
+    max-height: 80svh;
+  }
+  .lb-close {
+    top: calc(16px + var(--safe-top, 0px));
+    right: 20px;
+    font-size: 1.4rem;
+    min-width: 48px; min-height: 48px;
+    background: rgba(11,9,6,.5);
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-nav {
+    font-size: 1.6rem;
+    padding: 0;
+    min-width: 52px; min-height: 52px;
+    background: rgba(11,9,6,.4);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-prev { left: 12px; }
+  .lb-next { right: 12px; }
+  .lb-caption {
+    font-size: .58rem;
+    bottom: calc(20px + var(--safe-bottom, 0px));
+    padding: 0 60px;
+    text-align: center;
+    white-space: normal;
+  }
+  .lb-counter {
+    top: calc(20px + var(--safe-top, 0px));
+    left: 20px;
+  }
+}
+
 /* ── WHATSAPP FLOAT ── */
 .wa-float {
   position: fixed;
@@ -1590,6 +1630,8 @@ footer {
   display: flex;
   gap: 4px;
   overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--pad-x);
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;

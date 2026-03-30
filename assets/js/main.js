@@ -184,13 +184,50 @@
       if (e.key === 'ArrowRight') lbNext();
     });
 
-    // Touch swipe
-    var tx = 0;
-    lb.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+    // Touch swipe + pinch zoom
+    var tx = 0, ty = 0;
+    var initialPinchDist = 0;
+    var currentScale = 1;
+
+    lb.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 1) {
+        tx = e.touches[0].clientX;
+        ty = e.touches[0].clientY;
+      }
+      if (e.touches.length === 2) {
+        var dx = e.touches[0].clientX - e.touches[1].clientX;
+        var dy = e.touches[0].clientY - e.touches[1].clientY;
+        initialPinchDist = Math.sqrt(dx*dx + dy*dy);
+      }
+    }, { passive: true });
+
+    lb.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 2 && initialPinchDist > 0) {
+        var dx = e.touches[0].clientX - e.touches[1].clientX;
+        var dy = e.touches[0].clientY - e.touches[1].clientY;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        currentScale = Math.min(Math.max(dist / initialPinchDist, 1), 3);
+        if (lbImg) lbImg.style.transform = 'scale(' + currentScale + ')';
+      }
+    }, { passive: true });
+
     lb.addEventListener('touchend', function (e) {
-      var dx = e.changedTouches[0].clientX - tx;
-      if (dx > 50) lbPrev();
-      else if (dx < -50) lbNext();
+      if (e.changedTouches.length === 1 && e.touches.length === 0) {
+        if (currentScale > 1.1) {
+          /* pinch was active — reset scale after delay */
+          setTimeout(function () {
+            currentScale = 1;
+            if (lbImg) lbImg.style.transform = 'scale(1)';
+          }, 2000);
+          return;
+        }
+        var dx = e.changedTouches[0].clientX - tx;
+        var dy = Math.abs(e.changedTouches[0].clientY - ty);
+        if (Math.abs(dx) > 50 && dy < 60) {
+          if (dx < 0) lbNext(); else lbPrev();
+        }
+      }
+      if (e.touches.length < 2) initialPinchDist = 0;
     }, { passive: true });
   }
 
