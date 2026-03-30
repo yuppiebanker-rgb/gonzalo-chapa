@@ -15,6 +15,93 @@
   <meta property="og:image" content="https://gchapa.com/assets/images/brookside/4-_DSC8092.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://gchapa.com/pages/hire.html" />
+  <style>
+/* ── Hire page mobile ──────────────────────────── */
+
+/* Services hero headline */
+@media (max-width: 768px) {
+  .services-hero {
+    padding: calc(var(--pad-y) + 60px) var(--pad-x) 60px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .services-headline,
+  .sh-title h1 {
+    font-size: clamp(44px, 11vw, 80px);
+    line-height: .88;
+  }
+  .services-headline em,
+  .sh-title em {
+    font-size: .5em;
+    letter-spacing: .08em;
+  }
+}
+
+/* Service rows */
+@media (max-width: 768px) {
+  .service-row {
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding: 28px 0;
+  }
+  .service-name { font-size: clamp(22px, 5.5vw, 36px); }
+  .service-desc { font-size: .8rem; line-height: 1.75; }
+  .service-tags { display: none; }
+  .services-list,
+  .service-rows { padding: 0 var(--pad-x) 60px; }
+}
+
+@media (max-width: 480px) {
+  .service-row { grid-template-columns: 1fr; }
+  .service-num { display: none; }
+  .service-row { padding: 22px 0; }
+}
+
+/* Contact section */
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 64px var(--pad-x) calc(64px + var(--safe-bottom, 0px));
+  }
+  .contact-inner,
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .contact-quote,
+  .contact-left blockquote {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+  }
+}
+
+/* Form improvements for mobile */
+@media (max-width: 560px) {
+  .form-row { grid-template-columns: 1fr; }
+  .form-group input,
+  .form-group textarea,
+  .form-group select,
+  .contact-form input,
+  .contact-form textarea,
+  .contact-form select {
+    font-size: 16px; /* prevent iOS zoom */
+    padding: 14px 14px;
+  }
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 18px;
+    min-height: 52px;
+  }
+  .contact-form { gap: 14px; }
+}
+
+/* "HIRE" ghost text background — too large on mobile */
+@media (max-width: 560px) {
+  .contact-section::before,
+  .contact-ghost {
+    font-size: 50vw;
+  }
+}
+  </style>
 </head>
 <body class="inner-page">
 <div class="photo-cursor" id="photoCursor">
@@ -91,7 +178,7 @@
     </div>
     <div class="sh-body">
       <p>Based in Monterrey, available across M&eacute;xico and beyond. Whether it's a one-hour portrait session or a multi-day festival, every project gets the same attention to light, timing, and story.</p>
-      <a href="https://wa.me/528187997500" target="_blank" class="btn-wa-lg">
+      <a href="https://wa.me/528187997500" target="_blank" class="btn-wa-lg" style="min-height:48px;">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.725-1.393A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.697-6.332-1.893l-.442-.296-3.26.961.882-3.412-.315-.462A9.935 9.935 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
         Hire on WhatsApp
       </a>
@@ -177,7 +264,7 @@
           <span class="neon">unforgettable</span><br>
           together.
         </blockquote>
-        <div class="contact-info">
+        <div class="contact-info" style="display:flex;flex-direction:column;gap:8px;margin-top:20px;">
           <a href="https://wa.me/528187997500" target="_blank">+52 81 8799 7500</a>
           <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a>
           <a href="https://instagram.com/my_memories.jpeg" target="_blank">@my_memories.jpeg</a>
