@@ -329,6 +329,10 @@ body::after {
   line-height: 2.2;
   opacity: 0;
   transition: opacity 0.5s 0.5s;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 24px;
+  padding: 0 20px 0;
 }
 .nav-overlay.open .nav-overlay-footer {
   opacity: 1;
@@ -454,8 +458,8 @@ body::after {
 /* ── WHATSAPP FLOAT ── */
 .wa-float {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: calc(28px + var(--safe-bottom));
+  right: calc(28px + var(--safe-right));
   z-index: 600;
   display: flex;
   align-items: center;
@@ -499,8 +503,8 @@ body::after {
 /* ── BACK TO TOP ── */
 .back-top {
   position: fixed;
-  bottom: 28px;
-  left: 28px;
+  bottom: calc(28px + var(--safe-bottom));
+  left: calc(28px + var(--safe-left));
   width: 40px;
   height: 40px;
   display: flex;
@@ -1399,10 +1403,11 @@ footer {
   padding: 14px 18px;
   background: rgba(244,239,230,0.06);
   border: 0.5px solid rgba(192,164,110,0.15);
-  border-radius: 4px;
+  border-radius: 0;
   color: var(--cream);
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 16px;
+  -webkit-appearance: none;
   outline: none;
   transition: border-color 0.3s;
 }
@@ -2066,3 +2071,49 @@ footer {
 .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ── Touch target sizes (min 44×44px per Apple HIG) ─────── */
+.lb-close {
+  min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
+}
+.lb-nav {
+  min-width: 56px; min-height: 56px;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-toggle span,
+.hamburger span {
+  /* expand tap area via padding on parent */
+}
+.nav-toggle,
+.hamburger {
+  min-width: 44px; min-height: 44px;
+  display: flex; align-items: center; justify-content: center;
+}
+.overlay-close {
+  min-width: 48px; min-height: 48px;
+  display: flex; align-items: center; justify-content: center;
+}
+.back-top {
+  min-width: 44px; min-height: 44px;
+}
+.hero-btn {
+  min-height: 48px;
+}
+.overlay-link {
+  min-height: 52px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Touch scroll behavior ───────────────────────────────── */
+.photo-grid,
+.bs-grid,
+.film-strip {
+  -webkit-overflow-scrolling: touch;
+}
+.photo-grid {
+  overscroll-behavior-y: contain;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
