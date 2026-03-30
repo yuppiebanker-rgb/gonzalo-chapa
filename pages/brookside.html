@@ -68,6 +68,36 @@
   </style>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b0906">
+
+  <style id="image-fix">
+    img.ph {
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+    .photo-item, .narr-item, .narr-full,
+    .editorial-full, .ed-panel, .editorial-closer {
+      overflow: hidden !important;
+    }
+    .photo-item img.ph {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 200px !important;
+      position: relative !important;
+      object-fit: cover !important;
+      filter: brightness(0.88) contrast(1.05) !important;
+    }
+    .narr-item img.ph, .narr-full img.ph,
+    .editorial-full img.ph, .ed-panel img.ph,
+    .editorial-closer img.ph {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+  </style>
 </head>
 <body class="inner-page">
 
