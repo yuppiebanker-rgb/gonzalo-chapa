@@ -2038,3 +2038,35 @@ footer {
     contain-intrinsic-size: 0 600px;
   }
 }
+
+/* ── Nav Hire Landing Button ─────────────────── */
+.nav-hire-landing {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 18px; border: 1px solid rgba(192,164,110,.45);
+  color: var(--dust); font-size: .63rem; letter-spacing: .22em;
+  text-transform: uppercase; text-decoration: none;
+  transition: all .3s ease; position: relative; overflow: hidden;
+}
+.nav-hire-landing::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--dust); transform: translateX(-101%);
+  transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+}
+.nav-hire-landing:hover::before { transform: translateX(0); }
+.nav-hire-landing:hover { color: var(--ink); }
+.nav-hire-landing span { position: relative; z-index: 1; }
+
+/* ── Hamburger Button ────────────────────────── */
+.hamburger {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; gap: 5px; padding: 4px;
+  min-width: 44px; min-height: 44px;
+  align-items: center; justify-content: center;
+}
+.hamburger span {
+  display: block; width: 22px; height: 1px;
+  background: var(--cream); transition: all .3s ease; transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }

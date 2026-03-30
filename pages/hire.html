@@ -133,34 +133,42 @@
 
   <nav id="nav">
     <a href="../index.html" class="nav-logo">G. Chapa</a>
+    <ul class="nav-links">
+      <li><a href="street.html">Street</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="retratos.html">Retratos</a></li>
+      <li><a href="brookside.html">Brookside</a></li>
+      <li><a href="hire.html">Services</a></li>
+    </ul>
     <div class="nav-right">
-      <div class="nav-links">
-        <a href="street.html">Street</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="retratos.html">Retratos</a>
-        <a href="brookside.html">Brookside</a>
-        <a href="hire.html">Services</a>
-      </div>
-      <a href="hire.html" class="hire-btn">Hire Me</a>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
-        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte."
+         class="nav-hire-landing" target="_blank" rel="noopener">
+        <span>Hire Me</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
       </button>
-      <button id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <div class="nav-overlay">
-    <button id="overlayClose" aria-label="Close menu">&times;</button>
-    <div class="nav-overlay-links">
-      <a href="street.html">Street</a>
-      <a href="eventos.html">Eventos</a>
-      <a href="retratos.html">Retratos</a>
-      <a href="brookside.html">Brookside</a>
-      <a href="hire.html">Services</a>
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navigation">
+    <button class="overlay-close" id="overlayClose" aria-label="Close menu">✕</button>
+    <div class="overlay-links">
+      <a href="street.html"    class="overlay-link">Street</a>
+      <a href="eventos.html"   class="overlay-link">Eventos</a>
+      <a href="retratos.html"  class="overlay-link">Retratos</a>
+      <a href="brookside.html" class="overlay-link">Brookside</a>
+      <a href="hire.html"      class="overlay-link active">Services</a>
     </div>
-    <a href="https://wa.me/528187997500" target="_blank" class="nav-overlay-cta">Hire Me on WhatsApp</a>
-    <div class="nav-overlay-footer">+52 81 8799 7500<br>@my_memories.jpeg<br>gchapa2602@gmail.com</div>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte."
+       class="overlay-hire" target="_blank" rel="noopener">
+      <span>Hire Me on WhatsApp</span>
+    </a>
+    <div class="overlay-footer">
+      <a href="https://wa.me/528187997500">+52 81 8799 7500</a>
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank" rel="noopener">@my_memories.jpeg</a>
+      <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a>
+    </div>
   </div>
 
   <div id="lightbox">
@@ -312,5 +320,31 @@
   </footer>
 
   <script src="../assets/js/main.js"></script>
+<script>
+(function() {
+  const hamburger = document.getElementById('hamburger');
+  const overlay   = document.getElementById('navOverlay');
+  const closeBtn  = document.getElementById('overlayClose');
+  function openO()  {
+    overlay.classList.add('open');
+    hamburger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeO() {
+    overlay.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  hamburger?.addEventListener('click', () =>
+    overlay.classList.contains('open') ? closeO() : openO()
+  );
+  closeBtn?.addEventListener('click', closeO);
+  overlay?.querySelectorAll('.overlay-link, .overlay-hire')
+    .forEach(a => a.addEventListener('click', closeO));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeO();
+  });
+})();
+</script>
 </body>
 </html>
