@@ -1497,6 +1497,73 @@ footer {
   .footer-center { text-align: center; width: 100%; }
 }
 
+/* ── Captions always visible on touch devices ────────────── */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Gallery photo captions */
+  .photo-caption {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    background: linear-gradient(to top, rgba(11,9,6,.75) 0%, transparent 70%);
+    padding-top: 24px;
+  }
+
+  /* Brookside narrative captions */
+  .bs-cap {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    background: linear-gradient(to top, rgba(11,9,6,.75) 0%, transparent 70%);
+    padding-top: 24px;
+  }
+
+  /* Retratos captions */
+  .rt-caption {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    background: linear-gradient(to top, rgba(11,9,6,.75) 0%, transparent 70%);
+  }
+
+  /* Work cards on landing */
+  .work-card-overlay { opacity: .85; }
+
+  /* Remove hover scale on touch (performance) */
+  .photo-item:hover img,
+  .work-card:hover img,
+  .bs-wide:hover img,
+  .bs-duo-cell:hover img,
+  .bs-trio-cell:hover img,
+  .bs-cell:hover img,
+  .bs-bw:hover img,
+  .rt-hero:hover img,
+  .rt-cell:hover img,
+  .rt-single:hover img {
+    transform: none;
+    filter: brightness(.85) contrast(1.06) saturate(.88);
+  }
+
+  /* Service rows — show hover state as active press */
+  .service-row:active::before { left: 0; }
+  .service-row:active .service-name { color: var(--dust); }
+
+  /* Overlay links — remove translateX hover (jarring on touch) */
+  .overlay-link:hover { transform: none; }
+  .overlay-link:active { color: var(--dust); }
+
+  /* Work card arrows always gold on touch */
+  .work-card-arrow { color: rgba(192,164,110,.45); }
+
+  /* Hero follower — hide on touch */
+  .hero-follower { display: none !important; }
+
+  /* Photo cursor — hide on touch */
+  .photo-cursor { display: none !important; }
+
+  /* WA float — slightly larger tap area on touch */
+  .wa-float a {
+    padding: 16px 24px 16px 18px;
+  }
+}
+
 /* ── Page transitions ───────────────────────────────── */
 .page-transition-out {
   animation: pageOut 0.35s cubic-bezier(.4,0,1,1) forwards;

@@ -15,6 +15,40 @@
   <meta property="og:image" content="https://gchapa.com/assets/images/retratos/2-_DSC8672.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://gchapa.com/pages/retratos.html" />
+  <style>
+    @media (max-width: 700px) {
+      .rt-split { grid-template-columns: 1fr; }
+      .rt-cell {
+        height: 62svh;
+        min-height: 320px;
+      }
+      .rt-statement { grid-template-columns: 1fr; gap: 24px; padding: 52px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .rt-hero {
+        height: 78svh;
+        min-height: 400px;
+      }
+      .rt-cell {
+        height: 58svh;
+        min-height: 300px;
+      }
+      .rt-single {
+        height: 72svh;
+        min-height: 360px;
+      }
+      .rt-text {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 52px 20px;
+      }
+      .rt-text blockquote {
+        font-size: clamp(1.4rem, 6.5vw, 2rem);
+      }
+      .retratos-grid { gap: 3px; padding: 3px; }
+    }
+  </style>
 </head>
 <body class="inner-page">
 <div class="photo-cursor" id="photoCursor">
