@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>404 — Gonzalo Chapa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <style>
+    .not-found{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--pad-x);position:relative;overflow:hidden;}
+    .not-found::before{content:'404';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:40vw;color:rgba(192,164,110,.03);pointer-events:none;white-space:nowrap;letter-spacing:.05em;}
+    .nf-label{font-size:.6rem;letter-spacing:.42em;text-transform:uppercase;color:var(--dust);margin-bottom:24px;}
+    .nf-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,8vw,6rem);font-weight:300;font-style:italic;color:var(--cream);line-height:1.1;margin-bottom:20px;}
+    .nf-sub{font-size:.82rem;line-height:1.9;color:rgba(244,239,230,.4);max-width:380px;margin-bottom:48px;}
+    .nf-links{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+    .nf-link{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;padding:12px 24px;border:1px solid rgba(192,164,110,.3);color:var(--dust);text-decoration:none;transition:all .3s ease;}
+    .nf-link:hover{background:var(--dust);color:var(--ink);}
+    .nf-link.primary{background:var(--dust);color:var(--ink);border-color:var(--dust);}
+    .nf-link.primary:hover{background:transparent;color:var(--dust);}
+  </style>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+  <meta name="theme-color" content="#0b0906"/>
+</head>
+<body>
+  <div id="loader"><div class="loader-name">404</div><div class="loader-bar"></div></div>
+  <nav id="nav">
+    <a href="index.html" class="nav-logo">G. Chapa</a>
+    <div class="nav-right">
+      <a href="https://wa.me/528187997500" class="nav-hire-landing" target="_blank" rel="noopener"><span>Hire Me</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-overlay" id="navOverlay">
+    <button class="overlay-close" id="overlayClose">✕</button>
+    <div class="overlay-links">
+      <a href="pages/street.html" class="overlay-link">Street</a>
+      <a href="pages/eventos.html" class="overlay-link">Eventos</a>
+      <a href="pages/retratos.html" class="overlay-link">Retratos</a>
+      <a href="pages/brookside.html" class="overlay-link">Brookside</a>
+      <a href="pages/hire.html" class="overlay-link">Services</a>
+      <a href="pages/about.html" class="overlay-link">About</a>
+    </div>
+    <a href="https://wa.me/528187997500" class="overlay-hire" target="_blank"><span>Hire Me on WhatsApp</span></a>
+    <div class="overlay-footer">
+      <a href="https://wa.me/528187997500">+52 81 8799 7500</a>
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank">@my_memories.jpeg</a>
+    </div>
+  </div>
+  <main class="not-found">
+    <p class="nf-label">Gonzalo Chapa · Photography</p>
+    <h1 class="nf-title">This frame<br>doesn't exist.</h1>
+    <p class="nf-sub">The page you're looking for has moved or never existed. Let's get you back to the work.</p>
+    <div class="nf-links">
+      <a href="index.html" class="nf-link primary">← Back Home</a>
+      <a href="pages/street.html" class="nf-link">Street</a>
+      <a href="pages/brookside.html" class="nf-link">Brookside</a>
+      <a href="pages/hire.html" class="nf-link">Hire</a>
+    </div>
+  </main>
+  <script src="assets/js/main.js"></script>
+  <script>(function(){var h=document.getElementById('hamburger'),o=document.getElementById('navOverlay'),c=document.getElementById('overlayClose');function op(){o.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}function cl(){o.classList.remove('open');h.classList.remove('open');document.body.style.overflow='';}h&&h.addEventListener('click',function(){o.classList.contains('open')?cl():op();});c&&c.addEventListener('click',cl);o&&o.querySelectorAll('.overlay-link,.overlay-hire').forEach(function(a){a.addEventListener('click',cl);});document.addEventListener('keydown',function(e){if(e.key==='Escape')cl();});}());</script>
+</body>
+</html>

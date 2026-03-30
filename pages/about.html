@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="About Gonzalo Chapa — Photographer from Monterrey, México."/>
+  <meta property="og:title" content="About — Gonzalo Chapa"/>
+  <meta property="og:url" content="https://gchapa.com/pages/about.html"/>
+  <meta property="og:image" content="https://gchapa.com/assets/images/retratos/_DSC8665.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://gchapa.com/pages/about.html"/>
+  <title>About — Gonzalo Chapa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <style>
+    .about-page{padding:calc(var(--pad-y) + 80px) var(--pad-x) var(--pad-y);}
+    .about-hero{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-bottom:120px;}
+    .about-portrait{position:relative;overflow:hidden;aspect-ratio:3/4;}
+    .about-portrait img{width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:brightness(.88) contrast(1.06) saturate(.85);display:block;}
+    .about-portrait::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(11,9,6,.4) 0%,transparent 60%);}
+    .about-text{padding-top:40px;}
+    .about-label{font-size:.6rem;letter-spacing:.42em;text-transform:uppercase;color:var(--dust);margin-bottom:24px;display:block;}
+    .about-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,68px);font-weight:300;line-height:1.1;color:var(--cream);margin-bottom:40px;}
+    .about-headline em{font-style:italic;color:var(--dust);}
+    .about-bio{font-size:.9rem;line-height:2;color:rgba(244,239,230,.55);margin-bottom:48px;max-width:480px;}
+    .about-bio p+p{margin-top:20px;}
+    .about-specs{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:.5px solid rgba(192,164,110,.12);padding-top:36px;margin-bottom:48px;}
+    .spec-label{font-size:.58rem;letter-spacing:.32em;text-transform:uppercase;color:var(--dust);margin-bottom:8px;}
+    .spec-value{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:var(--cream);line-height:1.4;}
+    .about-cta-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+    .selected-strip{border-top:.5px solid rgba(192,164,110,.08);padding-top:100px;}
+    .selected-label{font-size:.6rem;letter-spacing:.42em;text-transform:uppercase;color:var(--dust);text-align:center;margin-bottom:48px;display:block;}
+    .selected-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+    .selected-item{position:relative;overflow:hidden;aspect-ratio:3/4;display:block;}
+    .selected-item img{width:100%;height:100%;object-fit:cover;filter:brightness(.8) contrast(1.06) saturate(.82);transition:transform .75s var(--r),filter .4s ease;}
+    .selected-item:hover img{transform:scale(1.05);filter:brightness(.94);}
+    .selected-item-label{position:absolute;bottom:0;left:0;right:0;padding:32px 16px 14px;background:linear-gradient(to top,rgba(11,9,6,.88) 0%,transparent 100%);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dust);}
+    @media(max-width:768px){.about-hero{grid-template-columns:1fr;gap:40px;}.about-text{padding-top:0;}.selected-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:480px){.selected-grid{grid-template-columns:1fr;}.about-specs{grid-template-columns:1fr;}}
+  </style>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"/>
+  <meta name="theme-color" content="#0b0906"/>
+</head>
+<body>
+  <div id="progress"></div>
+  <div id="loader"><div class="loader-name">About</div><div class="loader-bar"></div></div>
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lb-close" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
+    <img id="lb-img" src="" alt=""/>
+    <button class="lb-nav lb-next" aria-label="Next">›</button>
+    <p id="lb-caption" class="lb-caption"></p>
+  </div>
+  <nav id="nav">
+    <a href="../index.html" class="nav-logo">G. Chapa</a>
+    <ul class="nav-links">
+      <li><a href="street.html">Street</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="retratos.html">Retratos</a></li>
+      <li><a href="brookside.html">Brookside</a></li>
+      <li><a href="hire.html">Services</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." class="nav-hire-landing" target="_blank" rel="noopener"><span>Hire Me</span></a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navigation">
+    <button class="overlay-close" id="overlayClose" aria-label="Close">✕</button>
+    <div class="overlay-links">
+      <a href="street.html" class="overlay-link">Street</a>
+      <a href="eventos.html" class="overlay-link">Eventos</a>
+      <a href="retratos.html" class="overlay-link">Retratos</a>
+      <a href="brookside.html" class="overlay-link">Brookside</a>
+      <a href="hire.html" class="overlay-link">Services</a>
+      <a href="about.html" class="overlay-link active">About</a>
+    </div>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." class="overlay-hire" target="_blank" rel="noopener"><span>Hire Me on WhatsApp</span></a>
+    <div class="overlay-footer">
+      <a href="https://wa.me/528187997500">+52 81 8799 7500</a>
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank">@my_memories.jpeg</a>
+      <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a>
+    </div>
+  </div>
+  <main class="about-page">
+    <div class="about-hero fi">
+      <div class="about-portrait">
+        <img src="../assets/images/retratos/_DSC8665.jpg" alt="Gonzalo Chapa" loading="eager" style="object-position:center 15%;"/>
+      </div>
+      <div class="about-text">
+        <span class="about-label">Fotógrafo · Monterrey, México</span>
+        <h1 class="about-headline">Every frame is a<br><em>declaration</em><br>of where we are.</h1>
+        <div class="about-bio">
+          <p>Gonzalo Chapa is a photographer based in San Pedro Garza García, Monterrey. His work documents the energy of northern México — from the masked characters of its streets to the neon-lit underground of its nightlife and the raw landscape of the Sierra Madre.</p>
+          <p>His practice is built on trust, patience, and a refusal to pose the world. Whether documenting a concert, shooting a portrait, or walking a carretera at dusk, he brings the same editorial eye: honest, bold, and rooted in place.</p>
+        </div>
+        <div class="about-specs">
+          <div><div class="spec-label">Based In</div><div class="spec-value">San Pedro<br>Garza García, NL</div></div>
+          <div><div class="spec-label">Camera</div><div class="spec-value">Sony A7RV<br>Fujifilm X-T50</div></div>
+          <div><div class="spec-label">Disciplines</div><div class="spec-value">Street · Eventos<br>Retratos · Series</div></div>
+          <div><div class="spec-label">Contact</div><div class="spec-value">+52 81 8799 7500<br>gchapa2602@gmail.com</div></div>
+        </div>
+        <div class="about-cta-row">
+          <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;padding:13px 26px;background:var(--wa);border-radius:3px;color:#fff;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-decoration:none;">Contratar</a>
+          <a href="hire.html" style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);text-decoration:none;border-bottom:1px solid rgba(192,164,110,.28);padding-bottom:2px;">Ver Servicios →</a>
+          <a href="https://instagram.com/my_memories.jpeg" target="_blank" rel="noopener" style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(244,239,230,.35);text-decoration:none;">@my_memories.jpeg</a>
+        </div>
+      </div>
+    </div>
+    <div class="selected-strip fi">
+      <span class="selected-label">Selected Work</span>
+      <div class="selected-grid">
+        <a href="street.html" class="selected-item"><img src="../assets/images/street/1-_DSC7572.jpg" alt="Street" loading="lazy"/><div class="selected-item-label">Street</div></a>
+        <a href="eventos.html" class="selected-item"><img src="../assets/images/eventos/_DSC3207.jpg" alt="Eventos" loading="lazy" style="object-position:center 10%;"/><div class="selected-item-label">Eventos</div></a>
+        <a href="brookside.html" class="selected-item"><img src="../assets/images/brookside/15-_DSC8560.jpg" alt="Brookside" loading="lazy" style="filter:brightness(.85) contrast(1.1) saturate(.2);"/><div class="selected-item-label">Brookside</div></a>
+      </div>
+    </div>
+  </main>
+  <footer style="margin-top:80px;border-top:.5px solid rgba(192,164,110,.1);">
+    <div class="footer-logo">G. Chapa</div>
+    <p class="footer-copy">© 2025 Gonzalo Chapa · Monterrey, México</p>
+    <div class="footer-links">
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/528187997500" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="hire.html">Hire</a>
+    </div>
+  </footer>
+  <div class="wa-float" style="position:fixed;"><div class="wa-pulse"></div>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." target="_blank" rel="noopener">
+      <svg class="wa-icon" viewBox="0 0 32 32" fill="none"><path fill="#fff" d="M16 2C8.27 2 2 8.27 2 16c0 2.44.65 4.73 1.78 6.72L2 30l7.47-1.75A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.5a11.45 11.45 0 01-5.82-1.58l-.42-.25-4.34 1.02.98-4.23-.27-.44A11.48 11.48 0 014.5 16C4.5 9.6 9.6 4.5 16 4.5S27.5 9.6 27.5 16 22.4 27.5 16 27.5zm6.3-8.57c-.35-.17-2.05-1.01-2.37-1.13-.32-.11-.55-.17-.78.17-.23.35-.88 1.13-1.08 1.36-.2.23-.4.26-.74.09-.35-.17-1.47-.54-2.8-1.73a10.52 10.52 0 01-1.94-2.42c-.2-.35-.02-.53.15-.7.15-.15.35-.4.52-.6.17-.2.23-.35.35-.58.12-.23.06-.43-.03-.6-.09-.17-.78-1.88-1.07-2.57-.28-.67-.57-.58-.78-.59H9.7c-.2 0-.52.07-.8.35-.26.28-1.02 1-1.02 2.44s1.05 2.83 1.2 3.02c.14.2 2.07 3.16 5.02 4.43.7.3 1.25.48 1.67.61.7.22 1.34.19 1.84.12.56-.08 1.73-.71 1.97-1.39.25-.68.25-1.27.17-1.39-.07-.12-.28-.19-.6-.35z"/></svg>
+      <span class="wa-label">Hire Me</span>
+    </a>
+  </div>
+  <button class="back-top" aria-label="Back to top">↑</button>
+  <script src="../assets/js/main.js"></script>
+  <script>(function(){var h=document.getElementById('hamburger'),o=document.getElementById('navOverlay'),c=document.getElementById('overlayClose');function op(){o.classList.add('open');h.classList.add('open');document.body.style.overflow='hidden';}function cl(){o.classList.remove('open');h.classList.remove('open');document.body.style.overflow='';}h&&h.addEventListener('click',function(){o.classList.contains('open')?cl():op();});c&&c.addEventListener('click',cl);o&&o.querySelectorAll('.overlay-link,.overlay-hire').forEach(function(a){a.addEventListener('click',cl);});document.addEventListener('keydown',function(e){if(e.key==='Escape')cl();});}());</script>
+</body>
+</html>
