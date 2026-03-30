@@ -15,6 +15,10 @@
   --pad-x:  clamp(20px, 5vw, 72px);
   --pad-y:  clamp(64px, 8vw, 120px);
   --r:      cubic-bezier(.25,.46,.45,.94);
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
 }
 
 [data-theme="light"] {
@@ -715,6 +719,14 @@ footer {
 }
 @media (prefers-reduced-motion: reduce) {
   .ticker-row .ticker-inner { animation-play-state: paused; }
+}
+.ticker-row:hover .ticker-inner { animation-play-state: paused; }
+.ticker-row:active .ticker-inner { animation-play-state: paused; }
+
+@media (hover: none) and (pointer: coarse) {
+  /* On touch devices — slightly faster ticker is more satisfying */
+  .ticker-row.left .ticker-inner { animation-duration: 28s; }
+  .ticker-row.right .ticker-inner { animation-duration: 22s; }
 }
 
 /* ── SECTION DIVIDER ── */
@@ -1776,5 +1788,48 @@ footer {
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--dust);
+  }
+}
+
+/* ── Scroll containment ──────────────────────────────────── */
+.photo-grid {
+  overscroll-behavior-y: contain;
+}
+.film-strip {
+  overscroll-behavior-x: contain;
+}
+.bs-grid,
+.retratos-grid {
+  overscroll-behavior-y: auto;
+}
+
+/* Smooth momentum scrolling everywhere on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Touch press feedback ────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  .hero-btn:active {
+    opacity: .75;
+    transform: scale(.97);
+  }
+  .work-card:active img {
+    filter: brightness(.92) contrast(1.07);
+  }
+  .overlay-link:active {
+    color: var(--dust);
+    background: rgba(192,164,110,.06);
+  }
+  .wa-float a:active {
+    transform: scale(.95);
+  }
+  .back-top:active {
+    border-color: var(--dust);
+    color: var(--dust);
+  }
+  .btn-submit:active {
+    background: var(--dust);
+    color: var(--ink);
   }
 }
