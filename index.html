@@ -116,6 +116,49 @@
     </div>
   </section>
 
+  <!-- ══ FILM STRIP ═══════════════════════════════════════ -->
+  <div class="film-strip-wrap" aria-label="Photography preview">
+    <div class="film-strip" id="filmStrip">
+      <a href="pages/brookside.html" class="film-frame">
+        <img src="assets/images/brookside/4-_DSC8092.jpg" alt="Brookside" loading="lazy" />
+      </a>
+      <a href="pages/street.html" class="film-frame">
+        <img src="assets/images/street/1-_DSC7572.jpg" alt="Street" loading="lazy" />
+      </a>
+      <a href="pages/eventos.html" class="film-frame">
+        <img src="assets/images/eventos/_DSC3207.jpg" alt="Eventos" loading="lazy" />
+      </a>
+      <a href="pages/brookside.html" class="film-frame wide">
+        <img src="assets/images/brookside/15-_DSC8560.jpg" alt="Brookside BW" loading="lazy" />
+      </a>
+      <a href="pages/retratos.html" class="film-frame">
+        <img src="assets/images/retratos/2-_DSC8672.jpg" alt="Retratos" loading="lazy" />
+      </a>
+      <a href="pages/street.html" class="film-frame">
+        <img src="assets/images/street/30-DSC02985.jpg" alt="Street" loading="lazy" />
+      </a>
+      <a href="pages/eventos.html" class="film-frame wide">
+        <img src="assets/images/eventos/3-_DSC6845.jpg" alt="Eventos crowd" loading="lazy" />
+      </a>
+      <a href="pages/brookside.html" class="film-frame">
+        <img src="assets/images/brookside/7-_DSC8189.jpg" alt="Brookside" loading="lazy" />
+      </a>
+      <a href="pages/street.html" class="film-frame">
+        <img src="assets/images/street/26-DSC02961.jpg" alt="Street" loading="lazy" />
+      </a>
+      <a href="pages/retratos.html" class="film-frame">
+        <img src="assets/images/retratos/_DSC8665.jpg" alt="Retratos" loading="lazy" />
+      </a>
+      <a href="pages/brookside.html" class="film-frame wide">
+        <img src="assets/images/brookside/3-_DSC8078.jpg" alt="Brookside" loading="lazy" />
+      </a>
+      <a href="pages/eventos.html" class="film-frame">
+        <img src="assets/images/eventos/_DSC3257.jpg" alt="Neon" loading="lazy" />
+      </a>
+    </div>
+    <div class="film-strip-hint" aria-hidden="true">← drag →</div>
+  </div>
+
   <!-- ═══ DIVIDER ═══ -->
   <div class="sec-divider fi">
     <span>Selected Works</span>
@@ -241,5 +284,27 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+<script>
+(function() {
+  const strip = document.getElementById('filmStrip');
+  if (!strip) return;
+  let isDown = false, startX, scrollLeft;
+
+  strip.addEventListener('mousedown', e => {
+    isDown = true;
+    strip.classList.add('active');
+    startX = e.pageX - strip.offsetLeft;
+    scrollLeft = strip.scrollLeft;
+  });
+  strip.addEventListener('mouseleave', () => { isDown = false; });
+  strip.addEventListener('mouseup',    () => { isDown = false; });
+  strip.addEventListener('mousemove',  e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - strip.offsetLeft;
+    strip.scrollLeft = scrollLeft - (x - startX) * 1.4;
+  });
+})();
+</script>
 </body>
 </html>

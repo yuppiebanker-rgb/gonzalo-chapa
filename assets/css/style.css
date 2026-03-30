@@ -1531,3 +1531,72 @@ footer {
   color: rgba(192,164,110,.25);
   font-size: .8rem; flex-shrink: 0;
 }
+
+/* ── Film strip ─────────────────────────────────────── */
+.film-strip-wrap {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 0 0;
+  padding: 48px 0;
+  background: var(--ink);
+  border-top: .5px solid rgba(192,164,110,.07);
+  border-bottom: .5px solid rgba(192,164,110,.07);
+}
+
+.film-strip {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  padding: 0 var(--pad-x);
+  will-change: transform;
+}
+.film-strip:active { cursor: grabbing; }
+.film-strip::-webkit-scrollbar { display: none; }
+
+.film-frame {
+  flex: 0 0 auto;
+  height: 260px;
+  width: 195px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+.film-frame.wide {
+  width: 390px;
+}
+
+.film-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: brightness(.78) contrast(1.05) saturate(.82);
+  transition: filter .4s ease, transform .5s cubic-bezier(.25,.46,.45,.94);
+  clip-path: inset(0% 0 0 0) !important;
+}
+.film-frame:hover img {
+  filter: brightness(.95) contrast(1.07) saturate(.95);
+  transform: scale(1.04);
+}
+
+.film-strip-hint {
+  position: absolute;
+  bottom: 14px; right: var(--pad-x);
+  font-size: .55rem; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(192,164,110,.3); pointer-events: none;
+  animation: hintFade 3s ease-in-out 2.5s forwards;
+  opacity: 0;
+}
+@keyframes hintFade {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (max-width: 560px) {
+  .film-frame { height: 200px; width: 150px; }
+  .film-frame.wide { width: 280px; }
+}
