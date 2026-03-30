@@ -62,7 +62,7 @@
 
 /* ── RESET ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-text-size-adjust: 100%; }
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--ink);
@@ -809,6 +809,9 @@ footer {
 .work-card:hover .work-card-arrow {
   opacity: 1;
   transform: translateX(0);
+}
+.work-card:hover {
+  z-index: 2;
 }
 .work-card.bw .work-card-bg {
   filter: saturate(0);
@@ -1646,6 +1649,7 @@ footer {
   flex: 0 0 auto;
   height: 260px;
   width: 195px;
+  scroll-snap-align: start;
   overflow: hidden;
   display: block;
   position: relative;
@@ -1717,4 +1721,60 @@ footer {
 }
 .photo-cursor.active {
   opacity: 1;
+}
+
+/* ── Text selection ──────────────────────────────────────── */
+::selection {
+  background: rgba(192,164,110,.25);
+  color: var(--cream);
+}
+::-moz-selection {
+  background: rgba(192,164,110,.25);
+  color: var(--cream);
+}
+
+/* ── Focus styles (keyboard nav) ────────────────────────── */
+:focus-visible {
+  outline: 1px solid var(--dust);
+  outline-offset: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Desktop-only hover enhancements ─────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .work-card {
+    transition: box-shadow .4s ease;
+  }
+  .work-card:hover {
+    box-shadow: 0 24px 64px rgba(0,0,0,.5);
+  }
+
+  /* Service row — restore hover sweep (desktop only) */
+  .service-row:hover::before { left: 0; }
+  .service-row:hover .service-name { color: var(--dust); }
+
+  /* Nav links — desktop only underline */
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px; background: var(--dust);
+    transition: width .3s cubic-bezier(.25,.46,.45,.94);
+  }
+  .nav-links a:hover::after,
+  .nav-links a.active::after { width: 100%; }
+}
+
+/* ── Custom scrollbar (desktop webkit) ───────────────────── */
+@media (hover: hover) {
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(192,164,110,.3);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--dust);
+  }
 }
