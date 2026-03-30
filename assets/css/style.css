@@ -1503,7 +1503,7 @@ footer {
 .rt-hero.img-revealed img, .rt-cell.img-revealed img, .rt-single.img-revealed img, .page-hero.img-revealed img {
   clip-path:inset(0% 0 0 0);
 }
-.hero-v2 .hero-bg img, .film-frame img, .selected-item img, .about-portrait img { clip-path:inset(0% 0 0 0) !important; }
+.selected-item img, .about-portrait img { clip-path:inset(0% 0 0 0) !important; }
 @media (prefers-reduced-motion:reduce) {
   .photo-item img,.work-card img,.bs-wide img,.bs-duo-cell img,.bs-trio-cell img,
   .bs-cell img,.bs-bw img,.bs-opener img,.rt-hero img,.rt-cell img,.rt-single img,.page-hero img
@@ -1780,3 +1780,50 @@ img.ph {
   transition: background .25s, color .25s, border-color .25s;
 }
 .lang-toggle:hover { background: var(--dust); color: var(--ink); border-color: var(--dust); }
+
+/* ── Hero background image ─────────────────────── */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-bg picture,
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  display: block;
+  filter: brightness(0.72) contrast(1.06) saturate(0.85);
+}
+.hero-content { position: relative; z-index: 2; }
+.scroll-cue { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 2; }
+
+/* ── Work card real images ──────────────────────── */
+.work-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: brightness(0.75) contrast(1.05) saturate(0.85);
+  transition: transform 0.7s ease, filter 0.4s ease;
+  z-index: 0;
+}
+.work-card:hover .work-card-img { transform: scale(1.05); filter: brightness(0.88) contrast(1.06); }
+.work-card-info { position: relative; z-index: 2; }
+.work-card-arrow { position: absolute; bottom: 20px; right: 20px; z-index: 2; }
+
+/* ── Loader silhouette ──────────────────────────── */
+.loader-silhouette {
+  width: 160px; height: auto; opacity: 0.9;
+  animation: breathe 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(192,164,110,0.2));
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.85; }
+  50%       { transform: scale(1.03); opacity: 1;    }
+}
