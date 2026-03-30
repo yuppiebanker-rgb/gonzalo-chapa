@@ -6,6 +6,31 @@
 (function () {
   'use strict';
 
+  /* ── Theme toggle ──────────────────────────────────────────── */
+  var themeToggles = document.querySelectorAll('.theme-toggle');
+  var savedTheme = localStorage.getItem('gcTheme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  function applyThemeIcons(theme) {
+    themeToggles.forEach(function (btn) {
+      var moon = btn.querySelector('.icon-moon');
+      var sun  = btn.querySelector('.icon-sun');
+      if (moon) moon.style.display = theme === 'dark'  ? 'block' : 'none';
+      if (sun)  sun.style.display  = theme === 'light' ? 'block' : 'none';
+    });
+  }
+  applyThemeIcons(savedTheme);
+
+  themeToggles.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var current = document.documentElement.getAttribute('data-theme');
+      var next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('gcTheme', next);
+      applyThemeIcons(next);
+    });
+  });
+
   /* ── 1. LOADER ── */
   window.addEventListener('load', function () {
     setTimeout(function () {
