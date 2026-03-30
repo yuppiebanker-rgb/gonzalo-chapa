@@ -2101,3 +2101,21 @@ body.page-exit { opacity:0; }
 html {
   -webkit-text-size-adjust: 100%;
 }
+
+/* ── WA + back-top spacing fix ───────────────────────────── */
+@media (max-width: 768px) {
+  .back-top.show {
+    bottom: calc(28px + env(safe-area-inset-bottom,0px) + 72px) !important;
+  }
+}
+
+/* ── Print ───────────────────────────────────────────────── */
+@media print {
+  #nav, .wa-float, .back-top, .nav-overlay, #loader,
+  .progress-bar, #progress, .hero-scroll, .ticker-section,
+  .film-strip-wrap, .press-strip { display:none !important; }
+  body { background:#fff; color:#000; }
+  .page-hero img, .hero-v2 .hero-bg img { filter:none; }
+  a { color:#000; text-decoration:underline; }
+  footer { border-top:1px solid #ccc; }
+}
