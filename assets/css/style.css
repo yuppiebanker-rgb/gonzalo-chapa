@@ -106,6 +106,7 @@ body::after {
   inset: 0;
   background: var(--ink);
   z-index: 8000;
+  will-change: opacity;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1647,19 +1648,37 @@ footer {
 .gallery-counter.visible { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .photo-item img,
-  .work-card img,
-  .bs-opener img,
-  .bs-wide img,
-  .bs-duo-cell img,
-  .bs-trio-cell img,
-  .bs-cell img,
-  .bs-bw img,
-  .rt-hero img,
-  .rt-cell img,
-  .rt-single img,
-  .page-hero img {
-    clip-path: inset(0% 0 0 0) !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .ticker-track,
+  .ticker-track.right {
+    animation: none;
+  }
+  .film-strip {
+    scroll-behavior: auto;
+  }
+  body::after {
+    animation: none;
+  }
+  .hero-v2 .hero-bg img,
+  .bs-opener img {
+    transform: none !important;
+    transition: none !important;
+  }
+  .fi {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .loader-camera {
+    animation: none;
+    opacity: .7;
   }
 }
 
