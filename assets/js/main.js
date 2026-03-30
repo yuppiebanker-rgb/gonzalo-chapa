@@ -6,30 +6,27 @@
 (function () {
   'use strict';
 
-  /* ── Theme toggle ──────────────────────────────────────────── */
-  var themeToggles = document.querySelectorAll('.theme-toggle');
-  var savedTheme = localStorage.getItem('gcTheme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  /* ── Theme toggle ──────────────────────────────────────── */
+  (function() {
+    var saved = localStorage.getItem('gcTheme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
 
-  function applyThemeIcons(theme) {
-    themeToggles.forEach(function (btn) {
-      var moon = btn.querySelector('.icon-moon');
-      var sun  = btn.querySelector('.icon-sun');
-      if (moon) moon.style.display = theme === 'dark'  ? 'block' : 'none';
-      if (sun)  sun.style.display  = theme === 'light' ? 'block' : 'none';
-    });
-  }
-  applyThemeIcons(savedTheme);
+    function applyIcons(theme) {
+      document.querySelectorAll('#iconMoon').forEach(function(el) { el.style.display = theme === 'dark' ? 'block' : 'none'; });
+      document.querySelectorAll('#iconSun').forEach(function(el)  { el.style.display = theme === 'light' ? 'block' : 'none'; });
+    }
+    applyIcons(saved);
 
-  themeToggles.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var current = document.documentElement.getAttribute('data-theme');
-      var next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('gcTheme', next);
-      applyThemeIcons(next);
+    document.querySelectorAll('.theme-toggle').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var cur  = document.documentElement.getAttribute('data-theme');
+        var next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('gcTheme', next);
+        applyIcons(next);
+      });
     });
-  });
+  })();
 
   /* ── 1. LOADER ── */
   window.addEventListener('load', function () {
