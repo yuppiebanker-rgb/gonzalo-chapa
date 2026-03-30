@@ -716,6 +716,10 @@ footer {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+@keyframes tickL {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 @keyframes scrollR {
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
@@ -1783,38 +1787,30 @@ footer {
 }
 
 /* ── Press strip ────────────────────────────────────── */
+/* ── Press strip ─────────────────────────────────────────── */
 .press-strip {
-  padding: 64px var(--pad-x);
-  border-top: .5px solid rgba(192,164,110,.08);
-  text-align: center;
+  padding:56px var(--pad-x);
+  border-top:.5px solid rgba(192,164,110,.08);
+  text-align:center;
 }
 .press-label {
-  display: block;
-  font-size: .58rem; letter-spacing: .42em; text-transform: uppercase;
-  color: rgba(192,164,110,.35); margin-bottom: 32px;
-  font-family: 'DM Sans', sans-serif;
+  display:block; font-size:.58rem; letter-spacing:.42em;
+  text-transform:uppercase; color:rgba(192,164,110,.32);
+  margin-bottom:28px; font-family:'DM Sans',sans-serif;
 }
-.press-track-wrap { overflow: hidden; }
+.press-track-wrap { overflow:hidden; }
 .press-track {
-  display: flex; align-items: center; gap: 0;
-  width: max-content;
-  animation: scrollL 35s linear infinite;
+  display:flex; align-items:center; gap:0;
+  width:max-content; animation:tickL 38s linear infinite;
 }
-.press-track:hover { animation-play-state: paused; }
+.press-track:hover { animation-play-state:paused; }
 .press-item {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  font-weight: 300; font-style: italic;
-  color: rgba(244,239,230,.22);
-  white-space: nowrap;
-  padding: 0 32px;
-  transition: color .3s;
+  font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,2vw,1.35rem);
+  font-weight:300; font-style:italic; color:rgba(244,239,230,.2);
+  white-space:nowrap; padding:0 28px; transition:color .3s;
 }
-.press-item:hover { color: var(--dust); }
-.press-sep {
-  color: rgba(192,164,110,.25);
-  font-size: .8rem; flex-shrink: 0;
-}
+.press-item:hover { color:var(--dust); }
+.press-sep { color:rgba(192,164,110,.22); font-size:.8rem; flex-shrink:0; }
 
 /* ── Film strip ─────────────────────────────────────── */
 .film-strip-wrap {
