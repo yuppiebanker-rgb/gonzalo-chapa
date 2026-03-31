@@ -341,7 +341,7 @@ body::after {
   margin-top: 48px;
   font-size: 0.62rem;
   letter-spacing: 0.15em;
-  color: rgba(244,239,230,0.35);
+  color: rgba(244,239,230,0.55);
   text-align: center;
   line-height: 2.2;
   opacity: 0;
@@ -556,7 +556,7 @@ footer {
   border-top: 0.5px solid rgba(192,164,110,0.1);
   font-size: 0.62rem;
   letter-spacing: 0.12em;
-  color: rgba(244,239,230,0.35);
+  color: rgba(244,239,230,0.55);
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -570,7 +570,7 @@ footer {
   gap: 20px;
 }
 .footer-right a {
-  color: rgba(244,239,230,0.35);
+  color: rgba(244,239,230,0.55);
   transition: color 0.3s;
 }
 .footer-right a:hover { color: var(--dust); }
@@ -725,13 +725,13 @@ footer {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 26px;
-  color: rgba(192,164,110,0.35);
+  color: rgba(192,164,110,0.55);
 }
 .ticker-row.right {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.3em;
-  color: rgba(244,239,230,0.18);
+  color: rgba(244,239,230,0.35);
 }
 @keyframes scrollL {
   0%   { transform: translateX(0); }
@@ -832,7 +832,7 @@ footer {
 .work-card-info .count {
   font-size: 0.58rem;
   letter-spacing: 0.15em;
-  color: rgba(244,239,230,0.5);
+  color: rgba(244,239,230,0.72);
   margin-top: 4px;
 }
 .work-card-arrow {
@@ -1540,13 +1540,13 @@ footer {
    PRESS STRIP
 ════════════════════════════════════════════════════════════════════ */
 .press-strip { padding:56px var(--pad-x); border-top:.5px solid rgba(192,164,110,.08); text-align:center; }
-.press-label { display:block; font-size:.58rem; letter-spacing:.42em; text-transform:uppercase; color:rgba(192,164,110,.32); margin-bottom:28px; font-family:'DM Sans',sans-serif; }
+.press-label { display:block; font-size:.58rem; letter-spacing:.42em; text-transform:uppercase; color:rgba(192,164,110,.55); margin-bottom:28px; font-family:'DM Sans',sans-serif; }
 .press-track-wrap { overflow:hidden; }
 .press-track { display:flex; align-items:center; gap:0; width:max-content; animation:tickL 38s linear infinite; }
 .press-track:hover { animation-play-state:paused; }
-.press-item { font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,2vw,1.35rem); font-weight:300; font-style:italic; color:rgba(244,239,230,.2); white-space:nowrap; padding:0 28px; transition:color .3s; }
+.press-item { font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,2vw,1.35rem); font-weight:300; font-style:italic; color:rgba(244,239,230,.45); white-space:nowrap; padding:0 28px; transition:color .3s; }
 .press-item:hover { color:var(--dust); }
-.press-sep { color:rgba(192,164,110,.22); font-size:.8rem; flex-shrink:0; }
+.press-sep { color:rgba(192,164,110,.4); font-size:.8rem; flex-shrink:0; }
 
 /* ════════════════════════════════════════════════════════════════════
    THEME TOGGLE
