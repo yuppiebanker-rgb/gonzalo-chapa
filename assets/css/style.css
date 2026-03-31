@@ -138,17 +138,19 @@ body::after {
 /* Click ring: a subtle circular burst from the camera area */
 .loader-click-ring {
   position: absolute;
-  top: 68%;
-  left: 50%;
+  top: 75%;
+  left: 48%;
   width: 20px;
   height: 20px;
   border: 2px solid var(--dust);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
 }
 .loader-click-ring.fire {
+  visibility: visible;
   animation: clickRing .5s ease-out forwards;
 }
 @keyframes clickRing {
@@ -158,11 +160,15 @@ body::after {
 /* Flash rays: 8 lines bursting from the camera */
 .loader-rays {
   position: absolute;
-  top: 68%;
-  left: 50%;
+  top: 75%;
+  left: 48%;
   width: 0;
   height: 0;
   pointer-events: none;
+  visibility: hidden;
+}
+.loader-rays.fire {
+  visibility: visible;
 }
 .loader-rays span {
   position: absolute;
