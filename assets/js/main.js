@@ -37,30 +37,37 @@
     var flash = loader ? loader.querySelector('.loader-flash') : null;
     if (!loader) return;
 
-    // Phase 1 (0–3.0s): Silhouette breathes, user sees Gonzalo with his camera
-    // Phase 2 (3.0s): He "shoots" — recoil + ring burst + rays burst from camera
+    // Full animation on first visit, quick flash on return visits
+    var seen = sessionStorage.getItem('gcLoaderSeen');
+    var shootDelay = seen ? 600 : 3000;
+    var flashDelay = seen ? 800 : 3300;
+    var revealDelay = seen ? 1000 : 3600;
+
+    // Phase 1: Silhouette breathes
+    // Phase 2: He shoots — recoil + ring + rays
     setTimeout(function() {
       if (sil) sil.classList.add('shoot');
       if (ring) ring.classList.add('fire');
       if (rays) rays.classList.add('fire');
-    }, 3000);
+    }, shootDelay);
 
-    // Phase 3 (3.3s): FLASH — full white screen snaps on
+    // Phase 3: FLASH
     setTimeout(function() {
       if (flash) {
         flash.style.transition = 'opacity .07s ease-in';
         flash.style.opacity = '1';
       }
-    }, 3300);
+    }, flashDelay);
 
-    // Phase 4 (3.6s): Flash fades out, loader disappears, site revealed
+    // Phase 4: Reveal site
     setTimeout(function() {
       if (flash) {
-        flash.style.transition = 'opacity .6s ease-out';
+        flash.style.transition = 'opacity .5s ease-out';
         flash.style.opacity = '0';
       }
       loader.classList.add('out');
-    }, 3600);
+      sessionStorage.setItem('gcLoaderSeen', '1');
+    }, revealDelay);
   });
 
   /* ── 2. MARQUEE DUPLICATE ── */
@@ -98,12 +105,20 @@
     overlay.classList.add('open');
     hamburger.classList.add('open');
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
   }
   function closeNav() {
     if (!overlay || !hamburger) return;
+    var scrollY = document.body.style.top;
     overlay.classList.remove('open');
     hamburger.classList.remove('open');
     document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
   }
 
   if (hamburger) hamburger.addEventListener('click', function () {
@@ -269,7 +284,7 @@
       e.preventDefault();
       var target = link.href;
       document.body.classList.add('page-exit');
-      setTimeout(function() { window.location.href = target; }, 280);
+      setTimeout(function() { window.location.href = target; }, 150);
     });
   });
 
