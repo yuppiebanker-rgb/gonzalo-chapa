@@ -33,7 +33,7 @@
     var loader = document.getElementById('loader');
     var sil = loader ? loader.querySelector('.loader-silhouette') : null;
     
-    var rays = loader ? loader.querySelector('.loader-rays') : null;
+    
     var flash = loader ? loader.querySelector('.loader-flash') : null;
     if (!loader) return;
 
@@ -48,7 +48,7 @@
     setTimeout(function() {
       if (sil) sil.classList.add('shoot');
       
-      if (rays) rays.classList.add('fire');
+      
     }, shootDelay);
 
     // Phase 3: FLASH
