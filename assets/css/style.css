@@ -253,9 +253,9 @@ body::after {
   padding-bottom: 14px;
 }
 .nav-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  letter-spacing: 0.32em;
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
   color: var(--cream);
 }
 .nav-right {
@@ -703,9 +703,9 @@ footer {
   gap: 12px;
 }
 .footer-left {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  letter-spacing: 0.2em;
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
 }
 .footer-right {
   display: flex;
@@ -1784,8 +1784,8 @@ body.page-exit { opacity:1; }
 }
 .page-wipe .wipe-text {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:clamp(14px,2vw,20px); letter-spacing:.3em;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(20px,3vw,32px); letter-spacing:.08em;
   color:var(--dust); opacity:0;
   animation:wipeTextIn .3s ease .25s forwards;
 }
