@@ -32,7 +32,7 @@
   window.addEventListener('load', function () {
     var loader = document.getElementById('loader');
     var sil = loader ? loader.querySelector('.loader-silhouette') : null;
-    var ring = loader ? loader.querySelector('.loader-click-ring') : null;
+    
     var rays = loader ? loader.querySelector('.loader-rays') : null;
     var flash = loader ? loader.querySelector('.loader-flash') : null;
     if (!loader) return;
@@ -47,7 +47,7 @@
     // Phase 2: He shoots — recoil + ring + rays
     setTimeout(function() {
       if (sil) sil.classList.add('shoot');
-      if (ring) ring.classList.add('fire');
+      
       if (rays) rays.classList.add('fire');
     }, shootDelay);
 
