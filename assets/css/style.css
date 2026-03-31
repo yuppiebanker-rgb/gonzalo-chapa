@@ -1117,27 +1117,29 @@ footer {
   width: 100%;
   display: block;
   object-fit: cover;
-  transition: transform 0.5s var(--r), filter 0.3s;
+  transition: transform 1.8s cubic-bezier(.25,.46,.45,.94), filter 0.6s ease;
 }
 .photo-item:hover .ph {
-  transform: scale(1.04);
-  filter: brightness(0.96);
+  transform: scale(1.08);
+  filter: brightness(0.92) contrast(1.06);
 }
 .photo-item .caption-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 14px;
-  background: linear-gradient(to top, rgba(11,9,6,0.7), transparent);
-  font-size: 0.6rem;
+  padding: 16px 14px;
+  background: linear-gradient(to top, rgba(11,9,6,0.75), transparent);
+  font-size: 0.62rem;
   letter-spacing: 0.12em;
-  color: rgba(244,239,230,0.5);
+  color: rgba(244,239,230,0.7);
   transform: translateY(100%);
-  transition: transform 0.35s var(--r);
+  transition: transform 0.45s cubic-bezier(.4,0,.2,1), opacity 0.45s;
+  opacity: 0;
 }
 .photo-item:hover .caption-overlay {
   transform: translateY(0);
+  opacity: 1;
 }
 .photo-placeholder {
   width: 100%;
@@ -1649,7 +1651,8 @@ footer {
 .film-strip::-webkit-scrollbar { display:none; }
 .film-frame { flex:0 0 auto; height:260px; width:195px; overflow:hidden; display:block; position:relative; scroll-snap-align:start; }
 .film-frame.wide { width:390px; }
-.film-frame img { width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.78) contrast(1.05) saturate(.82); transition:filter .4s ease, transform .5s var(--r); clip-path: none !important; }
+.film-frame img {
+  transition: filter 0.6s ease, transform 2s cubic-bezier(.25,.46,.45,.94); width:100%; height:100%; object-fit:cover; display:block; filter:brightness(.78) contrast(1.05) saturate(.82); transition:filter .4s ease, transform .5s var(--r); clip-path: none !important; }
 .film-frame:hover img { filter:brightness(.95) contrast(1.07) saturate(.95); transform:scale(1.04); }
 .film-strip-hint { position:absolute; bottom:14px; right:var(--pad-x); font-size:.55rem; letter-spacing:.35em; text-transform:uppercase; color:rgba(192,164,110,.3); pointer-events:none; animation:hintFade 3.5s ease-in-out 2.5s forwards; opacity:0; }
 @keyframes hintFade { 0%{opacity:0} 20%{opacity:1} 80%{opacity:1} 100%{opacity:0} }
@@ -1680,6 +1683,47 @@ footer {
    LIGHTBOX COUNTER
 ════════════════════════════════════════════════════════════════════ */
 .lb-counter { position:absolute; top:28px; left:36px; font-size:.58rem; letter-spacing:.28em; text-transform:uppercase; color:rgba(244,239,230,.38); font-family:'DM Sans',sans-serif; }
+
+/* ════════════════════════════════════════════════════════════════════
+   INSTAGRAM FEED
+════════════════════════════════════════════════════════════════════ */
+.ig-section { padding:var(--pad-y) 0; }
+.ig-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--pad-x); margin-bottom:28px;
+}
+.ig-label {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(20px,2.5vw,30px); color:var(--cream);
+}
+.ig-handle {
+  font-size:.65rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--dust); font-family:'DM Sans',sans-serif;
+  transition:opacity .3s;
+}
+.ig-handle:hover { opacity:.7; }
+.ig-grid {
+  display:grid; grid-template-columns:repeat(6,1fr); gap:3px;
+}
+.ig-cell {
+  aspect-ratio:1; overflow:hidden; position:relative; display:block;
+}
+.ig-cell img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  filter:brightness(.85) contrast(1.05) saturate(.9);
+  transition:transform 2s cubic-bezier(.25,.46,.45,.94), filter .6s ease;
+}
+.ig-cell:hover img {
+  transform:scale(1.12);
+  filter:brightness(.95) contrast(1.08) saturate(1);
+}
+.ig-cell::after {
+  content:''; position:absolute; inset:0;
+  background:rgba(192,164,110,0); transition:background .4s;
+}
+.ig-cell:hover::after { background:rgba(192,164,110,.08); }
+@media (max-width:768px) { .ig-grid { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:480px) { .ig-grid { grid-template-columns:repeat(2,1fr); } }
 
 /* ════════════════════════════════════════════════════════════════════
    PRESS STRIP
@@ -1984,10 +2028,10 @@ img.ph {
   object-position: center;
   display: block;
   filter: brightness(0.75) contrast(1.05) saturate(0.85);
-  transition: transform 0.7s ease, filter 0.4s ease;
+  transition: transform 2.5s cubic-bezier(.25,.46,.45,.94), filter 0.8s ease;
   z-index: 0;
 }
-.work-card:hover .work-card-img { transform: scale(1.05); filter: brightness(0.88) contrast(1.06); }
+.work-card:hover .work-card-img { transform: scale(1.1); filter: brightness(0.85) contrast(1.08); }
 .work-card-info { z-index: 2; }
 .work-card-arrow { z-index: 2; }
 
@@ -2034,6 +2078,7 @@ img.ph {
 }
 .film-frame.wide { width: 390px; }
 .film-frame img {
+  transition: filter 0.6s ease, transform 2s cubic-bezier(.25,.46,.45,.94);
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
@@ -2058,10 +2103,10 @@ img.ph {
   display: block;
   clip-path: none !important;
   filter: brightness(0.72) contrast(1.05);
-  transition: transform 0.7s ease, filter 0.4s ease;
+  transition: transform 2.5s cubic-bezier(.25,.46,.45,.94), filter 0.8s ease;
   z-index: 0;
 }
-.work-card:hover .work-card-img { transform: scale(1.05); filter: brightness(0.88) contrast(1.06); }
+.work-card:hover .work-card-img { transform: scale(1.1); filter: brightness(0.85) contrast(1.08); }
 .work-card::after { z-index: 1; }
 .work-card-info { z-index: 2; }
 .work-card-arrow { z-index: 2; }

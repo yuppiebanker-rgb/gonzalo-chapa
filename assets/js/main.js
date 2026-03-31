@@ -389,4 +389,54 @@
     });
   });
 
+  /* ── 17. WHATSAPP CTA — PER PAGE TEXT ── */
+  (function() {
+    var waText = document.getElementById('waText');
+    var waFloat = document.getElementById('waFloat');
+    if (!waText || !waFloat) return;
+
+    var page = window.location.pathname.split('/').pop().replace('.html', '');
+    var messages = {
+      'street': { text: 'Street Session', msg: 'Hola Gonzalo, me interesa una sesión de street photography.' },
+      'eventos': { text: 'Cotizar Evento', msg: 'Hola Gonzalo, quiero cotizar cobertura para un evento.' },
+      'retratos': { text: 'Agendar Retratos', msg: 'Hola Gonzalo, quiero agendar una sesión de retratos.' },
+      'brookside': { text: 'Brookside Session', msg: 'Hola Gonzalo, me interesa una sesión tipo Brookside.' },
+      'hire': { text: 'Contratar', msg: 'Hola Gonzalo, vi tu portafolio y me gustaría contratarte.' },
+      'about': { text: 'Contactar', msg: 'Hola Gonzalo, vi tu portafolio y quiero contactarte.' },
+      'book': { text: 'Reservar', msg: 'Hola Gonzalo, quiero reservar una sesión.' }
+    };
+
+    var config = messages[page];
+    if (config) {
+      waText.textContent = config.text;
+      waFloat.href = 'https://wa.me/528187997500?text=' + encodeURIComponent(config.msg);
+    }
+  })();
+
+  /* ── 18. INSTAGRAM GRID STAGGER ── */
+  (function() {
+    var igCells = document.querySelectorAll('.ig-cell');
+    if (!igCells.length) return;
+
+    var igObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          var idx = Array.from(igCells).indexOf(e.target);
+          setTimeout(function() {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'none';
+          }, idx * 80);
+          igObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05 });
+
+    igCells.forEach(function(cell) {
+      cell.style.opacity = '0';
+      cell.style.transform = 'scale(.94)';
+      cell.style.transition = 'opacity .7s ease, transform .7s ease';
+      igObs.observe(cell);
+    });
+  })();
+
 })();
