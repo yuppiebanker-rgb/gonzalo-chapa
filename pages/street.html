@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es" class="inner-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calle — Gonzalo Chapa</title>
+  <meta name="description" content="Fotografía de calle por Gonzalo Chapa. Monterrey, México.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Street — Gonzalo Chapa" />
+  <meta property="og:description" content="39 fotografías de calle de Monterrey, México." />
+  <meta property="og:url" content="https://gchapa.com/pages/street.html" />
+  <meta property="og:image" content="https://gchapa.com/assets/images/street/1-_DSC7572.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://gchapa.com/pages/street.html" />
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0b0906">
+
+  <style id="image-fix">
+    img.ph {
+      clip-path: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+    }
+    .photo-item, .narr-item, .narr-full,
+    .editorial-full, .ed-panel, .editorial-closer {
+      overflow: hidden !important;
+    }
+    .photo-item img.ph {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 200px !important;
+      position: relative !important;
+      object-fit: cover !important;
+      filter: brightness(0.88) contrast(1.05) !important;
+    }
+    .narr-item img.ph, .narr-full img.ph,
+    .editorial-full img.ph, .ed-panel img.ph,
+    .editorial-closer img.ph {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+  </style>
+</head>
+<body class="inner-page">
+    <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-scene">
+      <img src="../assets/images/silhouette.png"
+           alt="Gonzalo Chapa"
+           class="loader-silhouette"
+           width="160" height="240"/>
+      <div class="loader-click-ring"></div>
+      <div class="loader-rays">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="loader-text">Gonzalo Chapa &middot; Photography</div>
+    <div class="loader-flash"></div>
+  </div><div id="progress"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="../index.html" class="nav-logo">G. Chapa</a>
+    <ul class="nav-links">
+      <li><a href="street.html">Street</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="retratos.html">Retratos</a></li>
+      <li><a href="brookside.html">Brookside</a></li>
+      <li><a href="hire.html">Services</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte."
+         class="nav-hire-landing" target="_blank" rel="noopener">
+        <span>Hire Me</span>
+      </a>
+      <button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma" title="Switch language">ES</button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+        <svg id="iconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="iconSun"  width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navigation">
+    <button class="overlay-close" id="overlayClose" aria-label="Close menu">✕</button>
+    <div class="overlay-links">
+      <a href="street.html"    class="overlay-link active">Street</a>
+      <a href="eventos.html"   class="overlay-link">Eventos</a>
+      <a href="retratos.html"  class="overlay-link">Retratos</a>
+      <a href="brookside.html" class="overlay-link">Brookside</a>
+      <a href="hire.html"      class="overlay-link">Services</a>
+      <a href="about.html"    class="overlay-link">About</a>
+    </div>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte."
+       class="overlay-hire" target="_blank" rel="noopener">
+      <span>Hire Me on WhatsApp</span>
+    </a>
+    <div class="overlay-footer">
+      <a href="https://wa.me/528187997500">+52 81 8799 7500</a>
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank" rel="noopener">@my_memories.jpeg</a>
+      <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a>
+    </div>
+  </div>
+
+  <div id="lightbox">
+    <button class="lb-close">&times;</button>
+    <button class="lb-prev">&#8592;</button>
+    <button class="lb-next">&#8594;</button>
+    <img src="" alt="">
+    <div class="lb-caption"></div>
+    <p id="lb-counter" class="lb-counter"></p>
+  </div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero" style="background:#1a1610;">
+    <div class="page-hero-content">
+      <div>
+        <h1 class="fi">Calle</h1>
+        <p class="subtitle fi d1">Gonzalo Chapa</p>
+      </div>
+      <div class="meta fi d2">38 Images &middot; Monterrey &middot; 2024&ndash;2025</div>
+    </div>
+  </section>
+
+  <!-- MASONRY GALLERY -->
+  <section class="photo-grid">
+    <div class="photo-item" data-src="../assets/images/street/1-_DSC7572.jpg" data-caption="Street · GC #01">
+      <img class="ph" src="../assets/images/street/1-_DSC7572.jpg" alt="Street · 1-_DSC7572" loading="eager" fetchpriority="high" width="674" height="899" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/10-DSC02636.jpg" data-caption="Street · GC #02">
+      <img class="ph" src="../assets/images/street/10-DSC02636.jpg" alt="Street · 1-_DSC7572" loading="eager" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/11-DSC02638.jpg" data-caption="Street · GC #03">
+      <img class="ph" src="../assets/images/street/11-DSC02638.jpg" alt="Street · 1-_DSC7572" loading="eager" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/12-DSC02696.jpg" data-caption="Street · GC #04">
+      <img class="ph" src="../assets/images/street/12-DSC02696.jpg" alt="Street · 1-_DSC7572" loading="eager" width="900" height="506" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/13-DSC02697.jpg" data-caption="Street · GC #05">
+      <img class="ph" src="../assets/images/street/13-DSC02697.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="900" height="506" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/14-DSC02732.jpg" data-caption="Street · GC #06">
+      <img class="ph" src="../assets/images/street/14-DSC02732.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/15-DSC02744.jpg" data-caption="Street · GC #07">
+      <img class="ph" src="../assets/images/street/15-DSC02744.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/16-DSC02745.jpg" data-caption="Street · GC #08">
+      <img class="ph" src="../assets/images/street/16-DSC02745.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/17-DSC02747.jpg" data-caption="Street · GC #09">
+      <img class="ph" src="../assets/images/street/17-DSC02747.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/18-DSC02748.jpg" data-caption="Street · GC #10">
+      <img class="ph" src="../assets/images/street/18-DSC02748.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/19-DSC02751.jpg" data-caption="Street · GC #11">
+      <img class="ph" src="../assets/images/street/19-DSC02751.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="900" height="506" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/2-DSC02108.jpg" data-caption="Street · GC #12">
+      <img class="ph" src="../assets/images/street/2-DSC02108.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/20-DSC02781.jpg" data-caption="Street · GC #13">
+      <img class="ph" src="../assets/images/street/20-DSC02781.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/21-DSC02826.jpg" data-caption="Street · GC #14">
+      <img class="ph" src="../assets/images/street/21-DSC02826.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/22-DSC02895.jpg" data-caption="Street · GC #15">
+      <img class="ph" src="../assets/images/street/22-DSC02895.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/23-DSC02953.jpg" data-caption="Street · GC #16">
+      <img class="ph" src="../assets/images/street/23-DSC02953.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/24-DSC02954.jpg" data-caption="Street · GC #17">
+      <img class="ph" src="../assets/images/street/24-DSC02954.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/25-DSC02956.jpg" data-caption="Street · GC #18">
+      <img class="ph" src="../assets/images/street/25-DSC02956.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/26-DSC02961.jpg" data-caption="Street · GC #19">
+      <img class="ph" src="../assets/images/street/26-DSC02961.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/27-DSC02966.jpg" data-caption="Street · GC #20">
+      <img class="ph" src="../assets/images/street/27-DSC02966.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/28-DSC02975.jpg" data-caption="Street · GC #21">
+      <img class="ph" src="../assets/images/street/28-DSC02975.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/29-DSC02977.jpg" data-caption="Street · GC #22">
+      <img class="ph" src="../assets/images/street/29-DSC02977.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/3-DSC02160.jpg" data-caption="Street · GC #23">
+      <img class="ph" src="../assets/images/street/3-DSC02160.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="444" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/30-DSC02985.jpg" data-caption="Street · GC #24">
+      <img class="ph" src="../assets/images/street/30-DSC02985.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/31-DSC03011.jpg" data-caption="Street · GC #25">
+      <img class="ph" src="../assets/images/street/31-DSC03011.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/32-DSC03012.jpg" data-caption="Street · GC #26">
+      <img class="ph" src="../assets/images/street/32-DSC03012.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/33-DSC03013.jpg" data-caption="Street · GC #27">
+      <img class="ph" src="../assets/images/street/33-DSC03013.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/34-DSC03029.jpg" data-caption="Street · GC #28">
+      <img class="ph" src="../assets/images/street/34-DSC03029.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/35-DSC03032.jpg" data-caption="Street · GC #29">
+      <img class="ph" src="../assets/images/street/35-DSC03032.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/36-DSC03038.jpg" data-caption="Street · GC #30">
+      <img class="ph" src="../assets/images/street/36-DSC03038.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/37-_DSC4484.jpg" data-caption="Street · GC #31">
+      <img class="ph" src="../assets/images/street/37-_DSC4484.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/4-DSC02167.jpg" data-caption="Street · GC #32">
+      <img class="ph" src="../assets/images/street/4-DSC02167.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/5-DSC02384.jpg" data-caption="Street · GC #33">
+      <img class="ph" src="../assets/images/street/5-DSC02384.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/6-DSC02430.jpg" data-caption="Street · GC #34">
+      <img class="ph" src="../assets/images/street/6-DSC02430.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/7-DSC02436.jpg" data-caption="Street · GC #35">
+      <img class="ph" src="../assets/images/street/7-DSC02436.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/8-DSC02617.jpg" data-caption="Street · GC #36">
+      <img class="ph" src="../assets/images/street/8-DSC02617.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/9-DSC02629.jpg" data-caption="Street · GC #37">
+      <img class="ph" src="../assets/images/street/9-DSC02629.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="506" height="900" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+    <div class="photo-item" data-src="../assets/images/street/DSC02108.jpg" data-caption="Street · GC #38">
+      <img class="ph" src="../assets/images/street/DSC02108.jpg" alt="Street · 1-_DSC7572" loading="lazy" width="787" height="1400" style="width:100%;display:block;object-fit:cover;"/>
+      <div class="caption-overlay">Street &middot; GC</div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="gallery-cta fi">
+    <blockquote>&ldquo;The street remembers what we choose to forget.&rdquo;</blockquote>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20de%20Street" target="_blank" class="btn-dust">Get in Touch &rarr;</a>
+  </section>
+
+  <!-- WA FLOAT -->
+  <a href="https://wa.me/528187997500" target="_blank" class="wa-float">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.612.638l4.725-1.393A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.336 0-4.512-.697-6.332-1.893l-.442-.296-3.26.961.882-3.412-.315-.462A9.935 9.935 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+    Hire Me
+    <span class="wa-pulse"></span>
+  </a>
+
+  <button class="back-top" aria-label="Back to top">&uarr;</button>
+
+  <footer>
+    <div class="footer-left">G. Chapa</div>
+    <div class="footer-center">&copy; 2025 Gonzalo Chapa &middot; Monterrey, M&eacute;xico</div>
+    <div class="footer-right">
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank">Instagram</a>
+      <a href="https://wa.me/528187997500" target="_blank">WhatsApp</a>
+      <a href="hire.html">Hire</a>
+      <a href="privacy.html">Privacidad</a>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+<div id="galleryCounter" style="
+  position:fixed; bottom:calc(28px + env(safe-area-inset-bottom,0px));
+  left:50%; transform:translateX(-50%); z-index:400;
+  font-size:.56rem; letter-spacing:.3em; text-transform:uppercase;
+  color:rgba(192,164,110,.55); font-family:'DM Sans',sans-serif;
+  background:rgba(11,9,6,.75); backdrop-filter:blur(8px);
+  padding:6px 18px; border-radius:20px; pointer-events:none;
+  opacity:0; transition:opacity .4s ease;
+  white-space:nowrap;
+"></div>
+<script>
+(function(){
+  var counter=document.getElementById('galleryCounter');
+  if(!counter)return;
+  var items=[].slice.call(document.querySelectorAll('.photo-item[data-src],.bs-cell,.bs-duo-cell,.bs-trio-cell,.bs-wide,.bs-bw,.bs-opener'));
+  if(!items.length)return;
+  var total=items.length, timer;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx=items.indexOf(e.target)+1;
+        counter.textContent=('0'+idx).slice(-2)+' / '+('0'+total).slice(-2);
+        counter.style.opacity='1';
+        clearTimeout(timer);
+        timer=setTimeout(function(){counter.style.opacity='0';},2000);
+      }
+    });
+  },{threshold:0.45});
+  items.forEach(function(el){io.observe(el);});
+})();
+</script>
+
+  <script>
+  (function(){
+    var btn = document.getElementById('langToggle');
+    var lang = localStorage.getItem('gcLang') || 'es';
+    function apply(l){
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-es]').forEach(function(el){ el.textContent = el.getAttribute('data-'+l); });
+      if(btn) btn.textContent = l === 'es' ? 'EN' : 'ES';
+      localStorage.setItem('gcLang', l);
+    }
+    apply(lang);
+    if(btn) btn.addEventListener('click', function(){ apply(localStorage.getItem('gcLang')==='es'?'en':'es'); });
+  })();
+  </script>
+</body>
+</html>
