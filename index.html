@@ -39,6 +39,43 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b0906">
 
+  <!-- SEO Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Gonzalo Chapa Photography",
+    "url": "https://gchapa.com",
+    "image": "https://gchapa.com/assets/images/brookside/5-_DSC8118.jpg",
+    "description": "Professional photographer in Monterrey, México. Street photography, events, portraits, and editorial sessions.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Monterrey",
+      "addressRegion": "Nuevo León",
+      "addressCountry": "MX"
+    },
+    "telephone": "+528187997500",
+    "email": "gchapa2602@gmail.com",
+    "priceRange": "$$",
+    "sameAs": [
+      "https://instagram.com/my_memories.jpeg"
+    ],
+    "areaServed": {
+      "@type": "City",
+      "name": "Monterrey"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Photography Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Event Photography", "description": "Professional event coverage" }},
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Portrait Session", "description": "On-location portrait photography" }},
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Street Photography", "description": "Urban and street photography sessions" }}
+      ]
+    }
+  }
+  </script>
+
   <style id="image-fix">
     /* ═══ FORCE ALL IMAGES TO SHOW ═══════════════════════════ */
 
@@ -139,6 +176,11 @@
   </style>
 </head>
 <body>
+
+  <!-- PAGE WIPE TRANSITION -->
+  <div class="page-wipe" id="pageWipe">
+    <div class="wipe-text">G. Chapa</div>
+  </div>
 
   <!-- LOADER -->
   <div id="loader">

@@ -267,19 +267,27 @@
     if (href === path) a.classList.add('active');
   });
 
-  /* ── 11. PAGE TRANSITIONS ── */
-  document.querySelectorAll('a[href]').forEach(function(link) {
-    var href = link.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('http') ||
-        href.startsWith('mailto') || href.startsWith('tel') ||
-        link.target === '_blank' || link.hasAttribute('download')) return;
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var target = link.href;
-      document.body.classList.add('page-exit');
-      setTimeout(function() { window.location.href = target; }, 150);
+  /* ── 11. PAGE TRANSITIONS — CINEMATIC WIPE ── */
+  (function() {
+    var wipe = document.getElementById('pageWipe');
+
+    document.querySelectorAll('a[href]').forEach(function(link) {
+      var href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('http') ||
+          href.startsWith('mailto') || href.startsWith('tel') ||
+          link.target === '_blank' || link.hasAttribute('download')) return;
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = link.href;
+        if (wipe) {
+          wipe.classList.add('active');
+          setTimeout(function() { window.location.href = target; }, 450);
+        } else {
+          window.location.href = target;
+        }
+      });
     });
-  });
+  })();
 
   /* ── 12. IMAGE REVEAL ON SCROLL ── */
   var revealTargets = document.querySelectorAll(
@@ -437,6 +445,118 @@
       cell.style.transition = 'opacity .7s ease, transform .7s ease';
       igObs.observe(cell);
     });
+  })();
+
+  /* ── 19. BLUR-UP IMAGE LOADING ── */
+  (function() {
+    var imgs = document.querySelectorAll('.ph, .work-card-img, .ig-cell img, .film-frame img, .hero-slide img');
+    imgs.forEach(function(img) {
+      if (img.complete) {
+        img.classList.add('loaded');
+      } else {
+        img.addEventListener('load', function() {
+          img.classList.add('loaded');
+        });
+        img.addEventListener('error', function() {
+          img.classList.add('loaded'); // Remove blur even on error
+        });
+      }
+    });
+  })();
+
+  /* ── 20. PARALLAX ON SCROLL ── */
+  (function() {
+    // Only on desktop — parallax is janky on mobile
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    var parallaxEls = document.querySelectorAll('.work-card-img, .page-hero img, .hero-slide img');
+    if (!parallaxEls.length) return;
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          var scrollY = window.scrollY;
+          parallaxEls.forEach(function(el) {
+            var rect = el.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+            var center = rect.top + rect.height / 2;
+            var offset = (center / window.innerHeight - 0.5) * 30;
+            el.style.objectPosition = 'center calc(50% + ' + offset + 'px)';
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
+
+  /* ── 21. SCROLL-TRIGGERED COUNTER ANIMATION ── */
+  (function() {
+    var counts = document.querySelectorAll('.work-card-info .count');
+    if (!counts.length) return;
+
+    var countObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+
+        var el = entry.target;
+        var text = el.textContent;
+        var match = text.match(/(\d+)/);
+        if (!match) return;
+
+        var target = parseInt(match[1]);
+        var suffix = text.replace(match[1], '').trim();
+        var start = 0;
+        var duration = 1200;
+        var startTime = null;
+
+        function animate(time) {
+          if (!startTime) startTime = time;
+          var progress = Math.min((time - startTime) / duration, 1);
+          // Ease out cubic
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(eased * target);
+          el.textContent = current + ' ' + suffix;
+          if (progress < 1) requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+        countObs.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+
+    counts.forEach(function(el) { countObs.observe(el); });
+  })();
+
+  /* ── 22. LIGHTBOX SHARE BUTTON ── */
+  (function() {
+    var lb = document.getElementById('lightbox');
+    if (!lb) return;
+
+    // Add share button if not exists
+    if (!lb.querySelector('.lb-share')) {
+      var shareBtn = document.createElement('button');
+      shareBtn.className = 'lb-share';
+      shareBtn.innerHTML = '&#8599;';
+      shareBtn.title = 'Share';
+      shareBtn.style.cssText = 'position:absolute;top:20px;left:36px;font-size:22px;color:var(--cream);opacity:.5;cursor:pointer;background:none;border:none;transition:opacity .3s;z-index:2;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;';
+      shareBtn.addEventListener('mouseenter', function() { shareBtn.style.opacity = '1'; });
+      shareBtn.addEventListener('mouseleave', function() { shareBtn.style.opacity = '.5'; });
+      shareBtn.addEventListener('click', function() {
+        var img = lb.querySelector('img');
+        if (!img || !img.src) return;
+        if (navigator.share) {
+          navigator.share({ title: 'Gonzalo Chapa Photography', url: window.location.href });
+        } else {
+          navigator.clipboard.writeText(window.location.href).then(function() {
+            shareBtn.innerHTML = '&#10003;';
+            setTimeout(function() { shareBtn.innerHTML = '&#8599;'; }, 1500);
+          });
+        }
+      });
+      lb.appendChild(shareBtn);
+    }
   })();
 
 })();

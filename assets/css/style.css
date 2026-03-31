@@ -1760,7 +1760,58 @@ footer {
    PAGE TRANSITIONS
 ════════════════════════════════════════════════════════════════════ */
 body { opacity:1; transition:opacity .15s ease; }
-body.page-exit { opacity:0; }
+body.page-exit { opacity:1; }
+
+/* Cinematic page wipe transition */
+.page-wipe {
+  position:fixed; inset:0; z-index:9500;
+  background:var(--ink);
+  transform:translateY(100%);
+  pointer-events:none;
+}
+.page-wipe.active {
+  animation:wipeIn .5s cubic-bezier(.76,0,.24,1) forwards;
+}
+@keyframes wipeIn {
+  0% { transform:translateY(100%); }
+  100% { transform:translateY(0); }
+}
+.page-wipe .wipe-text {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(14px,2vw,20px); letter-spacing:.3em;
+  color:var(--dust); opacity:0;
+  animation:wipeTextIn .3s ease .25s forwards;
+}
+@keyframes wipeTextIn {
+  to { opacity:1; }
+}
+
+/* Blur-up image placeholders — lazy loaded images only */
+.photo-item .ph,
+.work-card-img,
+.ig-cell img,
+.film-frame img {
+  filter:blur(12px) brightness(.7) !important;
+  transition:filter 1.2s ease !important;
+}
+.photo-item .ph.loaded { filter:brightness(.88) contrast(1.05) !important; }
+.work-card-img.loaded { filter:brightness(.72) contrast(1.05) !important; }
+.ig-cell img.loaded { filter:brightness(.85) contrast(1.05) saturate(.9) !important; }
+.film-frame img.loaded { filter:brightness(.82) contrast(1.05) !important; }
+/* Restore hover states */
+.photo-item:hover .ph.loaded { filter:brightness(.92) contrast(1.06) !important; }
+.work-card:hover .work-card-img.loaded { filter:brightness(.85) contrast(1.08) !important; }
+.ig-cell:hover img.loaded { filter:brightness(.95) contrast(1.08) saturate(1) !important; }
+.film-frame:hover img.loaded { filter:brightness(.95) contrast(1.07) !important; }
+
+/* Parallax containers */
+.parallax-wrap { overflow:hidden; position:relative; }
+.parallax-img { transition:transform .1s linear; will-change:transform; }
+
+/* Scroll counter animation */
+.count-up { display:inline-block; }
+.count-up.animated { transition:none; }
 
 /* ════════════════════════════════════════════════════════════════════
    GLOBAL POLISH
