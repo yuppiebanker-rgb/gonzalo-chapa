@@ -105,20 +105,12 @@
     overlay.classList.add('open');
     hamburger.classList.add('open');
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = '-' + window.scrollY + 'px';
   }
   function closeNav() {
     if (!overlay || !hamburger) return;
-    var scrollY = document.body.style.top;
     overlay.classList.remove('open');
     hamburger.classList.remove('open');
     document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY || '0') * -1);
   }
 
   if (hamburger) hamburger.addEventListener('click', function () {
@@ -133,8 +125,9 @@
     }
   });
 
+  // Close overlay on link click — handle both naming conventions
   if (overlay) {
-    overlay.querySelectorAll('a').forEach(function (a) {
+    overlay.querySelectorAll('a, .overlay-link, .overlay-hire, .nav-overlay-links a, .nav-overlay-cta').forEach(function (a) {
       a.addEventListener('click', closeNav);
     });
   }
