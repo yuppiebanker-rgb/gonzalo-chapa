@@ -1692,6 +1692,7 @@ html { -webkit-text-size-adjust:100%; scroll-padding-top:80px; }
 ════════════════════════════════════════════════════════════════════ */
 @media (max-width:900px) {
   .nav-links { display:none; }
+  .hire-btn { display:none; }
   .nav-toggle { display:flex; }
   .hero { grid-template-columns:1fr 1fr; }
   .hero-col:nth-child(3) { display:none; }
@@ -1709,6 +1710,8 @@ html { -webkit-text-size-adjust:100%; scroll-padding-top:80px; }
 ════════════════════════════════════════════════════════════════════ */
 @media (max-width:768px) {
   #nav { padding-left:clamp(16px,4vw,40px); padding-right:clamp(16px,4vw,40px); }
+  .hire-btn, .lang-toggle, .theme-toggle { display:none !important; }
+  .nav-right { gap:12px; }
   .hero-v2-title { font-size:clamp(44px,11vw,72px); margin-bottom:28px; }
   .hero-eyebrow { font-size:.6rem; letter-spacing:.35em; }
   .hero-scroll { bottom:32px; }
@@ -1891,7 +1894,7 @@ img.ph {
 }
 .work-card:hover .work-card-img { transform: scale(1.05); filter: brightness(0.88) contrast(1.06); }
 .work-card-info { z-index: 2; }
-.work-card-arrow { position: absolute; bottom: 20px; right: 20px; z-index: 2; }
+.work-card-arrow { z-index: 2; }
 
 /* Hero + film strip — never clip */
 .hero-bg img, .hero-bg picture img, .film-frame img, .work-card-img { clip-path: none !important; }
@@ -1966,7 +1969,7 @@ img.ph {
 .work-card:hover .work-card-img { transform: scale(1.05); filter: brightness(0.88) contrast(1.06); }
 .work-card::after { z-index: 1; }
 .work-card-info { z-index: 2; }
-.work-card-arrow { position: absolute; bottom: 20px; right: 20px; z-index: 2; }
+.work-card-arrow { z-index: 2; }
 
 /* Gallery images -- reveal on scroll */
 img.ph {
