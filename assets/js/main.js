@@ -33,32 +33,34 @@
     var loader = document.getElementById('loader');
     var sil = loader ? loader.querySelector('.loader-silhouette') : null;
     var ring = loader ? loader.querySelector('.loader-click-ring') : null;
+    var rays = loader ? loader.querySelector('.loader-rays') : null;
     var flash = loader ? loader.querySelector('.loader-flash') : null;
     if (!loader) return;
 
-    // Phase 1 (1.2s): Silhouette breathes, user sees Gonzalo
-    // Phase 2 (1.2s): He "shoots" — recoil + ring burst
+    // Phase 1 (0–3.0s): Silhouette breathes, user sees Gonzalo with his camera
+    // Phase 2 (3.0s): He "shoots" — recoil + ring burst + rays burst from camera
     setTimeout(function() {
       if (sil) sil.classList.add('shoot');
       if (ring) ring.classList.add('fire');
-    }, 1200);
+      if (rays) rays.classList.add('fire');
+    }, 3000);
 
-    // Phase 3 (1.4s): Flash fires — full white
+    // Phase 3 (3.3s): FLASH — full white screen snaps on
     setTimeout(function() {
       if (flash) {
         flash.style.transition = 'opacity .07s ease-in';
         flash.style.opacity = '1';
       }
-    }, 1400);
+    }, 3300);
 
-    // Phase 4 (1.6s): Flash fades out, loader disappears, site revealed
+    // Phase 4 (3.6s): Flash fades out, loader disappears, site revealed
     setTimeout(function() {
       if (flash) {
         flash.style.transition = 'opacity .6s ease-out';
         flash.style.opacity = '0';
       }
       loader.classList.add('out');
-    }, 1600);
+    }, 3600);
   });
 
   /* ── 2. MARQUEE DUPLICATE ── */

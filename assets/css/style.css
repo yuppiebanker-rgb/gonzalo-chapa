@@ -149,11 +149,52 @@ body::after {
   pointer-events: none;
 }
 .loader-click-ring.fire {
-  animation: clickRing .4s ease-out forwards;
+  animation: clickRing .5s ease-out forwards;
 }
 @keyframes clickRing {
   0% { transform: translate(-50%, -50%) scale(0); opacity: .8; }
-  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(5); opacity: 0; }
+}
+/* Flash rays: 8 lines bursting from the camera */
+.loader-rays {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.loader-rays span {
+  position: absolute;
+  width: 2px;
+  height: 0;
+  background: linear-gradient(to top, var(--dust), rgba(255,255,255,.9));
+  transform-origin: bottom center;
+  opacity: 0;
+  border-radius: 1px;
+}
+.loader-rays span:nth-child(1) { transform: rotate(0deg) translateX(-1px); }
+.loader-rays span:nth-child(2) { transform: rotate(45deg) translateX(-1px); }
+.loader-rays span:nth-child(3) { transform: rotate(90deg) translateX(-1px); }
+.loader-rays span:nth-child(4) { transform: rotate(135deg) translateX(-1px); }
+.loader-rays span:nth-child(5) { transform: rotate(180deg) translateX(-1px); }
+.loader-rays span:nth-child(6) { transform: rotate(225deg) translateX(-1px); }
+.loader-rays span:nth-child(7) { transform: rotate(270deg) translateX(-1px); }
+.loader-rays span:nth-child(8) { transform: rotate(315deg) translateX(-1px); }
+.loader-rays.fire span {
+  animation: rayBurst .4s ease-out forwards;
+}
+.loader-rays.fire span:nth-child(2) { animation-delay: .02s; }
+.loader-rays.fire span:nth-child(3) { animation-delay: .04s; }
+.loader-rays.fire span:nth-child(4) { animation-delay: .01s; }
+.loader-rays.fire span:nth-child(5) { animation-delay: .05s; }
+.loader-rays.fire span:nth-child(6) { animation-delay: .03s; }
+.loader-rays.fire span:nth-child(7) { animation-delay: .02s; }
+.loader-rays.fire span:nth-child(8) { animation-delay: .04s; }
+@keyframes rayBurst {
+  0% { height: 0; opacity: 1; }
+  50% { height: 80px; opacity: .9; }
+  100% { height: 120px; opacity: 0; }
 }
 .loader-text {
   margin-top: 24px;

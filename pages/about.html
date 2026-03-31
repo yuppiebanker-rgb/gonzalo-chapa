@@ -43,7 +43,22 @@
 </head>
 <body>
   <div id="progress"></div>
-  <div id="loader"><div class="loader-name">About</div><div class="loader-bar"></div></div>
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-scene">
+      <img src="../assets/images/silhouette.png"
+           alt="Gonzalo Chapa"
+           class="loader-silhouette"
+           width="160" height="240"/>
+      <div class="loader-click-ring"></div>
+      <div class="loader-rays">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="loader-text">Gonzalo Chapa &middot; Photography</div>
+    <div class="loader-flash"></div>
+  </div>
   <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
     <button class="lb-close" aria-label="Close">✕</button>
     <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
