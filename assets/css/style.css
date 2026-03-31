@@ -138,8 +138,8 @@ body::after {
 /* Click ring: a subtle circular burst from the camera area */
 .loader-click-ring {
   position: absolute;
-  top: 75%;
-  left: 48%;
+  top: 63%;
+  left: 58%;
   width: 20px;
   height: 20px;
   border: 2px solid var(--dust);
@@ -160,8 +160,8 @@ body::after {
 /* Flash rays: 8 lines bursting from the camera */
 .loader-rays {
   position: absolute;
-  top: 75%;
-  left: 48%;
+  top: 63%;
+  left: 58%;
   width: 0;
   height: 0;
   pointer-events: none;
