@@ -113,13 +113,45 @@
     .toast.success{border-color:var(--success)}.toast.error{border-color:var(--danger)}
 
     .empty{text-align:center;padding:40px;color:var(--muted);font-size:.8rem;font-style:italic}
+    .photo-card[draggable]{cursor:grab}.photo-card.dragging{opacity:.3;border-color:var(--dust)!important}
+    tr[draggable]{cursor:grab}tr.dragging>td{opacity:.3;background:rgba(192,164,110,.06)}
 
+    /* SIDEBAR BADGE */
+    .sb-badge{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;padding:0 4px;background:var(--dust);color:var(--ink);font-size:.52rem;font-weight:700;border-radius:9px;margin-left:auto;line-height:1}
+
+    /* QUICK ACTIONS */
+    .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .qa-btn{background:var(--card);border:1px solid var(--border);padding:16px 8px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;font-family:inherit;color:var(--cream);width:100%}
+    .qa-btn:hover{border-color:var(--dust);background:rgba(192,164,110,.06)}
+    .qa-ic{font-size:18px;margin-bottom:5px;color:var(--dust)}
+    .qa-label{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+    /* ACTIVITY FEED */
+    .activity-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)}
+    .activity-row:last-child{border-bottom:none}
+    .activity-ic{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:rgba(192,164,110,.08);border-radius:50%;font-size:12px;flex-shrink:0;color:var(--dust)}
+    .activity-desc{flex:1;font-size:.78rem;line-height:1.4}
+    .activity-time{font-size:.62rem;color:var(--muted);white-space:nowrap;padding-left:8px}
+
+    /* 7-DAY CHART */
+    .dash-lower{display:grid;grid-template-columns:260px 1fr;gap:14px;margin-top:14px}
+    .chart-wrap{display:flex;flex-direction:column;justify-content:flex-end;height:96px;gap:0}
+    .chart-bars{display:flex;align-items:flex-end;gap:5px;height:80px}
+    .chart-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+    .chart-bar{width:100%;background:rgba(192,164,110,.2);border-top:1px solid rgba(192,164,110,.5);min-height:2px;transition:height .35s}
+    .chart-bar.today{background:rgba(192,164,110,.45);border-top-color:var(--dust)}
+    .chart-labels{display:flex;gap:5px;margin-top:5px}
+    .chart-lbl{flex:1;text-align:center;font-size:.52rem;color:var(--muted);letter-spacing:.02em}
+
+    @media(max-width:900px){.dash-lower{grid-template-columns:1fr}}
     @media(max-width:768px){
       .sidebar{width:56px;padding:12px 0}.sb-head,.sb-nav li a span,.sb-sub{display:none}
       .sb-nav li a{justify-content:center;padding:10px 0;border-left:none}
+      .sb-badge{display:none}
       .main{margin-left:56px;padding:16px}
       .form-row,.form-row.tri{grid-template-columns:1fr}
       .stat-grid{grid-template-columns:1fr 1fr}
+      .quick-actions{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
@@ -157,8 +189,8 @@
     <li><a href="#" data-s="seo"><span class="ic">◎</span><span>SEO</span></a></li>
     <li><a href="#" data-s="analiticas"><span class="ic">▥</span><span>Analíticas</span></a></li>
     <div class="divider"></div>
-    <li><a href="#" data-s="cotizaciones"><span class="ic">$</span><span>Cotizaciones</span></a></li>
-    <li><a href="#" data-s="mensajes"><span class="ic">✉</span><span>Mensajes</span></a></li>
+    <li><a href="#" data-s="cotizaciones"><span class="ic">$</span><span>Cotizaciones</span><span class="sb-badge" id="badgeQuotes" style="display:none">0</span></a></li>
+    <li><a href="#" data-s="mensajes"><span class="ic">✉</span><span>Mensajes</span><span class="sb-badge" id="badgeMsgs" style="display:none">0</span></a></li>
     <li><a href="#" data-s="settings"><span class="ic">⚙</span><span>Settings</span></a></li>
   </ul>
   <div class="sb-foot"><button onclick="doLogout()">Cerrar Sesión</button></div>
@@ -170,7 +202,27 @@
 <div id="s-dashboard" class="section active">
   <div class="page-head"><h1 class="page-title">Dashboard</h1><p class="page-sub">Resumen de tu portafolio</p></div>
   <div class="stat-grid" id="dashStats"></div>
-  <div class="card" style="margin-top:16px"><div class="card-title">Actividad Reciente</div><div id="dashActivity" class="empty">Cargando...</div></div>
+  <!-- QUICK ACTIONS -->
+  <div class="quick-actions" style="margin-top:14px">
+    <button class="qa-btn" onclick="navTo('gallery')"><div class="qa-ic">▣</div><div class="qa-label">Subir Fotos</div></button>
+    <button class="qa-btn" onclick="navTo('blog')"><div class="qa-ic">✎</div><div class="qa-label">Nuevo Post</div></button>
+    <button class="qa-btn" onclick="navTo('cotizaciones')"><div class="qa-ic">$</div><div class="qa-label">Cotizaciones</div></button>
+    <button class="qa-btn" onclick="navTo('mensajes')"><div class="qa-ic">✉</div><div class="qa-label">Mensajes</div></button>
+  </div>
+  <!-- CHART + ACTIVITY -->
+  <div class="dash-lower">
+    <div class="card">
+      <div class="card-title">Visitas — 7 días</div>
+      <div class="chart-wrap">
+        <div class="chart-bars" id="chartBars"></div>
+        <div class="chart-labels" id="chartLabels"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Actividad Reciente</div>
+      <div id="dashActivity"><div class="empty">Cargando...</div></div>
+    </div>
+  </div>
 </div>
 
 <!-- PÁGINAS -->
@@ -219,7 +271,7 @@
     </div>
     <div class="btn-group"><button class="btn btn-primary" onclick="saveNav()">Guardar</button><button class="btn btn-outline" onclick="hideNavForm()">Cancelar</button></div>
   </div>
-  <table class="data-table"><thead><tr><th>Orden</th><th>Label</th><th>URL</th><th>CTA</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="navBody"></tbody></table>
+  <table class="data-table"><thead><tr><th style="width:24px"></th><th>Label</th><th>URL</th><th>CTA</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="navBody"></tbody></table>
 </div>
 
 <!-- BLOG -->
@@ -348,7 +400,7 @@ let curCol=null,cols=[],seoPages=[],curSeoPage=null;
 async function doLogin(){const e=$('authEmail').value.trim(),p=$('authPass').value,err=$('authErr');err.style.display='none';if(!e||!p){err.textContent='Ingresa email y contraseña.';err.style.display='block';return}const{error}=await sb.auth.signInWithPassword({email:e,password:p});if(error){err.textContent=error.message+(error.status?' ('+error.status+')':'');err.style.display='block'}else showApp()}
 async function doLogout(){await sb.auth.signOut();$('app').style.display='none';$('authScreen').style.display='flex'}
 async function checkAuth(){const{data:{session}}=await sb.auth.getSession();if(session)showApp()}
-function showApp(){$('authScreen').style.display='none';$('app').style.display='block';loadDashboard()}
+function showApp(){$('authScreen').style.display='none';$('app').style.display='block';loadDashboard();loadSidebarBadges()}
 
 // NAV
 document.querySelectorAll('.sb-nav a[data-s]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');const s=a.dataset.s;document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}));
@@ -358,13 +410,13 @@ async function loadDashboard(){const[p,c,s,h,b,q,m]=await Promise.all([sb.from('
 
 // GALLERY
 async function loadGallery(){const{data}=await sb.from('collections').select('*').order('sort_order');cols=data||[];$('colTabs').innerHTML=cols.map((c,i)=>`<button class="tab ${i===0?'active':''}" onclick="selCol('${c.id}',this)">${c.name}</button>`).join('')+`<button class="tab" onclick="addCol()" style="color:var(--dust)">+ Nueva</button>`;if(cols.length)selCol(cols[0].id,$('colTabs').querySelector('.tab'))}
-async function selCol(id,el){curCol=id;$('colTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const{data}=await sb.from('photos').select('*').eq('collection_id',id).order('sort_order');$('photoGrid').innerHTML=(data||[]).map(p=>`<div class="photo-card"><img src="${p.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delPhoto('${p.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay fotos. Sube la primera.</div>'}
+async function selCol(id,el){curCol=id;$('colTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const{data}=await sb.from('photos').select('*').eq('collection_id',id).order('sort_order');$('photoGrid').innerHTML=(data||[]).map(p=>`<div class="photo-card" draggable="true" data-id="${p.id}"><img src="${p.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delPhoto('${p.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay fotos. Sube la primera.</div>';initDrag('photoGrid','.photo-card[data-id]',savePhotoOrder)}
 async function uploadPhotos(files){if(!curCol||!files.length)return;const col=cols.find(c=>c.id===curCol);for(let i=0;i<files.length;i++){const f=files[i],path=`${col.slug}/${Date.now()}-${i}.${f.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,f);if(error){toast('Error: '+error.message,'error');continue}const{data:u}=sb.storage.from('photos').getPublicUrl(path);await sb.from('photos').insert({collection_id:curCol,image_url:u.publicUrl,filename:f.name,sort_order:i})}toast(files.length+' foto(s) subidas','success');selCol(curCol);$('photoFile').value=''}
 async function delPhoto(id){if(!confirm('¿Eliminar?'))return;await sb.from('photos').delete().eq('id',id);toast('Eliminada','success');selCol(curCol)}
 async function addCol(){const n=prompt('Nombre:');if(!n)return;await sb.from('collections').insert({name:n,slug:n.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''),sort_order:cols.length+1});toast('Creada','success');loadGallery()}
 
 // HERO
-async function loadHero(){const{data}=await sb.from('hero_slides').select('*').order('sort_order');$('heroGrid').innerHTML=(data||[]).map(h=>`<div class="photo-card"><img src="${h.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delHero('${h.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay slides.</div>'}
+async function loadHero(){const{data}=await sb.from('hero_slides').select('*').order('sort_order');$('heroGrid').innerHTML=(data||[]).map(h=>`<div class="photo-card" draggable="true" data-id="${h.id}"><img src="${h.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delHero('${h.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay slides.</div>';initDrag('heroGrid','.photo-card[data-id]',saveHeroOrder)}
 async function uploadHero(f){if(!f)return;const path=`hero/${Date.now()}.${f.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,f);if(error){toast('Error: '+error.message,'error');return}const{data:u}=sb.storage.from('photos').getPublicUrl(path);const label=prompt('Location label:')||'';await sb.from('hero_slides').insert({image_url:u.publicUrl,location_label:label,sort_order:0});toast('Slide agregado','success');loadHero();$('heroFile').value=''}
 async function delHero(id){if(!confirm('¿Eliminar?'))return;await sb.from('hero_slides').delete().eq('id',id);toast('Eliminado','success');loadHero()}
 
@@ -373,7 +425,7 @@ async function loadSections(){const{data}=await sb.from('section_visibility').se
 async function toggleSection(id,v){await sb.from('section_visibility').update({visible:v}).eq('id',id);toast(v?'Sección visible':'Sección oculta','success')}
 
 // NAVIGATION
-async function loadNav(){const{data}=await sb.from('nav_items').select('*').order('sort_order');$('navBody').innerHTML=(data||[]).map(n=>`<tr><td>${n.sort_order}</td><td>${n.label}</td><td style="font-size:.72rem;color:var(--muted)">${n.href}</td><td>${n.is_cta?'<span class="badge badge-active">CTA</span>':''}</td><td>${n.visible?'<span class="badge badge-active">Sí</span>':'<span class="badge badge-inactive">No</span>'}</td><td><button class="btn btn-sm btn-outline" onclick="editNav('${n.id}')">Editar</button> <button class="btn btn-sm btn-danger" onclick="delNav('${n.id}')">✕</button></td></tr>`).join('')}
+async function loadNav(){const{data}=await sb.from('nav_items').select('*').order('sort_order');$('navBody').innerHTML=(data||[]).map(n=>`<tr data-id="${n.id}" draggable="true"><td style="color:var(--muted);user-select:none">⠿</td><td>${n.label}</td><td style="font-size:.72rem;color:var(--muted)">${n.href}</td><td>${n.is_cta?'<span class="badge badge-active">CTA</span>':''}</td><td>${n.visible?'<span class="badge badge-active">Sí</span>':'<span class="badge badge-inactive">No</span>'}</td><td><button class="btn btn-sm btn-outline" onclick="editNav('${n.id}')">Editar</button> <button class="btn btn-sm btn-danger" onclick="delNav('${n.id}')">✕</button></td></tr>`).join('');initDrag('navBody','tr[data-id]',saveNavOrder)}
 function showNavForm(){$('navForm').style.display='block'}function hideNavForm(){$('navForm').style.display='none';['navId','navLabel','navLabelEn','navHref'].forEach(x=>$(x).value='');$('navOrder').value='0'}
 async function saveNav(){const id=$('navId').value,d={label:$('navLabel').value,label_en:$('navLabelEn').value,href:$('navHref').value,sort_order:+$('navOrder').value,is_cta:$('navCta').value==='true',visible:$('navVis').value==='true'};if(id)await sb.from('nav_items').update(d).eq('id',id);else await sb.from('nav_items').insert(d);hideNavForm();toast('Guardado','success');loadNav()}
 async function editNav(id){const{data:n}=await sb.from('nav_items').select('*').eq('id',id).single();if(!n)return;$('navId').value=n.id;$('navLabel').value=n.label||'';$('navLabelEn').value=n.label_en||'';$('navHref').value=n.href||'';$('navOrder').value=n.sort_order;$('navCta').value=String(n.is_cta);$('navVis').value=String(n.visible);showNavForm()}
@@ -428,6 +480,19 @@ async function saveSettings(){const{data:ex}=await sb.from('site_settings').sele
 async function loadPages(){const{data}=await sb.from('page_sections').select('*').order('page_slug').order('sort_order');const pages={};(data||[]).forEach(s=>{if(!pages[s.page_slug])pages[s.page_slug]=[];pages[s.page_slug].push(s)});const slugs=Object.keys(pages);$('pageTabs').innerHTML=slugs.map((s,i)=>`<button class="tab ${i===0?'active':''}" onclick="selPage('${s}',this)">${s}</button>`).join('')||'<div class="empty">No hay secciones de página configuradas.</div>';if(slugs.length)selPage(slugs[0],$('pageTabs').querySelector('.tab'))}
 function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div>${s.image_url?`<div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><input class="form-input" value="${s.image_url}" onchange="updSection('${s.id}','image_url',this.value)"></div></div>`:''}</div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
 async function updSection(id,field,val){await sb.from('page_sections').update({[field]:val}).eq('id',id);toast('Actualizado','success')}
+
+// DRAG & DROP REORDER
+function initDrag(containerId,itemSel,onDrop){
+  const c=$(containerId);if(!c||c._dragBound)return;c._dragBound=true;
+  let dragging=null;
+  c.addEventListener('dragstart',e=>{dragging=e.target.closest(itemSel);if(!dragging)return;dragging.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
+  c.addEventListener('dragend',()=>{if(dragging){dragging.classList.remove('dragging');dragging=null}});
+  c.addEventListener('dragover',e=>{e.preventDefault();if(!dragging)return;const t=e.target.closest(itemSel);if(!t||t===dragging)return;const r=t.getBoundingClientRect();t.parentNode.insertBefore(dragging,e.clientY>r.top+r.height/2?t.nextSibling:t)});
+  c.addEventListener('drop',e=>{e.preventDefault();onDrop()});
+}
+async function savePhotoOrder(){const els=$('photoGrid').querySelectorAll('[data-id]');await Promise.all(Array.from(els).map((el,i)=>sb.from('photos').update({sort_order:i}).eq('id',el.dataset.id)));toast('Orden actualizado','success')}
+async function saveHeroOrder(){const els=$('heroGrid').querySelectorAll('[data-id]');await Promise.all(Array.from(els).map((el,i)=>sb.from('hero_slides').update({sort_order:i}).eq('id',el.dataset.id)));toast('Orden actualizado','success')}
+async function saveNavOrder(){const els=$('navBody').querySelectorAll('[data-id]');await Promise.all(Array.from(els).map((el,i)=>sb.from('nav_items').update({sort_order:i}).eq('id',el.dataset.id)));toast('Orden actualizado','success')}
 
 // TOAST
 function toast(m,t='success'){const el=$('toast');el.textContent=m;el.className='toast '+t;requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>el.classList.remove('show'),3000)}
