@@ -8,733 +8,433 @@
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root {
-      --ink:#0b0906; --cream:#f4efe6; --dust:#c0a46e; --slate:#1a1612;
-      --card:#111; --border:rgba(192,164,110,.12); --muted:rgba(244,239,230,.4);
-      --success:#4caf50; --danger:#e53935; --warn:#ff9800;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'DM Sans',sans-serif; background:var(--ink); color:var(--cream); font-size:14px; line-height:1.6; }
+    :root{--ink:#0b0906;--cream:#f4efe6;--dust:#c0a46e;--slate:#141210;--card:#111;--border:rgba(192,164,110,.12);--muted:rgba(244,239,230,.4);--success:#4caf50;--danger:#e53935;--warn:#ff9800;--sidebar-w:230px}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);font-size:14px;line-height:1.6}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--ink)}::-webkit-scrollbar-thumb{background:rgba(192,164,110,.2);border-radius:3px}
 
-    /* ═══ AUTH ═══ */
-    .auth-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; }
-    .auth-box { width:340px; padding:40px 32px; border:1px solid var(--border); text-align:center; }
-    .auth-logo { font-family:'Bodoni Moda',serif; font-style:italic; font-size:1.6rem; color:var(--dust); margin-bottom:8px; }
-    .auth-sub { font-size:.7rem; letter-spacing:.25em; color:var(--muted); margin-bottom:32px; text-transform:uppercase; }
-    .auth-input { width:100%; padding:12px 16px; background:rgba(244,239,230,.05); border:.5px solid var(--border); color:var(--cream); font-family:inherit; font-size:14px; margin-bottom:12px; outline:none; }
-    .auth-input:focus { border-color:var(--dust); }
-    .auth-btn { width:100%; padding:12px; background:var(--dust); color:var(--ink); font-family:inherit; font-size:.75rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; border:none; cursor:pointer; margin-top:8px; }
-    .auth-error { color:var(--danger); font-size:.75rem; margin-top:12px; display:none; }
+    /* AUTH */
+    .auth{display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .auth-box{width:360px;padding:48px 36px;border:1px solid var(--border);text-align:center;background:var(--slate)}
+    .auth-logo{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.8rem;color:var(--dust);margin-bottom:6px}
+    .auth-sub{font-size:.62rem;letter-spacing:.3em;color:var(--muted);margin-bottom:36px;text-transform:uppercase}
+    .auth-input{width:100%;padding:13px 18px;background:rgba(244,239,230,.04);border:.5px solid var(--border);color:var(--cream);font-family:inherit;font-size:14px;margin-bottom:12px;outline:none;transition:border-color .3s}
+    .auth-input:focus{border-color:var(--dust)}
+    .auth-btn{width:100%;padding:13px;background:var(--dust);color:var(--ink);font-family:inherit;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;margin-top:8px;transition:background .3s}
+    .auth-btn:hover{background:#d4b67a}
+    .auth-error{color:var(--danger);font-size:.75rem;margin-top:14px;display:none}
 
-    /* ═══ LAYOUT ═══ */
-    .app { display:none; }
-    .sidebar { position:fixed; left:0; top:0; bottom:0; width:220px; background:var(--slate); border-right:1px solid var(--border); padding:24px 0; overflow-y:auto; z-index:100; }
-    .sb-logo { font-family:'Bodoni Moda',serif; font-style:italic; font-size:1.3rem; color:var(--dust); padding:0 20px; margin-bottom:4px; }
-    .sb-sub { font-size:.6rem; letter-spacing:.2em; color:var(--muted); padding:0 20px; margin-bottom:32px; text-transform:uppercase; }
-    .sb-nav { list-style:none; }
-    .sb-nav li a { display:flex; align-items:center; gap:10px; padding:10px 20px; color:var(--muted); text-decoration:none; font-size:.78rem; letter-spacing:.03em; transition:all .2s; border-left:2px solid transparent; }
-    .sb-nav li a:hover { color:var(--cream); background:rgba(192,164,110,.05); }
-    .sb-nav li a.active { color:var(--dust); border-left-color:var(--dust); background:rgba(192,164,110,.06); }
-    .sb-nav li a .icon { font-size:16px; width:20px; text-align:center; }
-    .sb-logout { position:absolute; bottom:20px; left:20px; right:20px; }
-    .sb-logout button { width:100%; padding:8px; background:none; border:.5px solid var(--border); color:var(--muted); font-family:inherit; font-size:.7rem; letter-spacing:.1em; cursor:pointer; transition:all .3s; }
-    .sb-logout button:hover { border-color:var(--danger); color:var(--danger); }
+    /* LAYOUT */
+    .app{display:none}
+    .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);background:var(--slate);border-right:1px solid var(--border);padding:20px 0;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+    .sb-head{padding:0 20px;margin-bottom:28px}
+    .sb-logo{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.4rem;color:var(--dust)}
+    .sb-sub{font-size:.55rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase}
+    .sb-nav{list-style:none;flex:1}
+    .sb-nav li a{display:flex;align-items:center;gap:10px;padding:9px 20px;color:var(--muted);text-decoration:none;font-size:.75rem;letter-spacing:.02em;transition:all .2s;border-left:2px solid transparent}
+    .sb-nav li a:hover{color:var(--cream);background:rgba(192,164,110,.04)}
+    .sb-nav li a.active{color:var(--dust);border-left-color:var(--dust);background:rgba(192,164,110,.06)}
+    .sb-nav li a .ic{width:18px;text-align:center;font-size:13px;opacity:.6}
+    .sb-nav .divider{height:1px;background:var(--border);margin:12px 20px}
+    .sb-foot{padding:12px 20px;border-top:1px solid var(--border)}
+    .sb-foot button{width:100%;padding:8px;background:none;border:.5px solid var(--border);color:var(--muted);font-family:inherit;font-size:.65rem;letter-spacing:.12em;cursor:pointer;text-transform:uppercase;transition:all .3s}
+    .sb-foot button:hover{border-color:var(--danger);color:var(--danger)}
 
-    .main { margin-left:220px; padding:32px; min-height:100vh; }
-    .page-title { font-family:'Bodoni Moda',serif; font-style:italic; font-size:1.6rem; color:var(--cream); margin-bottom:4px; }
-    .page-sub { font-size:.7rem; color:var(--muted); letter-spacing:.1em; margin-bottom:28px; }
+    .main{margin-left:var(--sidebar-w);padding:28px 32px;min-height:100vh}
+    .page-head{margin-bottom:28px}
+    .page-title{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.5rem;color:var(--cream)}
+    .page-sub{font-size:.68rem;color:var(--muted);letter-spacing:.08em;margin-top:2px}
 
-    /* ═══ SECTIONS (hidden by default) ═══ */
-    .section { display:none; }
-    .section.active { display:block; }
+    /* COMPONENTS */
+    .section{display:none}.section.active{display:block}
+    .card{background:var(--card);border:1px solid var(--border);padding:22px;margin-bottom:14px}
+    .card-title{font-size:.82rem;font-weight:500;margin-bottom:14px;color:var(--cream)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+    .form-row.full{grid-template-columns:1fr}
+    .form-row.tri{grid-template-columns:1fr 1fr 1fr}
+    .form-group{display:flex;flex-direction:column;gap:4px}
+    .form-label{font-size:.6rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+    .form-input{padding:10px 14px;background:rgba(244,239,230,.04);border:.5px solid var(--border);color:var(--cream);font-family:inherit;font-size:13px;outline:none;transition:border-color .3s}
+    .form-input:focus{border-color:var(--dust)}
+    textarea.form-input{resize:vertical;min-height:90px}
+    select.form-input{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c0a46e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 
-    /* ═══ CARDS & FORMS ═══ */
-    .card { background:var(--card); border:1px solid var(--border); padding:24px; margin-bottom:16px; }
-    .card-title { font-size:.9rem; font-weight:500; margin-bottom:16px; color:var(--cream); }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-    .form-row.full { grid-template-columns:1fr; }
-    .form-group { display:flex; flex-direction:column; gap:4px; }
-    .form-label { font-size:.65rem; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; }
-    .form-input { padding:10px 14px; background:rgba(244,239,230,.05); border:.5px solid var(--border); color:var(--cream); font-family:inherit; font-size:13px; outline:none; }
-    .form-input:focus { border-color:var(--dust); }
-    textarea.form-input { resize:vertical; min-height:100px; }
-    select.form-input { appearance:none; cursor:pointer; }
-    .color-input { display:flex; align-items:center; gap:8px; }
-    .color-input input[type=color] { width:36px; height:36px; border:none; cursor:pointer; background:none; }
+    .btn{padding:8px 20px;font-family:inherit;font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;transition:all .25s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:var(--dust);color:var(--ink)}.btn-primary:hover{background:#d4b67a}
+    .btn-outline{background:none;border:.5px solid var(--border);color:var(--cream)}.btn-outline:hover{border-color:var(--dust);color:var(--dust)}
+    .btn-danger{background:none;border:.5px solid var(--danger);color:var(--danger)}.btn-danger:hover{background:var(--danger);color:#fff}
+    .btn-sm{padding:5px 12px;font-size:.6rem}
+    .btn-group{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 
-    /* ═══ BUTTONS ═══ */
-    .btn { padding:8px 20px; font-family:inherit; font-size:.72rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; border:none; cursor:pointer; transition:all .25s; }
-    .btn-primary { background:var(--dust); color:var(--ink); }
-    .btn-primary:hover { background:#d4b67a; }
-    .btn-outline { background:none; border:.5px solid var(--border); color:var(--cream); }
-    .btn-outline:hover { border-color:var(--dust); color:var(--dust); }
-    .btn-danger { background:none; border:.5px solid var(--danger); color:var(--danger); }
-    .btn-danger:hover { background:var(--danger); color:#fff; }
-    .btn-sm { padding:5px 12px; font-size:.65rem; }
-    .btn-group { display:flex; gap:8px; margin-top:16px; }
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+    .stat-card{background:var(--card);border:1px solid var(--border);padding:20px;text-align:center}
+    .stat-num{font-size:2rem;color:var(--dust);font-family:'Bodoni Moda',serif}
+    .stat-label{font-size:.6rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-top:2px}
 
-    /* ═══ PHOTO GRID ═══ */
-    .photo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:8px; margin-top:16px; }
-    .photo-card { position:relative; aspect-ratio:1; overflow:hidden; cursor:grab; border:1px solid transparent; transition:border-color .2s; }
-    .photo-card:hover { border-color:var(--dust); }
-    .photo-card img { width:100%; height:100%; object-fit:cover; }
-    .photo-card .photo-actions { position:absolute; top:6px; right:6px; display:flex; gap:4px; opacity:0; transition:opacity .2s; }
-    .photo-card:hover .photo-actions { opacity:1; }
-    .photo-card .photo-order { position:absolute; bottom:6px; left:6px; background:rgba(0,0,0,.7); color:var(--cream); font-size:11px; padding:2px 6px; }
-    .photo-action-btn { width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.7); color:var(--cream); border:none; cursor:pointer; font-size:12px; }
-    .photo-action-btn.delete { color:var(--danger); }
+    .data-table{width:100%;border-collapse:collapse;margin-top:12px}
+    .data-table th{text-align:left;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--border)}
+    .data-table td{padding:9px 10px;border-bottom:.5px solid var(--border);font-size:.8rem;vertical-align:middle}
+    .data-table tr:hover td{background:rgba(192,164,110,.02)}
+    .badge{display:inline-block;padding:2px 8px;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;border-radius:2px}
+    .badge-active,.badge-published{background:rgba(76,175,80,.12);color:var(--success)}
+    .badge-inactive,.badge-draft{background:rgba(229,57,53,.08);color:var(--danger)}
+    .badge-new{background:rgba(192,164,110,.12);color:var(--dust)}
+    .badge-read,.badge-viewed{background:rgba(244,239,230,.08);color:var(--muted)}
 
-    /* ═══ TABLE ═══ */
-    .data-table { width:100%; border-collapse:collapse; margin-top:12px; }
-    .data-table th { text-align:left; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); padding:8px 12px; border-bottom:1px solid var(--border); }
-    .data-table td { padding:10px 12px; border-bottom:.5px solid var(--border); font-size:.82rem; }
-    .data-table tr:hover td { background:rgba(192,164,110,.03); }
-    .badge { display:inline-block; padding:2px 8px; font-size:.6rem; letter-spacing:.08em; text-transform:uppercase; }
-    .badge-active { background:rgba(76,175,80,.15); color:var(--success); }
-    .badge-inactive { background:rgba(229,57,53,.1); color:var(--danger); }
+    .tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:18px;overflow-x:auto}
+    .tab{padding:9px 18px;font-size:.7rem;letter-spacing:.06em;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;transition:all .2s;background:none;font-family:inherit;white-space:nowrap}
+    .tab:hover{color:var(--cream)}.tab.active{color:var(--dust);border-bottom-color:var(--dust)}
 
-    /* ═══ UPLOAD ═══ */
-    .upload-zone { border:2px dashed var(--border); padding:40px; text-align:center; cursor:pointer; transition:all .3s; }
-    .upload-zone:hover { border-color:var(--dust); background:rgba(192,164,110,.04); }
-    .upload-zone.dragging { border-color:var(--dust); background:rgba(192,164,110,.08); }
-    .upload-zone p { font-size:.78rem; color:var(--muted); }
-    .upload-zone .upload-icon { font-size:28px; color:var(--dust); margin-bottom:8px; }
-    .upload-progress { width:100%; height:3px; background:var(--border); margin-top:12px; display:none; }
-    .upload-progress .bar { height:100%; background:var(--dust); width:0; transition:width .3s; }
+    .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:14px}
+    .photo-card{position:relative;aspect-ratio:1;overflow:hidden;border:1px solid transparent;transition:border-color .2s}
+    .photo-card:hover{border-color:var(--dust)}
+    .photo-card img{width:100%;height:100%;object-fit:cover}
+    .photo-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity .2s}
+    .photo-card:hover .photo-overlay{opacity:1}
+    .photo-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);color:var(--cream);border:none;cursor:pointer;font-size:12px;transition:color .2s}
+    .photo-btn.del:hover{color:var(--danger)}
 
-    /* ═══ COLLECTION TABS ═══ */
-    .collection-tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:20px; }
-    .collection-tab { padding:10px 20px; font-size:.72rem; letter-spacing:.08em; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; background:none; border-top:none; border-left:none; border-right:none; font-family:inherit; }
-    .collection-tab:hover { color:var(--cream); }
-    .collection-tab.active { color:var(--dust); border-bottom-color:var(--dust); }
+    .upload-zone{border:2px dashed var(--border);padding:32px;text-align:center;cursor:pointer;transition:all .3s;margin-bottom:12px}
+    .upload-zone:hover{border-color:var(--dust);background:rgba(192,164,110,.03)}
+    .upload-zone p{font-size:.75rem;color:var(--muted)}.upload-zone .uic{font-size:24px;color:var(--dust);margin-bottom:6px}
 
-    /* ═══ TOAST ═══ */
-    .toast { position:fixed; bottom:24px; right:24px; padding:12px 24px; background:var(--slate); border:1px solid var(--border); color:var(--cream); font-size:.78rem; z-index:9000; opacity:0; transform:translateY(12px); transition:all .3s; }
-    .toast.show { opacity:1; transform:translateY(0); }
-    .toast.success { border-color:var(--success); }
-    .toast.error { border-color:var(--danger); }
+    .toggle{position:relative;width:40px;height:22px;cursor:pointer}
+    .toggle input{opacity:0;width:0;height:0}
+    .toggle .slider{position:absolute;inset:0;background:rgba(244,239,230,.1);border-radius:11px;transition:.3s}
+    .toggle .slider::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:var(--cream);border-radius:50%;transition:.3s}
+    .toggle input:checked+.slider{background:var(--dust)}
+    .toggle input:checked+.slider::before{transform:translateX(18px)}
 
-    /* ═══ RESPONSIVE ═══ */
-    @media (max-width:768px) {
-      .sidebar { width:60px; padding:16px 0; }
-      .sb-logo,.sb-sub,.sb-nav li a span { display:none; }
-      .sb-nav li a { justify-content:center; padding:12px 0; border-left:none; border-bottom:2px solid transparent; }
-      .sb-nav li a.active { border-bottom-color:var(--dust); }
-      .main { margin-left:60px; padding:20px; }
-      .form-row { grid-template-columns:1fr; }
-      .photo-grid { grid-template-columns:repeat(auto-fill, minmax(100px,1fr)); }
+    .color-row{display:flex;align-items:center;gap:8px}
+    .color-row input[type=color]{width:32px;height:32px;border:none;cursor:pointer;background:none;padding:0}
+
+    .toast{position:fixed;bottom:24px;right:24px;padding:12px 24px;background:var(--slate);border:1px solid var(--border);color:var(--cream);font-size:.76rem;z-index:9000;opacity:0;transform:translateY(12px);transition:all .3s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.success{border-color:var(--success)}.toast.error{border-color:var(--danger)}
+
+    .empty{text-align:center;padding:40px;color:var(--muted);font-size:.8rem;font-style:italic}
+
+    @media(max-width:768px){
+      .sidebar{width:56px;padding:12px 0}.sb-head,.sb-nav li a span,.sb-sub{display:none}
+      .sb-nav li a{justify-content:center;padding:10px 0;border-left:none}
+      .main{margin-left:56px;padding:16px}
+      .form-row,.form-row.tri{grid-template-columns:1fr}
+      .stat-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
 <body>
 
-<!-- ═══ AUTH SCREEN ═══ -->
-<div id="authScreen" class="auth-screen">
+<!-- AUTH -->
+<div id="authScreen" class="auth">
   <div class="auth-box">
     <div class="auth-logo">G. Chapa</div>
     <div class="auth-sub">Admin Panel</div>
     <input type="email" id="authEmail" class="auth-input" placeholder="Email">
-    <input type="password" id="authPassword" class="auth-input" placeholder="Password">
-    <button id="authBtn" class="auth-btn" onclick="login()">Iniciar Sesión</button>
-    <div id="authError" class="auth-error"></div>
+    <input type="password" id="authPass" class="auth-input" placeholder="Password">
+    <button class="auth-btn" onclick="doLogin()">Iniciar Sesión</button>
+    <div id="authErr" class="auth-error"></div>
   </div>
 </div>
 
-<!-- ═══ APP ═══ -->
+<!-- APP -->
 <div id="app" class="app">
+<aside class="sidebar">
+  <div class="sb-head"><div class="sb-logo">G. Chapa</div><div class="sb-sub">Admin</div></div>
+  <ul class="sb-nav">
+    <li><a href="#" data-s="dashboard" class="active"><span class="ic">◉</span><span>Dashboard</span></a></li>
+    <li><a href="#" data-s="paginas"><span class="ic">◧</span><span>Páginas</span></a></li>
+    <li><a href="#" data-s="gallery"><span class="ic">▣</span><span>Galería</span></a></li>
+    <li><a href="#" data-s="hero"><span class="ic">◐</span><span>Hero</span></a></li>
+    <li><a href="#" data-s="secciones"><span class="ic">☰</span><span>Secciones</span></a></li>
+    <li><a href="#" data-s="navegacion"><span class="ic">≡</span><span>Navegación</span></a></li>
+    <div class="divider"></div>
+    <li><a href="#" data-s="blog"><span class="ic">✎</span><span>Blog</span></a></li>
+    <li><a href="#" data-s="categorias"><span class="ic">▤</span><span>Categorías</span></a></li>
+    <li><a href="#" data-s="servicios"><span class="ic">◈</span><span>Servicios</span></a></li>
+    <div class="divider"></div>
+    <li><a href="#" data-s="tema"><span class="ic">◑</span><span>Tema</span></a></li>
+    <li><a href="#" data-s="seo"><span class="ic">◎</span><span>SEO</span></a></li>
+    <li><a href="#" data-s="analiticas"><span class="ic">▥</span><span>Analíticas</span></a></li>
+    <div class="divider"></div>
+    <li><a href="#" data-s="cotizaciones"><span class="ic">$</span><span>Cotizaciones</span></a></li>
+    <li><a href="#" data-s="mensajes"><span class="ic">✉</span><span>Mensajes</span></a></li>
+    <li><a href="#" data-s="settings"><span class="ic">⚙</span><span>Settings</span></a></li>
+  </ul>
+  <div class="sb-foot"><button onclick="doLogout()">Cerrar Sesión</button></div>
+</aside>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-logo">G. Chapa</div>
-    <div class="sb-sub">Admin</div>
-    <ul class="sb-nav">
-      <li><a href="#" data-section="dashboard" class="active"><span class="icon">◉</span><span>Dashboard</span></a></li>
-      <li><a href="#" data-section="gallery"><span class="icon">▣</span><span>Galería</span></a></li>
-      <li><a href="#" data-section="hero"><span class="icon">◧</span><span>Hero</span></a></li>
-      <li><a href="#" data-section="services"><span class="icon">◈</span><span>Servicios</span></a></li>
-      <li><a href="#" data-section="about"><span class="icon">◎</span><span>About</span></a></li>
-      <li><a href="#" data-section="settings"><span class="icon">⚙</span><span>Settings</span></a></li>
-    </ul>
-    <div class="sb-logout">
-      <button onclick="logout()">Cerrar Sesión</button>
+<main class="main">
+
+<!-- DASHBOARD -->
+<div id="s-dashboard" class="section active">
+  <div class="page-head"><h1 class="page-title">Dashboard</h1><p class="page-sub">Resumen de tu portafolio</p></div>
+  <div class="stat-grid" id="dashStats"></div>
+  <div class="card" style="margin-top:16px"><div class="card-title">Actividad Reciente</div><div id="dashActivity" class="empty">Cargando...</div></div>
+</div>
+
+<!-- PÁGINAS -->
+<div id="s-paginas" class="section">
+  <div class="page-head"><h1 class="page-title">Páginas</h1><p class="page-sub">Edita el contenido de cada página por sección</p></div>
+  <div class="tabs" id="pageTabs"></div>
+  <div id="pageContent"></div>
+</div>
+
+<!-- GALERÍA -->
+<div id="s-gallery" class="section">
+  <div class="page-head"><h1 class="page-title">Galería</h1><p class="page-sub">Fotos por colección</p></div>
+  <div class="tabs" id="colTabs"></div>
+  <div class="upload-zone" onclick="$('photoFile').click()"><div class="uic">+</div><p>Arrastra fotos o haz click para subir</p><input type="file" id="photoFile" accept="image/*" multiple style="display:none" onchange="uploadPhotos(this.files)"></div>
+  <div class="photo-grid" id="photoGrid"></div>
+</div>
+
+<!-- HERO -->
+<div id="s-hero" class="section">
+  <div class="page-head"><h1 class="page-title">Hero Slideshow</h1><p class="page-sub">Imágenes del carrusel principal</p></div>
+  <div class="upload-zone" onclick="$('heroFile').click()"><div class="uic">+</div><p>Subir imagen de hero</p><input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadHero(this.files[0])"></div>
+  <div class="photo-grid" id="heroGrid"></div>
+</div>
+
+<!-- SECCIONES -->
+<div id="s-secciones" class="section">
+  <div class="page-head"><h1 class="page-title">Secciones</h1><p class="page-sub">Muestra u oculta secciones del sitio</p></div>
+  <div id="sectionToggles"></div>
+</div>
+
+<!-- NAVEGACIÓN -->
+<div id="s-navegacion" class="section">
+  <div class="page-head"><h1 class="page-title">Navegación</h1><p class="page-sub">Reordena y edita los links del menú</p></div>
+  <div class="btn-group" style="margin-bottom:14px"><button class="btn btn-primary" onclick="showNavForm()">+ Nuevo Link</button></div>
+  <div id="navForm" class="card" style="display:none">
+    <input type="hidden" id="navId">
+    <div class="form-row tri">
+      <div class="form-group"><label class="form-label">Label</label><input class="form-input" id="navLabel"></div>
+      <div class="form-group"><label class="form-label">Label EN</label><input class="form-input" id="navLabelEn"></div>
+      <div class="form-group"><label class="form-label">URL</label><input class="form-input" id="navHref"></div>
     </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main">
-
-    <!-- DASHBOARD -->
-    <div id="sec-dashboard" class="section active">
-      <h1 class="page-title">Dashboard</h1>
-      <p class="page-sub">Resumen de tu portafolio</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
-        <div class="card" style="text-align:center">
-          <div style="font-size:2rem;color:var(--dust);font-family:'Bodoni Moda',serif" id="statPhotos">0</div>
-          <div style="font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase">Fotos</div>
-        </div>
-        <div class="card" style="text-align:center">
-          <div style="font-size:2rem;color:var(--dust);font-family:'Bodoni Moda',serif" id="statCollections">0</div>
-          <div style="font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase">Colecciones</div>
-        </div>
-        <div class="card" style="text-align:center">
-          <div style="font-size:2rem;color:var(--dust);font-family:'Bodoni Moda',serif" id="statServices">0</div>
-          <div style="font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase">Servicios</div>
-        </div>
-        <div class="card" style="text-align:center">
-          <div style="font-size:2rem;color:var(--dust);font-family:'Bodoni Moda',serif" id="statHero">0</div>
-          <div style="font-size:.65rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase">Hero Slides</div>
-        </div>
-      </div>
+    <div class="form-row tri">
+      <div class="form-group"><label class="form-label">Orden</label><input class="form-input" type="number" id="navOrder" value="0"></div>
+      <div class="form-group"><label class="form-label">CTA?</label><select class="form-input" id="navCta"><option value="false">No</option><option value="true">Sí</option></select></div>
+      <div class="form-group"><label class="form-label">Visible</label><select class="form-input" id="navVis"><option value="true">Sí</option><option value="false">No</option></select></div>
     </div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="saveNav()">Guardar</button><button class="btn btn-outline" onclick="hideNavForm()">Cancelar</button></div>
+  </div>
+  <table class="data-table"><thead><tr><th>Orden</th><th>Label</th><th>URL</th><th>CTA</th><th>Visible</th><th>Acciones</th></tr></thead><tbody id="navBody"></tbody></table>
+</div>
 
-    <!-- GALLERY -->
-    <div id="sec-gallery" class="section">
-      <h1 class="page-title">Galería</h1>
-      <p class="page-sub">Administra las fotos de cada colección</p>
-      <div class="collection-tabs" id="collectionTabs"></div>
-      <div class="upload-zone" id="photoUpload" onclick="document.getElementById('photoFile').click()">
-        <div class="upload-icon">+</div>
-        <p>Arrastra fotos aquí o haz click para subir</p>
-        <input type="file" id="photoFile" accept="image/*" multiple style="display:none" onchange="uploadPhotos(this.files)">
-      </div>
-      <div class="upload-progress" id="uploadProgress"><div class="bar" id="uploadBar"></div></div>
-      <div class="photo-grid" id="photoGrid"></div>
+<!-- BLOG -->
+<div id="s-blog" class="section">
+  <div class="page-head"><h1 class="page-title">Blog</h1><p class="page-sub">Publicaciones y artículos</p></div>
+  <div class="btn-group" style="margin-bottom:14px"><button class="btn btn-primary" onclick="showBlogForm()">+ Nuevo Post</button></div>
+  <div id="blogForm" class="card" style="display:none">
+    <input type="hidden" id="blogId">
+    <div class="form-row"><div class="form-group"><label class="form-label">Título</label><input class="form-input" id="blogTitle"></div><div class="form-group"><label class="form-label">Slug</label><input class="form-input" id="blogSlug"></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Extracto</label><textarea class="form-input" id="blogExcerpt" style="min-height:60px"></textarea></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" id="blogBody" style="min-height:200px"></textarea></div></div>
+    <div class="form-row tri">
+      <div class="form-group"><label class="form-label">Categoría</label><select class="form-input" id="blogCat"></select></div>
+      <div class="form-group"><label class="form-label">Estado</label><select class="form-input" id="blogStatus"><option value="draft">Borrador</option><option value="published">Publicado</option></select></div>
+      <div class="form-group"><label class="form-label">Cover Image URL</label><input class="form-input" id="blogCover"></div>
     </div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="saveBlog()">Guardar</button><button class="btn btn-outline" onclick="hideBlogForm()">Cancelar</button></div>
+  </div>
+  <table class="data-table"><thead><tr><th>Título</th><th>Categoría</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead><tbody id="blogBody2"></tbody></table>
+</div>
 
-    <!-- HERO -->
-    <div id="sec-hero" class="section">
-      <h1 class="page-title">Hero Slideshow</h1>
-      <p class="page-sub">Imágenes del carrusel principal</p>
-      <div class="upload-zone" onclick="document.getElementById('heroFile').click()">
-        <div class="upload-icon">+</div>
-        <p>Subir imagen de hero</p>
-        <input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadHero(this.files[0])">
-      </div>
-      <div class="photo-grid" id="heroGrid" style="margin-top:16px"></div>
+<!-- CATEGORÍAS -->
+<div id="s-categorias" class="section">
+  <div class="page-head"><h1 class="page-title">Categorías</h1><p class="page-sub">Categorías del blog</p></div>
+  <div class="btn-group" style="margin-bottom:14px"><button class="btn btn-primary" onclick="addCategory()">+ Nueva Categoría</button></div>
+  <table class="data-table"><thead><tr><th>Nombre</th><th>Slug</th><th>Orden</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="catBody"></tbody></table>
+</div>
+
+<!-- SERVICIOS -->
+<div id="s-servicios" class="section">
+  <div class="page-head"><h1 class="page-title">Servicios</h1><p class="page-sub">Paquetes y precios</p></div>
+  <div class="btn-group" style="margin-bottom:14px"><button class="btn btn-primary" onclick="showSvcForm()">+ Nuevo Servicio</button></div>
+  <div id="svcForm" class="card" style="display:none">
+    <input type="hidden" id="svcId">
+    <div class="form-row"><div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="svcName"></div><div class="form-group"><label class="form-label">Name EN</label><input class="form-input" id="svcNameEn"></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Descripción</label><textarea class="form-input" id="svcDesc"></textarea></div></div>
+    <div class="form-row tri">
+      <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="svcType"><option value="hourly">Por hora</option><option value="package">Paquete</option><option value="addon">Add-on</option></select></div>
+      <div class="form-group"><label class="form-label">Precio MXN</label><input class="form-input" type="number" id="svcPrice"></div>
+      <div class="form-group"><label class="form-label">Orden</label><input class="form-input" type="number" id="svcOrder" value="0"></div>
     </div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="saveSvc()">Guardar</button><button class="btn btn-outline" onclick="hideSvcForm()">Cancelar</button></div>
+  </div>
+  <table class="data-table"><thead><tr><th>Servicio</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="svcBody"></tbody></table>
+</div>
 
-    <!-- SERVICES -->
-    <div id="sec-services" class="section">
-      <h1 class="page-title">Servicios</h1>
-      <p class="page-sub">Paquetes y precios</p>
-      <div class="btn-group" style="margin-bottom:16px">
-        <button class="btn btn-primary" onclick="showServiceForm()">+ Nuevo Servicio</button>
-      </div>
-      <div id="serviceForm" class="card" style="display:none">
-        <div class="card-title">Nuevo Servicio</div>
-        <input type="hidden" id="svcId">
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="svcName"></div>
-          <div class="form-group"><label class="form-label">Name (EN)</label><input class="form-input" id="svcNameEn"></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group"><label class="form-label">Descripción</label><textarea class="form-input" id="svcDesc"></textarea></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Tipo</label>
-            <select class="form-input" id="svcType"><option value="hourly">Por hora</option><option value="package">Paquete</option><option value="addon">Add-on</option></select>
-          </div>
-          <div class="form-group"><label class="form-label">Precio MXN</label><input class="form-input" type="number" id="svcPrice" placeholder="2500"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Min horas</label><input class="form-input" type="number" id="svcMinH"></div>
-          <div class="form-group"><label class="form-label">Max horas</label><input class="form-input" type="number" id="svcMaxH"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Duración (min)</label><input class="form-input" type="number" id="svcDuration"></div>
-          <div class="form-group"><label class="form-label">Orden</label><input class="form-input" type="number" id="svcOrder" value="0"></div>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="saveService()">Guardar</button>
-          <button class="btn btn-outline" onclick="hideServiceForm()">Cancelar</button>
-        </div>
-      </div>
-      <table class="data-table" id="servicesTable">
-        <thead><tr><th>Servicio</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead>
-        <tbody id="servicesBody"></tbody>
-      </table>
+<!-- TEMA -->
+<div id="s-tema" class="section">
+  <div class="page-head"><h1 class="page-title">Tema</h1><p class="page-sub">Colores, fuentes y presets del sitio</p></div>
+  <div class="card"><div class="card-title">Presets</div><div id="themePresets" class="stat-grid"></div></div>
+  <div class="card">
+    <div class="card-title">Personalizar</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Color Primario</label><div class="color-row"><input type="color" id="thColor1" value="#c0a46e"><input class="form-input" id="thColor1T" style="flex:1"></div></div>
+      <div class="form-group"><label class="form-label">Color Acento</label><div class="color-row"><input type="color" id="thColor2" value="#f4efe6"><input class="form-input" id="thColor2T" style="flex:1"></div></div>
     </div>
-
-    <!-- ABOUT -->
-    <div id="sec-about" class="section">
-      <h1 class="page-title">About</h1>
-      <p class="page-sub">Página de información personal</p>
-      <div class="card">
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Headline</label><input class="form-input" id="aboutHeadline"></div>
-          <div class="form-group"><label class="form-label">Subheadline</label><input class="form-input" id="aboutSub"></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group"><label class="form-label">Biografía (ES)</label><textarea class="form-input" id="aboutBio" style="min-height:150px"></textarea></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group"><label class="form-label">Biography (EN)</label><textarea class="form-input" id="aboutBioEn" style="min-height:150px"></textarea></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group">
-            <label class="form-label">Retrato</label>
-            <input type="file" id="aboutPortrait" accept="image/*" onchange="uploadPortrait(this.files[0])">
-            <img id="aboutPortraitPreview" style="max-width:200px;margin-top:8px;display:none">
-          </div>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="saveAbout()">Guardar</button>
-        </div>
-      </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Font Heading</label><input class="form-input" id="thFontH"></div>
+      <div class="form-group"><label class="form-label">Font Body</label><input class="form-input" id="thFontB"></div>
     </div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="saveTheme()">Guardar Tema</button></div>
+  </div>
+</div>
 
-    <!-- SETTINGS -->
-    <div id="sec-settings" class="section">
-      <h1 class="page-title">Settings</h1>
-      <p class="page-sub">Configuración general del sitio</p>
-      <div class="card">
-        <div class="card-title">Branding</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Logo Text</label><input class="form-input" id="setLogo"></div>
-          <div class="form-group"><label class="form-label">Site Title</label><input class="form-input" id="setTitle"></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group"><label class="form-label">Site Description</label><textarea class="form-input" id="setDesc" style="min-height:60px"></textarea></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Color Primario</label>
-            <div class="color-input"><input type="color" id="setColor1" value="#c0a46e"><input class="form-input" id="setColor1Text" style="flex:1"></div>
-          </div>
-          <div class="form-group"><label class="form-label">Color Acento</label>
-            <div class="color-input"><input type="color" id="setColor2" value="#f4efe6"><input class="form-input" id="setColor2Text" style="flex:1"></div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Font Heading</label><input class="form-input" id="setFontH"></div>
-          <div class="form-group"><label class="form-label">Font Body</label><input class="form-input" id="setFontB"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Contacto</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="setPhone"></div>
-          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="setEmail"></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Instagram Handle</label><input class="form-input" id="setIG"></div>
-          <div class="form-group"><label class="form-label">WhatsApp Number</label><input class="form-input" id="setWA"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">SEO</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label">Meta Title</label><input class="form-input" id="setMetaT"></div>
-        </div>
-        <div class="form-row full">
-          <div class="form-group"><label class="form-label">Meta Description</label><textarea class="form-input" id="setMetaD" style="min-height:60px"></textarea></div>
-        </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-primary" onclick="saveSettings()">Guardar Settings</button>
-      </div>
-    </div>
+<!-- SEO -->
+<div id="s-seo" class="section">
+  <div class="page-head"><h1 class="page-title">SEO</h1><p class="page-sub">Meta tags por página</p></div>
+  <div class="tabs" id="seoTabs"></div>
+  <div id="seoForm" class="card">
+    <input type="hidden" id="seoId">
+    <div class="form-row full"><div class="form-group"><label class="form-label">Meta Title</label><input class="form-input" id="seoTitle"></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Meta Description</label><textarea class="form-input" id="seoDesc" style="min-height:60px"></textarea></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">OG Image URL</label><input class="form-input" id="seoOG"></div><div class="form-group"><label class="form-label">Canonical URL</label><input class="form-input" id="seoCan"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">No Index</label><select class="form-input" id="seoNoindex"><option value="false">No</option><option value="true">Sí</option></select></div></div>
+    <div class="btn-group"><button class="btn btn-primary" onclick="saveSeo()">Guardar SEO</button></div>
+  </div>
+</div>
 
-  </main>
+<!-- ANALÍTICAS -->
+<div id="s-analiticas" class="section">
+  <div class="page-head"><h1 class="page-title">Analíticas</h1><p class="page-sub">Visitas y engagement</p></div>
+  <div class="stat-grid" id="analyticsStats"></div>
+  <div class="card" style="margin-top:14px"><div class="card-title">Páginas más visitadas</div><table class="data-table"><thead><tr><th>Página</th><th>Visitas</th><th>Únicos</th></tr></thead><tbody id="analyticsBody"></tbody></table></div>
+</div>
+
+<!-- COTIZACIONES -->
+<div id="s-cotizaciones" class="section">
+  <div class="page-head"><h1 class="page-title">Cotizaciones</h1><p class="page-sub">Solicitudes de servicio</p></div>
+  <table class="data-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="quoteBody"></tbody></table>
+</div>
+
+<!-- MENSAJES -->
+<div id="s-mensajes" class="section">
+  <div class="page-head"><h1 class="page-title">Mensajes</h1><p class="page-sub">Mensajes de contacto</p></div>
+  <table class="data-table"><thead><tr><th>De</th><th>Asunto</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="msgBody"></tbody></table>
+</div>
+
+<!-- SETTINGS -->
+<div id="s-settings" class="section">
+  <div class="page-head"><h1 class="page-title">Settings</h1><p class="page-sub">Configuración general</p></div>
+  <div class="card"><div class="card-title">Branding</div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Logo Text</label><input class="form-input" id="setLogo"></div><div class="form-group"><label class="form-label">Site Title</label><input class="form-input" id="setTitle"></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Site Description</label><textarea class="form-input" id="setDesc" style="min-height:60px"></textarea></div></div>
+  </div>
+  <div class="card"><div class="card-title">Contacto</div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="setPhone"></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" id="setEmail"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="setIG"></div><div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="setWA"></div></div>
+  </div>
+  <div class="btn-group"><button class="btn btn-primary" onclick="saveSettings()">Guardar</button></div>
+</div>
+
+</main>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   GONZALO CHAPA — ADMIN PANEL
-   ═══════════════════════════════════════════════════ */
+// ═══ CONFIG — REPLACE WITH YOUR ACTUAL VALUES ═══
+const SB_URL='YOUR_SUPABASE_URL';
+const SB_KEY='YOUR_SUPABASE_ANON_KEY';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+let curCol=null,cols=[],seoPages=[],curSeoPage=null;
 
-// ── CONFIG ──
-// REPLACE THESE with your actual Supabase credentials
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+// AUTH
+async function doLogin(){const e=$('authEmail').value,p=$('authPass').value,err=$('authErr');err.style.display='none';const{error}=await sb.auth.signInWithPassword({email:e,password:p});if(error){err.textContent=error.message;err.style.display='block'}else showApp()}
+async function doLogout(){await sb.auth.signOut();$('app').style.display='none';$('authScreen').style.display='flex'}
+async function checkAuth(){const{data:{session}}=await sb.auth.getSession();if(session)showApp()}
+function showApp(){$('authScreen').style.display='none';$('app').style.display='block';loadDashboard()}
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let currentCollection = null;
-let collections = [];
+// NAV
+document.querySelectorAll('.sb-nav a[data-s]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');const s=a.dataset.s;document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}));
 
-// ── AUTH ──
-async function login() {
-  const email = document.getElementById('authEmail').value;
-  const pass = document.getElementById('authPassword').value;
-  const errEl = document.getElementById('authError');
-  errEl.style.display = 'none';
+// DASHBOARD
+async function loadDashboard(){const[p,c,s,h,b,q,m]=await Promise.all([sb.from('photos').select('id',{count:'exact',head:true}),sb.from('collections').select('id',{count:'exact',head:true}),sb.from('services').select('id',{count:'exact',head:true}),sb.from('hero_slides').select('id',{count:'exact',head:true}),sb.from('blog_posts').select('id',{count:'exact',head:true}).catch(()=>({count:0})),sb.from('quotes').select('id',{count:'exact',head:true}).catch(()=>({count:0})),sb.from('messages').select('id',{count:'exact',head:true}).catch(()=>({count:0}))]);$('dashStats').innerHTML=[{n:p.count||0,l:'Fotos'},{n:c.count||0,l:'Colecciones'},{n:s.count||0,l:'Servicios'},{n:h.count||0,l:'Hero Slides'},{n:b.count||0,l:'Blog Posts'},{n:q.count||0,l:'Cotizaciones'},{n:m.count||0,l:'Mensajes'}].map(x=>`<div class="stat-card"><div class="stat-num">${x.n}</div><div class="stat-label">${x.l}</div></div>`).join('')}
 
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) {
-    errEl.textContent = error.message;
-    errEl.style.display = 'block';
-  } else {
-    showApp();
-  }
-}
+// GALLERY
+async function loadGallery(){const{data}=await sb.from('collections').select('*').order('sort_order');cols=data||[];$('colTabs').innerHTML=cols.map((c,i)=>`<button class="tab ${i===0?'active':''}" onclick="selCol('${c.id}',this)">${c.name}</button>`).join('')+`<button class="tab" onclick="addCol()" style="color:var(--dust)">+ Nueva</button>`;if(cols.length)selCol(cols[0].id,$('colTabs').firstChild)}
+async function selCol(id,el){curCol=id;$('colTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const{data}=await sb.from('photos').select('*').eq('collection_id',id).order('sort_order');$('photoGrid').innerHTML=(data||[]).map(p=>`<div class="photo-card"><img src="${p.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delPhoto('${p.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay fotos. Sube la primera.</div>'}
+async function uploadPhotos(files){if(!curCol||!files.length)return;const col=cols.find(c=>c.id===curCol);for(let i=0;i<files.length;i++){const f=files[i],path=`${col.slug}/${Date.now()}-${i}.${f.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,f);if(error){toast('Error: '+error.message,'error');continue}const{data:u}=sb.storage.from('photos').getPublicUrl(path);await sb.from('photos').insert({collection_id:curCol,image_url:u.publicUrl,filename:f.name,sort_order:i})}toast(files.length+' foto(s) subidas','success');selCol(curCol);$('photoFile').value=''}
+async function delPhoto(id){if(!confirm('¿Eliminar?'))return;await sb.from('photos').delete().eq('id',id);toast('Eliminada','success');selCol(curCol)}
+async function addCol(){const n=prompt('Nombre:');if(!n)return;await sb.from('collections').insert({name:n,slug:n.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''),sort_order:cols.length+1});toast('Creada','success');loadGallery()}
 
-async function logout() {
-  await sb.auth.signOut();
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('authScreen').style.display = 'flex';
-}
+// HERO
+async function loadHero(){const{data}=await sb.from('hero_slides').select('*').order('sort_order');$('heroGrid').innerHTML=(data||[]).map(h=>`<div class="photo-card"><img src="${h.image_url}" loading="lazy"><div class="photo-overlay"><button class="photo-btn del" onclick="delHero('${h.id}')">✕</button></div></div>`).join('')||'<div class="empty">No hay slides.</div>'}
+async function uploadHero(f){if(!f)return;const path=`hero/${Date.now()}.${f.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,f);if(error){toast('Error: '+error.message,'error');return}const{data:u}=sb.storage.from('photos').getPublicUrl(path);const label=prompt('Location label:')||'';await sb.from('hero_slides').insert({image_url:u.publicUrl,location_label:label,sort_order:0});toast('Slide agregado','success');loadHero();$('heroFile').value=''}
+async function delHero(id){if(!confirm('¿Eliminar?'))return;await sb.from('hero_slides').delete().eq('id',id);toast('Eliminado','success');loadHero()}
 
-async function checkAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) showApp();
-}
+// SECTIONS TOGGLES
+async function loadSections(){const{data}=await sb.from('section_visibility').select('*').order('sort_order');$('sectionToggles').innerHTML=(data||[]).map(s=>`<div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:14px 22px"><div><strong>${s.section_label}</strong><br><span style="font-size:.7rem;color:var(--muted)">${s.page} · ${s.section_key}</span></div><label class="toggle"><input type="checkbox" ${s.visible?'checked':''} onchange="toggleSection('${s.id}',this.checked)"><span class="slider"></span></label></div>`).join('')||'<div class="empty">No hay secciones configuradas.</div>'}
+async function toggleSection(id,v){await sb.from('section_visibility').update({visible:v}).eq('id',id);toast(v?'Sección visible':'Sección oculta','success')}
 
-function showApp() {
-  document.getElementById('authScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadDashboard();
-}
+// NAVIGATION
+async function loadNav(){const{data}=await sb.from('nav_items').select('*').order('sort_order');$('navBody').innerHTML=(data||[]).map(n=>`<tr><td>${n.sort_order}</td><td>${n.label}</td><td style="font-size:.72rem;color:var(--muted)">${n.href}</td><td>${n.is_cta?'<span class="badge badge-active">CTA</span>':''}</td><td>${n.visible?'<span class="badge badge-active">Sí</span>':'<span class="badge badge-inactive">No</span>'}</td><td><button class="btn btn-sm btn-outline" onclick="editNav('${n.id}')">Editar</button> <button class="btn btn-sm btn-danger" onclick="delNav('${n.id}')">✕</button></td></tr>`).join('')}
+function showNavForm(){$('navForm').style.display='block'}function hideNavForm(){$('navForm').style.display='none';['navId','navLabel','navLabelEn','navHref'].forEach(x=>$(x).value='');$('navOrder').value='0'}
+async function saveNav(){const id=$('navId').value,d={label:$('navLabel').value,label_en:$('navLabelEn').value,href:$('navHref').value,sort_order:+$('navOrder').value,is_cta:$('navCta').value==='true',visible:$('navVis').value==='true'};if(id)await sb.from('nav_items').update(d).eq('id',id);else await sb.from('nav_items').insert(d);hideNavForm();toast('Guardado','success');loadNav()}
+async function editNav(id){const{data:n}=await sb.from('nav_items').select('*').eq('id',id).single();if(!n)return;$('navId').value=n.id;$('navLabel').value=n.label||'';$('navLabelEn').value=n.label_en||'';$('navHref').value=n.href||'';$('navOrder').value=n.sort_order;$('navCta').value=String(n.is_cta);$('navVis').value=String(n.visible);showNavForm()}
+async function delNav(id){if(!confirm('¿Eliminar?'))return;await sb.from('nav_items').delete().eq('id',id);toast('Eliminado','success');loadNav()}
 
-// ── NAV ──
-document.querySelectorAll('.sb-nav a').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    document.querySelectorAll('.sb-nav a').forEach(a => a.classList.remove('active'));
-    link.classList.add('active');
-    const sec = link.dataset.section;
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.getElementById('sec-' + sec).classList.add('active');
+// BLOG
+async function loadBlog(){const[{data:posts},{data:cats}]=await Promise.all([sb.from('blog_posts').select('*,blog_categories(name)').order('created_at',{ascending:false}),sb.from('blog_categories').select('*').order('sort_order')]);$('blogCat').innerHTML='<option value="">Sin categoría</option>'+(cats||[]).map(c=>`<option value="${c.id}">${c.name}</option>`).join('');$('blogBody2').innerHTML=(posts||[]).map(p=>`<tr><td>${p.title}</td><td>${p.blog_categories?.name||'—'}</td><td><span class="badge badge-${p.status}">${p.status}</span></td><td style="font-size:.72rem;color:var(--muted)">${new Date(p.created_at).toLocaleDateString('es-MX')}</td><td><button class="btn btn-sm btn-outline" onclick="editBlog('${p.id}')">Editar</button> <button class="btn btn-sm btn-danger" onclick="delBlog('${p.id}')">✕</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay posts.</td></tr>'}
+function showBlogForm(){$('blogForm').style.display='block'}function hideBlogForm(){$('blogForm').style.display='none';['blogId','blogTitle','blogSlug','blogExcerpt','blogBody','blogCover'].forEach(x=>$(x).value='');$('blogStatus').value='draft'}
+async function saveBlog(){const id=$('blogId').value,d={title:$('blogTitle').value,slug:$('blogSlug').value||$('blogTitle').value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''),excerpt:$('blogExcerpt').value,body:$('blogBody').value,category_id:$('blogCat').value||null,status:$('blogStatus').value,cover_image_url:$('blogCover').value};if(d.status==='published'&&!d.published_at)d.published_at=new Date().toISOString();if(id)await sb.from('blog_posts').update(d).eq('id',id);else await sb.from('blog_posts').insert(d);hideBlogForm();toast('Guardado','success');loadBlog()}
+async function editBlog(id){const{data:p}=await sb.from('blog_posts').select('*').eq('id',id).single();if(!p)return;$('blogId').value=p.id;$('blogTitle').value=p.title||'';$('blogSlug').value=p.slug||'';$('blogExcerpt').value=p.excerpt||'';$('blogBody').value=p.body||'';$('blogCat').value=p.category_id||'';$('blogStatus').value=p.status;$('blogCover').value=p.cover_image_url||'';showBlogForm()}
+async function delBlog(id){if(!confirm('¿Eliminar?'))return;await sb.from('blog_posts').delete().eq('id',id);toast('Eliminado','success');loadBlog()}
 
-    if (sec === 'dashboard') loadDashboard();
-    if (sec === 'gallery') loadGallery();
-    if (sec === 'hero') loadHero();
-    if (sec === 'services') loadServices();
-    if (sec === 'about') loadAbout();
-    if (sec === 'settings') loadSettings();
-  });
-});
+// CATEGORIES
+async function loadCats(){const{data}=await sb.from('blog_categories').select('*').order('sort_order');$('catBody').innerHTML=(data||[]).map(c=>`<tr><td>${c.name}</td><td style="color:var(--muted)">${c.slug}</td><td>${c.sort_order}</td><td><span class="badge badge-${c.active?'active':'inactive'}">${c.active?'Activa':'Inactiva'}</span></td><td><button class="btn btn-sm btn-danger" onclick="delCat('${c.id}')">✕</button></td></tr>`).join('')}
+async function addCategory(){const n=prompt('Nombre:');if(!n)return;await sb.from('blog_categories').insert({name:n,slug:n.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,''),sort_order:0});toast('Creada','success');loadCats()}
+async function delCat(id){if(!confirm('¿Eliminar?'))return;await sb.from('blog_categories').delete().eq('id',id);toast('Eliminada','success');loadCats()}
 
-// ── DASHBOARD ──
-async function loadDashboard() {
-  const [photos, cols, svcs, hero] = await Promise.all([
-    sb.from('photos').select('id', { count: 'exact', head: true }),
-    sb.from('collections').select('id', { count: 'exact', head: true }),
-    sb.from('services').select('id', { count: 'exact', head: true }),
-    sb.from('hero_slides').select('id', { count: 'exact', head: true })
-  ]);
-  document.getElementById('statPhotos').textContent = photos.count || 0;
-  document.getElementById('statCollections').textContent = cols.count || 0;
-  document.getElementById('statServices').textContent = svcs.count || 0;
-  document.getElementById('statHero').textContent = hero.count || 0;
-}
+// SERVICES
+async function loadSvcs(){const{data}=await sb.from('services').select('*').order('sort_order');$('svcBody').innerHTML=(data||[]).map(s=>`<tr><td>${s.name}</td><td>${s.type}</td><td>$${(s.base_price_mxn/100).toLocaleString('es-MX')}</td><td><span class="badge badge-${s.active?'active':'inactive'}">${s.active?'Activo':'Inactivo'}</span></td><td><button class="btn btn-sm btn-outline" onclick="editSvc('${s.id}')">Editar</button> <button class="btn btn-sm btn-outline" onclick="togSvc('${s.id}',${!s.active})">${s.active?'Desactivar':'Activar'}</button></td></tr>`).join('')}
+function showSvcForm(){$('svcForm').style.display='block'}function hideSvcForm(){$('svcForm').style.display='none';['svcId','svcName','svcNameEn','svcDesc','svcPrice'].forEach(x=>$(x).value='');$('svcOrder').value='0'}
+async function saveSvc(){const id=$('svcId').value,d={name:$('svcName').value,name_en:$('svcNameEn').value,description:$('svcDesc').value,type:$('svcType').value,base_price_mxn:(+$('svcPrice').value||0)*100,sort_order:+$('svcOrder').value};if(id)await sb.from('services').update(d).eq('id',id);else await sb.from('services').insert(d);hideSvcForm();toast('Guardado','success');loadSvcs()}
+async function editSvc(id){const{data:s}=await sb.from('services').select('*').eq('id',id).single();if(!s)return;$('svcId').value=s.id;$('svcName').value=s.name||'';$('svcNameEn').value=s.name_en||'';$('svcDesc').value=s.description||'';$('svcType').value=s.type;$('svcPrice').value=s.base_price_mxn/100;$('svcOrder').value=s.sort_order;showSvcForm()}
+async function togSvc(id,a){await sb.from('services').update({active:a}).eq('id',id);toast(a?'Activado':'Desactivado','success');loadSvcs()}
 
-// ── GALLERY ──
-async function loadGallery() {
-  const { data } = await sb.from('collections').select('*').order('sort_order');
-  collections = data || [];
-  const tabs = document.getElementById('collectionTabs');
-  tabs.innerHTML = collections.map((c, i) =>
-    `<button class="collection-tab ${i === 0 ? 'active' : ''}" data-id="${c.id}" onclick="selectCollection('${c.id}', this)">${c.name}</button>`
-  ).join('') + `<button class="collection-tab" onclick="addCollection()" style="color:var(--dust)">+ Nueva</button>`;
+// THEME
+async function loadTheme(){const[{data:presets},{data:settings}]=await Promise.all([sb.from('theme_presets').select('*'),sb.from('site_settings').select('*').limit(1).single()]);$('themePresets').innerHTML=(presets||[]).map(p=>`<div class="stat-card" style="cursor:pointer;border-color:${p.is_active?'var(--dust)':'var(--border)'}" onclick="applyPreset('${p.id}')"><div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px"><div style="width:20px;height:20px;background:${p.primary_color};border-radius:50%"></div><div style="width:20px;height:20px;background:${p.accent_color};border-radius:50%"></div></div><div style="font-size:.78rem">${p.name}</div>${p.is_active?'<div style="font-size:.6rem;color:var(--dust);margin-top:4px">ACTIVO</div>':''}</div>`).join('');if(settings){$('thColor1').value=settings.primary_color||'#c0a46e';$('thColor1T').value=settings.primary_color||'#c0a46e';$('thColor2').value=settings.accent_color||'#f4efe6';$('thColor2T').value=settings.accent_color||'#f4efe6';$('thFontH').value=settings.font_heading||'';$('thFontB').value=settings.font_body||''}$('thColor1').oninput=e=>$('thColor1T').value=e.target.value;$('thColor2').oninput=e=>$('thColor2T').value=e.target.value}
+async function applyPreset(id){await sb.from('theme_presets').update({is_active:false}).neq('id','');await sb.from('theme_presets').update({is_active:true}).eq('id',id);const{data:p}=await sb.from('theme_presets').select('*').eq('id',id).single();if(p){await sb.from('site_settings').update({primary_color:p.primary_color,accent_color:p.accent_color,font_heading:p.font_heading,font_body:p.font_body}).neq('id','')}toast('Preset aplicado','success');loadTheme()}
+async function saveTheme(){const{data:ex}=await sb.from('site_settings').select('id').limit(1).single();const d={primary_color:$('thColor1T').value,accent_color:$('thColor2T').value,font_heading:$('thFontH').value,font_body:$('thFontB').value};if(ex)await sb.from('site_settings').update(d).eq('id',ex.id);toast('Tema guardado','success')}
 
-  if (collections.length) selectCollection(collections[0].id, tabs.firstChild);
-}
+// SEO
+async function loadSeo(){const{data}=await sb.from('page_seo').select('*').order('page_slug');seoPages=data||[];$('seoTabs').innerHTML=seoPages.map((p,i)=>`<button class="tab ${i===0?'active':''}" onclick="selSeo('${p.page_slug}',this)">${p.page_title||p.page_slug}</button>`).join('');if(seoPages.length)selSeo(seoPages[0].page_slug,$('seoTabs').firstChild)}
+function selSeo(slug,el){curSeoPage=slug;$('seoTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const p=seoPages.find(x=>x.page_slug===slug);if(!p)return;$('seoId').value=p.id;$('seoTitle').value=p.meta_title||'';$('seoDesc').value=p.meta_description||'';$('seoOG').value=p.og_image_url||'';$('seoCan').value=p.canonical_url||'';$('seoNoindex').value=String(p.noindex||false)}
+async function saveSeo(){const id=$('seoId').value;await sb.from('page_seo').update({meta_title:$('seoTitle').value,meta_description:$('seoDesc').value,og_image_url:$('seoOG').value,canonical_url:$('seoCan').value,noindex:$('seoNoindex').value==='true'}).eq('id',id);toast('SEO guardado','success')}
 
-async function selectCollection(id, tabEl) {
-  currentCollection = id;
-  document.querySelectorAll('.collection-tab').forEach(t => t.classList.remove('active'));
-  if (tabEl) tabEl.classList.add('active');
+// ANALYTICS
+async function loadAnalytics(){const{data:views}=await sb.from('page_views').select('*').order('date',{ascending:false}).limit(100);const total=(views||[]).reduce((a,v)=>a+v.views,0);const unique=(views||[]).reduce((a,v)=>a+v.unique_visitors,0);const pages={};(views||[]).forEach(v=>{if(!pages[v.page])pages[v.page]={views:0,unique:0};pages[v.page].views+=v.views;pages[v.page].unique+=v.unique_visitors});$('analyticsStats').innerHTML=`<div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total Views</div></div><div class="stat-card"><div class="stat-num">${unique}</div><div class="stat-label">Únicos</div></div><div class="stat-card"><div class="stat-num">${Object.keys(pages).length}</div><div class="stat-label">Páginas</div></div>`;$('analyticsBody').innerHTML=Object.entries(pages).sort((a,b)=>b[1].views-a[1].views).map(([p,v])=>`<tr><td>${p}</td><td>${v.views}</td><td>${v.unique}</td></tr>`).join('')||'<tr><td colspan="3" class="empty">No hay datos.</td></tr>'}
 
-  const { data } = await sb.from('photos').select('*').eq('collection_id', id).order('sort_order');
-  const grid = document.getElementById('photoGrid');
-  grid.innerHTML = (data || []).map(p => `
-    <div class="photo-card" data-id="${p.id}" draggable="true">
-      <img src="${p.image_url}" alt="${p.caption || ''}" loading="lazy">
-      <div class="photo-actions">
-        <button class="photo-action-btn delete" onclick="deletePhoto('${p.id}')" title="Eliminar">✕</button>
-      </div>
-      <div class="photo-order">${p.sort_order}</div>
-    </div>
-  `).join('');
-}
+// QUOTES
+async function loadQuotes(){const{data}=await sb.from('quotes').select('*').order('created_at',{ascending:false});$('quoteBody').innerHTML=(data||[]).map(q=>`<tr><td>${q.client_name}<br><span style="font-size:.7rem;color:var(--muted)">${q.client_email||''}</span></td><td>${q.service_type||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${q.event_date||'—'}</td><td><span class="badge badge-${q.status==='new'?'new':q.status==='accepted'?'active':'read'}">${q.status}</span></td><td><button class="btn btn-sm btn-outline" onclick="updQuote('${q.id}','viewed')">Vista</button><button class="btn btn-sm btn-outline" onclick="updQuote('${q.id}','accepted')">Aceptar</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay cotizaciones.</td></tr>'}
+async function updQuote(id,s){await sb.from('quotes').update({status:s}).eq('id',id);toast('Actualizada','success');loadQuotes()}
 
-async function uploadPhotos(files) {
-  if (!currentCollection || !files.length) return;
-  const col = collections.find(c => c.id === currentCollection);
-  const prog = document.getElementById('uploadProgress');
-  const bar = document.getElementById('uploadBar');
-  prog.style.display = 'block';
+// MESSAGES
+async function loadMessages(){const{data}=await sb.from('messages').select('*').order('created_at',{ascending:false});$('msgBody').innerHTML=(data||[]).map(m=>`<tr><td>${m.sender_name}<br><span style="font-size:.7rem;color:var(--muted)">${m.sender_email||''}</span></td><td>${m.subject||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${new Date(m.created_at).toLocaleDateString('es-MX')}</td><td><span class="badge badge-${m.status==='unread'?'new':'read'}">${m.status}</span></td><td><button class="btn btn-sm btn-outline" onclick="readMsg('${m.id}')">Ver</button><button class="btn btn-sm btn-danger" onclick="delMsg('${m.id}')">✕</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay mensajes.</td></tr>'}
+async function readMsg(id){const{data:m}=await sb.from('messages').select('*').eq('id',id).single();if(!m)return;await sb.from('messages').update({status:'read'}).eq('id',id);alert(`De: ${m.sender_name}\nEmail: ${m.sender_email}\nAsunto: ${m.subject}\n\n${m.body}`);loadMessages()}
+async function delMsg(id){if(!confirm('¿Eliminar?'))return;await sb.from('messages').delete().eq('id',id);toast('Eliminado','success');loadMessages()}
 
-  for (let i = 0; i < files.length; i++) {
-    bar.style.width = ((i + 1) / files.length * 100) + '%';
-    const file = files[i];
-    const ext = file.name.split('.').pop();
-    const path = `${col.slug}/${Date.now()}-${i}.${ext}`;
+// SETTINGS
+async function loadSettings(){const{data}=await sb.from('site_settings').select('*').limit(1).single();if(!data)return;$('setLogo').value=data.logo_text||'';$('setTitle').value=data.site_title||'';$('setDesc').value=data.site_description||'';$('setPhone').value=data.phone||'';$('setEmail').value=data.email||'';$('setIG').value=data.instagram_handle||'';$('setWA').value=data.whatsapp_number||''}
+async function saveSettings(){const{data:ex}=await sb.from('site_settings').select('id').limit(1).single();const d={logo_text:$('setLogo').value,site_title:$('setTitle').value,site_description:$('setDesc').value,phone:$('setPhone').value,email:$('setEmail').value,instagram_handle:$('setIG').value,whatsapp_number:$('setWA').value};if(ex)await sb.from('site_settings').update(d).eq('id',ex.id);else await sb.from('site_settings').insert(d);toast('Guardado','success')}
 
-    const { error: upErr } = await sb.storage.from('photos').upload(path, file);
-    if (upErr) { toast('Error subiendo: ' + upErr.message, 'error'); continue; }
+// PAGES
+async function loadPages(){const{data}=await sb.from('page_sections').select('*').order('page_slug').order('sort_order');const pages={};(data||[]).forEach(s=>{if(!pages[s.page_slug])pages[s.page_slug]=[];pages[s.page_slug].push(s)});const slugs=Object.keys(pages);$('pageTabs').innerHTML=slugs.map((s,i)=>`<button class="tab ${i===0?'active':''}" onclick="selPage('${s}',this)">${s}</button>`).join('')||'<div class="empty">No hay secciones de página configuradas.</div>';if(slugs.length)selPage(slugs[0],$('pageTabs').firstChild)}
+function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div>${s.image_url?`<div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><input class="form-input" value="${s.image_url}" onchange="updSection('${s.id}','image_url',this.value)"></div></div>`:''}</div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
+async function updSection(id,field,val){await sb.from('page_sections').update({[field]:val}).eq('id',id);toast('Actualizado','success')}
 
-    const { data: urlData } = sb.storage.from('photos').getPublicUrl(path);
+// TOAST
+function toast(m,t='success'){const el=$('toast');el.textContent=m;el.className='toast '+t;requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>el.classList.remove('show'),3000)}
 
-    const { data: maxOrder } = await sb.from('photos').select('sort_order').eq('collection_id', currentCollection).order('sort_order', { ascending: false }).limit(1);
-    const nextOrder = (maxOrder && maxOrder[0] ? maxOrder[0].sort_order : 0) + 1;
-
-    await sb.from('photos').insert({
-      collection_id: currentCollection,
-      image_url: urlData.publicUrl,
-      filename: file.name,
-      sort_order: nextOrder,
-      size_bytes: file.size
-    });
-  }
-
-  prog.style.display = 'none';
-  bar.style.width = '0';
-  toast(`${files.length} foto(s) subidas`, 'success');
-  selectCollection(currentCollection);
-  document.getElementById('photoFile').value = '';
-}
-
-async function deletePhoto(id) {
-  if (!confirm('¿Eliminar esta foto?')) return;
-  await sb.from('photos').delete().eq('id', id);
-  toast('Foto eliminada', 'success');
-  selectCollection(currentCollection);
-}
-
-async function addCollection() {
-  const name = prompt('Nombre de la colección:');
-  if (!name) return;
-  const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  const nextOrder = collections.length + 1;
-  await sb.from('collections').insert({ name, slug, sort_order: nextOrder });
-  toast('Colección creada', 'success');
-  loadGallery();
-}
-
-// ── HERO ──
-async function loadHero() {
-  const { data } = await sb.from('hero_slides').select('*').order('sort_order');
-  const grid = document.getElementById('heroGrid');
-  grid.innerHTML = (data || []).map(h => `
-    <div class="photo-card" data-id="${h.id}">
-      <img src="${h.image_url}" loading="lazy">
-      <div class="photo-actions">
-        <button class="photo-action-btn delete" onclick="deleteHero('${h.id}')" title="Eliminar">✕</button>
-      </div>
-      <div class="photo-order">${h.location_label || h.sort_order}</div>
-    </div>
-  `).join('');
-}
-
-async function uploadHero(file) {
-  if (!file) return;
-  const ext = file.name.split('.').pop();
-  const path = `hero/${Date.now()}.${ext}`;
-  const { error } = await sb.storage.from('photos').upload(path, file);
-  if (error) { toast('Error: ' + error.message, 'error'); return; }
-
-  const { data: urlData } = sb.storage.from('photos').getPublicUrl(path);
-  const label = prompt('Location label (e.g. MONTERREY · CALLE):') || '';
-
-  const { data: maxOrder } = await sb.from('hero_slides').select('sort_order').order('sort_order', { ascending: false }).limit(1);
-  const nextOrder = (maxOrder && maxOrder[0] ? maxOrder[0].sort_order : 0) + 1;
-
-  await sb.from('hero_slides').insert({ image_url: urlData.publicUrl, location_label: label, sort_order: nextOrder });
-  toast('Hero slide agregado', 'success');
-  loadHero();
-  document.getElementById('heroFile').value = '';
-}
-
-async function deleteHero(id) {
-  if (!confirm('¿Eliminar este slide?')) return;
-  await sb.from('hero_slides').delete().eq('id', id);
-  toast('Slide eliminado', 'success');
-  loadHero();
-}
-
-// ── SERVICES ──
-async function loadServices() {
-  const { data } = await sb.from('services').select('*').order('sort_order');
-  const tbody = document.getElementById('servicesBody');
-  tbody.innerHTML = (data || []).map(s => `
-    <tr>
-      <td>${s.name}</td>
-      <td>${s.type}</td>
-      <td>$${(s.base_price_mxn / 100).toLocaleString('es-MX')} MXN</td>
-      <td><span class="badge ${s.active ? 'badge-active' : 'badge-inactive'}">${s.active ? 'Activo' : 'Inactivo'}</span></td>
-      <td>
-        <button class="btn btn-sm btn-outline" onclick="editService('${s.id}')">Editar</button>
-        <button class="btn btn-sm btn-outline" onclick="toggleService('${s.id}', ${!s.active})">${s.active ? 'Desactivar' : 'Activar'}</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function showServiceForm() { document.getElementById('serviceForm').style.display = 'block'; }
-function hideServiceForm() {
-  document.getElementById('serviceForm').style.display = 'none';
-  ['svcId','svcName','svcNameEn','svcDesc','svcPrice','svcMinH','svcMaxH','svcDuration'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('svcOrder').value = '0';
-}
-
-async function saveService() {
-  const id = document.getElementById('svcId').value;
-  const data = {
-    name: document.getElementById('svcName').value,
-    name_en: document.getElementById('svcNameEn').value,
-    description: document.getElementById('svcDesc').value,
-    type: document.getElementById('svcType').value,
-    base_price_mxn: parseInt(document.getElementById('svcPrice').value || 0) * 100,
-    min_hours: parseInt(document.getElementById('svcMinH').value) || null,
-    max_hours: parseInt(document.getElementById('svcMaxH').value) || null,
-    duration_minutes: parseInt(document.getElementById('svcDuration').value) || null,
-    sort_order: parseInt(document.getElementById('svcOrder').value) || 0
-  };
-
-  if (id) {
-    await sb.from('services').update(data).eq('id', id);
-    toast('Servicio actualizado', 'success');
-  } else {
-    await sb.from('services').insert(data);
-    toast('Servicio creado', 'success');
-  }
-  hideServiceForm();
-  loadServices();
-}
-
-async function editService(id) {
-  const { data: s } = await sb.from('services').select('*').eq('id', id).single();
-  if (!s) return;
-  document.getElementById('svcId').value = s.id;
-  document.getElementById('svcName').value = s.name || '';
-  document.getElementById('svcNameEn').value = s.name_en || '';
-  document.getElementById('svcDesc').value = s.description || '';
-  document.getElementById('svcType').value = s.type;
-  document.getElementById('svcPrice').value = s.base_price_mxn / 100;
-  document.getElementById('svcMinH').value = s.min_hours || '';
-  document.getElementById('svcMaxH').value = s.max_hours || '';
-  document.getElementById('svcDuration').value = s.duration_minutes || '';
-  document.getElementById('svcOrder').value = s.sort_order || 0;
-  showServiceForm();
-}
-
-async function toggleService(id, active) {
-  await sb.from('services').update({ active }).eq('id', id);
-  toast(active ? 'Servicio activado' : 'Servicio desactivado', 'success');
-  loadServices();
-}
-
-// ── ABOUT ──
-async function loadAbout() {
-  const { data } = await sb.from('about_content').select('*').limit(1).single();
-  if (!data) return;
-  document.getElementById('aboutHeadline').value = data.headline || '';
-  document.getElementById('aboutSub').value = data.subheadline || '';
-  document.getElementById('aboutBio').value = data.bio_text || '';
-  document.getElementById('aboutBioEn').value = data.bio_text_en || '';
-  if (data.portrait_url) {
-    const img = document.getElementById('aboutPortraitPreview');
-    img.src = data.portrait_url;
-    img.style.display = 'block';
-  }
-}
-
-async function saveAbout() {
-  const { data: existing } = await sb.from('about_content').select('id').limit(1).single();
-  const payload = {
-    headline: document.getElementById('aboutHeadline').value,
-    subheadline: document.getElementById('aboutSub').value,
-    bio_text: document.getElementById('aboutBio').value,
-    bio_text_en: document.getElementById('aboutBioEn').value
-  };
-  if (existing) {
-    await sb.from('about_content').update(payload).eq('id', existing.id);
-  } else {
-    await sb.from('about_content').insert(payload);
-  }
-  toast('About actualizado', 'success');
-}
-
-async function uploadPortrait(file) {
-  if (!file) return;
-  const path = `about/portrait-${Date.now()}.${file.name.split('.').pop()}`;
-  const { error } = await sb.storage.from('photos').upload(path, file);
-  if (error) { toast('Error: ' + error.message, 'error'); return; }
-  const { data: urlData } = sb.storage.from('photos').getPublicUrl(path);
-  const { data: existing } = await sb.from('about_content').select('id').limit(1).single();
-  if (existing) {
-    await sb.from('about_content').update({ portrait_url: urlData.publicUrl }).eq('id', existing.id);
-  }
-  const img = document.getElementById('aboutPortraitPreview');
-  img.src = urlData.publicUrl;
-  img.style.display = 'block';
-  toast('Retrato actualizado', 'success');
-}
-
-// ── SETTINGS ──
-async function loadSettings() {
-  const { data } = await sb.from('site_settings').select('*').limit(1).single();
-  if (!data) return;
-  document.getElementById('setLogo').value = data.logo_text || '';
-  document.getElementById('setTitle').value = data.site_title || '';
-  document.getElementById('setDesc').value = data.site_description || '';
-  document.getElementById('setColor1').value = data.primary_color || '#c0a46e';
-  document.getElementById('setColor1Text').value = data.primary_color || '#c0a46e';
-  document.getElementById('setColor2').value = data.accent_color || '#f4efe6';
-  document.getElementById('setColor2Text').value = data.accent_color || '#f4efe6';
-  document.getElementById('setFontH').value = data.font_heading || '';
-  document.getElementById('setFontB').value = data.font_body || '';
-  document.getElementById('setPhone').value = data.phone || '';
-  document.getElementById('setEmail').value = data.email || '';
-  document.getElementById('setIG').value = data.instagram_handle || '';
-  document.getElementById('setWA').value = data.whatsapp_number || '';
-  document.getElementById('setMetaT').value = data.meta_title || '';
-  document.getElementById('setMetaD').value = data.meta_description || '';
-
-  // Sync color pickers
-  document.getElementById('setColor1').addEventListener('input', e => document.getElementById('setColor1Text').value = e.target.value);
-  document.getElementById('setColor2').addEventListener('input', e => document.getElementById('setColor2Text').value = e.target.value);
-}
-
-async function saveSettings() {
-  const { data: existing } = await sb.from('site_settings').select('id').limit(1).single();
-  const payload = {
-    logo_text: document.getElementById('setLogo').value,
-    site_title: document.getElementById('setTitle').value,
-    site_description: document.getElementById('setDesc').value,
-    primary_color: document.getElementById('setColor1Text').value,
-    accent_color: document.getElementById('setColor2Text').value,
-    font_heading: document.getElementById('setFontH').value,
-    font_body: document.getElementById('setFontB').value,
-    phone: document.getElementById('setPhone').value,
-    email: document.getElementById('setEmail').value,
-    instagram_handle: document.getElementById('setIG').value,
-    whatsapp_number: document.getElementById('setWA').value,
-    meta_title: document.getElementById('setMetaT').value,
-    meta_description: document.getElementById('setMetaD').value
-  };
-  if (existing) {
-    await sb.from('site_settings').update(payload).eq('id', existing.id);
-  } else {
-    await sb.from('site_settings').insert(payload);
-  }
-  toast('Settings guardados', 'success');
-}
-
-// ── DRAG & DROP ──
-document.getElementById('photoUpload').addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.classList.add('dragging'); });
-document.getElementById('photoUpload').addEventListener('dragleave', e => e.currentTarget.classList.remove('dragging'));
-document.getElementById('photoUpload').addEventListener('drop', e => {
-  e.preventDefault();
-  e.currentTarget.classList.remove('dragging');
-  if (e.dataTransfer.files.length) uploadPhotos(e.dataTransfer.files);
-});
-
-// ── TOAST ──
-function toast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type;
-  requestAnimationFrame(() => t.classList.add('show'));
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ── INIT ──
+// INIT
 checkAuth();
-// Enter key on auth
-document.getElementById('authPassword').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+$('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 </script>
 </body>
 </html>
