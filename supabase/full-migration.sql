@@ -472,3 +472,187 @@ SELECT
   '<p>Gonzalo Chapa is a photographer based in San Pedro Garza García, Monterrey. His work documents the energy of northern México — from the masked characters of its streets to the neon-lit underground of its nightlife and the raw landscape of the Sierra Madre.</p><p>His practice is built on trust, patience, and a refusal to pose the world. Whether documenting a concert, shooting a portrait, or walking a carretera at dusk, he brings the same editorial eye: honest, bold, and rooted in place.</p>',
   '../assets/images/retratos/_DSC8665.jpg'
 WHERE NOT EXISTS (SELECT 1 FROM about_content);
+
+-- Blog categories seed
+INSERT INTO blog_categories (name, slug, sort_order, active)
+SELECT 'Fotografía', 'fotografia', 1, true
+WHERE NOT EXISTS (SELECT 1 FROM blog_categories WHERE slug = 'fotografia');
+
+INSERT INTO blog_categories (name, slug, sort_order, active)
+SELECT 'Detrás de Cámaras', 'detras-de-camaras', 2, true
+WHERE NOT EXISTS (SELECT 1 FROM blog_categories WHERE slug = 'detras-de-camaras');
+
+INSERT INTO blog_categories (name, slug, sort_order, active)
+SELECT 'Monterrey', 'monterrey', 3, true
+WHERE NOT EXISTS (SELECT 1 FROM blog_categories WHERE slug = 'monterrey');
+
+INSERT INTO blog_categories (name, slug, sort_order, active)
+SELECT 'Técnica', 'tecnica', 4, true
+WHERE NOT EXISTS (SELECT 1 FROM blog_categories WHERE slug = 'tecnica');
+
+-- Page sections seed (CMS content blocks)
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'home', 'hero_headline', 'text', 'Titular Principal',
+  'Fotografía que captura la esencia de cada momento.', 1
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'home' AND section_key = 'hero_headline');
+
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'home', 'hero_subheadline', 'text', 'Subtítulo Hero',
+  'Monterrey, México', 2
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'home' AND section_key = 'hero_subheadline');
+
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'about', 'bio_headline', 'text', 'Titular Bio',
+  'Every frame is a declaration of where we are.', 1
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'about' AND section_key = 'bio_headline');
+
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'about', 'bio_body', 'html', 'Texto Bio',
+  '<p>Fotógrafo basado en San Pedro Garza García, Monterrey. Documenta la energía del norte de México.</p>', 2
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'about' AND section_key = 'bio_body');
+
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'hire', 'intro_title', 'text', 'Título Servicios',
+  'Servicios Fotográficos', 1
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'hire' AND section_key = 'intro_title');
+
+INSERT INTO page_sections (page_slug, section_key, section_type, title, content, sort_order)
+SELECT 'hire', 'intro_body', 'text', 'Intro Servicios',
+  'Paquetes diseñados para cada ocasión.', 2
+WHERE NOT EXISTS (SELECT 1 FROM page_sections WHERE page_slug = 'hire' AND section_key = 'intro_body');
+
+-- =============================================================
+-- AUTHENTICATED USER POLICIES (admin CRUD access)
+-- Without these, logged-in admin users cannot write to any table.
+-- =============================================================
+DO $$
+BEGIN
+  -- collections
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='collections' AND policyname='auth_manage_collections') THEN
+    CREATE POLICY auth_manage_collections ON collections FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- photos
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='photos' AND policyname='auth_manage_photos') THEN
+    CREATE POLICY auth_manage_photos ON photos FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- hero_slides
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='hero_slides' AND policyname='auth_manage_hero') THEN
+    CREATE POLICY auth_manage_hero ON hero_slides FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- services
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='services' AND policyname='auth_manage_services') THEN
+    CREATE POLICY auth_manage_services ON services FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- blog_categories
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_categories' AND policyname='auth_manage_blog_cats') THEN
+    CREATE POLICY auth_manage_blog_cats ON blog_categories FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- blog_posts
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='blog_posts' AND policyname='auth_manage_blog_posts') THEN
+    CREATE POLICY auth_manage_blog_posts ON blog_posts FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- quotes
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='quotes' AND policyname='auth_manage_quotes') THEN
+    CREATE POLICY auth_manage_quotes ON quotes FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- messages
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='messages' AND policyname='auth_manage_messages') THEN
+    CREATE POLICY auth_manage_messages ON messages FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- site_settings
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='site_settings' AND policyname='auth_manage_settings') THEN
+    CREATE POLICY auth_manage_settings ON site_settings FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- theme_presets
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='theme_presets' AND policyname='auth_manage_presets') THEN
+    CREATE POLICY auth_manage_presets ON theme_presets FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- page_seo
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='page_seo' AND policyname='auth_manage_page_seo') THEN
+    CREATE POLICY auth_manage_page_seo ON page_seo FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- page_views
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='page_views' AND policyname='auth_manage_views') THEN
+    CREATE POLICY auth_manage_views ON page_views FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- section_visibility
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='section_visibility' AND policyname='auth_manage_sections') THEN
+    CREATE POLICY auth_manage_sections ON section_visibility FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- nav_items
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='nav_items' AND policyname='auth_manage_nav') THEN
+    CREATE POLICY auth_manage_nav ON nav_items FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- page_sections
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='page_sections' AND policyname='auth_manage_page_sections') THEN
+    CREATE POLICY auth_manage_page_sections ON page_sections FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+  -- about_content
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename='about_content' AND policyname='auth_manage_about') THEN
+    CREATE POLICY auth_manage_about ON about_content FOR ALL
+      USING (auth.role() = 'authenticated')
+      WITH CHECK (auth.role() = 'authenticated');
+  END IF;
+END $$;
+
+-- =============================================================
+-- STORAGE BUCKET (photos)
+-- Run after tables are created. Creates the public "photos" bucket
+-- and sets policies for public read + authenticated write.
+-- =============================================================
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'photos', 'photos', true,
+  10485760,  -- 10 MB per file
+  ARRAY['image/jpeg','image/jpg','image/png','image/webp','image/gif']
+)
+ON CONFLICT (id) DO NOTHING;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='storage' AND tablename='objects' AND policyname='photos_public_read') THEN
+    CREATE POLICY photos_public_read ON storage.objects FOR SELECT USING (bucket_id = 'photos');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='storage' AND tablename='objects' AND policyname='photos_auth_upload') THEN
+    CREATE POLICY photos_auth_upload ON storage.objects FOR INSERT
+      WITH CHECK (bucket_id = 'photos' AND auth.role() = 'authenticated');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='storage' AND tablename='objects' AND policyname='photos_auth_delete') THEN
+    CREATE POLICY photos_auth_delete ON storage.objects FOR DELETE
+      USING (bucket_id = 'photos' AND auth.role() = 'authenticated');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname='storage' AND tablename='objects' AND policyname='photos_auth_update') THEN
+    CREATE POLICY photos_auth_update ON storage.objects FOR UPDATE
+      USING (bucket_id = 'photos' AND auth.role() = 'authenticated');
+  END IF;
+END $$;
