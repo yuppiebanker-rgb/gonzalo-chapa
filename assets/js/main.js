@@ -563,25 +563,21 @@
   (function() {
     var SB_URL = 'https://pxqugqerodswtkgxzipw.supabase.co';
     var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cXVncWVyb2Rzd3RrZ3h6aXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjI2MDgsImV4cCI6MjA5NTM5ODYwOH0.A_78sl-5gcAVuhCR4cBwRbipWcPS7OV0xXhb57Uv_rk';
-    var page   = window.location.pathname || '/';
-    var date   = new Date().toISOString().slice(0, 10);
-
-    crypto.subtle.digest('SHA-256', new TextEncoder().encode(navigator.userAgent))
-      .then(function(buf) {
-        var hash = Array.from(new Uint8Array(buf))
-          .map(function(b) { return b.toString(16).padStart(2, '0'); })
-          .join('').slice(0, 16);
-        return fetch(SB_URL + '/rest/v1/page_views', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SB_KEY,
-            'Authorization': 'Bearer ' + SB_KEY
-          },
-          body: JSON.stringify({ page: page, date: date, visitor_hash: hash })
-        });
-      })
-      .catch(function() {});
+    var page = window.location.pathname || '/';
+    var date = new Date().toISOString().slice(0, 10);
+    var key  = 'pv:' + page + ':' + date;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, '1');
+    fetch(SB_URL + '/rest/v1/page_views', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify({ page: page, date: date, views: 1 })
+    }).catch(function() {});
   })();
 
 })();

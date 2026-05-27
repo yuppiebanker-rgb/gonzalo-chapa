@@ -413,13 +413,14 @@
   <button class="back-top" aria-label="Back to top">↑</button>
 
   <script src="../assets/js/main.js?v=202603311659"></script>
+  <script src="../assets/js/content-loader.js?v=20260527"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
   (function () {
     /* ── Supabase ── */
-    var SB_URL = 'YOUR_SUPABASE_URL';
-    var SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    var SB_URL = 'https://pxqugqerodswtkgxzipw.supabase.co';
+    var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cXVncWVyb2Rzd3RrZ3h6aXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjI2MDgsImV4cCI6MjA5NTM5ODYwOH0.A_78sl-5gcAVuhCR4cBwRbipWcPS7OV0xXhb57Uv_rk';
     var sb = supabase.createClient(SB_URL, SB_KEY);
 
     var article = document.getElementById('postArticle');
