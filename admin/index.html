@@ -143,6 +143,23 @@
     .chart-labels{display:flex;gap:5px;margin-top:5px}
     .chart-lbl{flex:1;text-align:center;font-size:.52rem;color:var(--muted);letter-spacing:.02em}
 
+    /* IMAGE BROWSER */
+    .img-browser{position:fixed;inset:0;z-index:9999;background:rgba(11,9,6,.97);overflow-y:auto;display:none}
+    .img-browser.open{display:block}
+    .ibw{max-width:1100px;margin:0 auto;padding:28px 24px}
+    .ibw-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+    .ibw-title{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.45rem;color:var(--dust);margin:0}
+    .ibw-ctrl{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+    .ibw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:14px}
+    .ibw-item{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;border:1.5px solid transparent;transition:border-color .18s}
+    .ibw-item:hover{border-color:var(--dust)}
+    .ibw-item img{width:100%;height:100%;object-fit:cover;display:block}
+    .ibw-check{position:absolute;bottom:5px;right:5px;width:20px;height:20px;background:var(--dust);color:var(--ink);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;pointer-events:none}
+    .ibw-item:hover .ibw-check{opacity:1}
+    .ibw-fname{position:absolute;bottom:0;left:0;right:0;padding:3px 6px;background:rgba(11,9,6,.78);font-size:.52rem;color:rgba(244,239,230,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .15s;pointer-events:none}
+    .ibw-item:hover .ibw-fname{opacity:1}
+    .ibw-empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-style:italic;font-size:.8rem}
+
     @media(max-width:900px){.dash-lower{grid-template-columns:1fr}}
     @media(max-width:768px){
       .sidebar{width:56px;padding:12px 0}.sb-head,.sb-nav li a span,.sb-sub{display:none}
@@ -243,6 +260,7 @@
 <!-- HERO -->
 <div id="s-hero" class="section">
   <div class="page-head"><h1 class="page-title">Hero Slideshow</h1><p class="page-sub">Imágenes del carrusel principal</p></div>
+  <div class="btn-group" style="margin-bottom:10px"><button class="btn btn-outline" onclick="browseForHero()">⊞ Explorar Galería</button></div>
   <div class="upload-zone" onclick="$('heroFile').click()"><div class="uic">+</div><p>Subir imagen de hero</p><input type="file" id="heroFile" accept="image/*" style="display:none" onchange="uploadHero(this.files[0])"></div>
   <div class="photo-grid" id="heroGrid"></div>
 </div>
@@ -286,7 +304,7 @@
     <div class="form-row tri">
       <div class="form-group"><label class="form-label">Categoría</label><select class="form-input" id="blogCat"></select></div>
       <div class="form-group"><label class="form-label">Estado</label><select class="form-input" id="blogStatus"><option value="draft">Borrador</option><option value="published">Publicado</option></select></div>
-      <div class="form-group"><label class="form-label">Cover Image URL</label><input class="form-input" id="blogCover"></div>
+      <div class="form-group"><label class="form-label">Cover Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="blogCover" style="flex:1"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){$('blogCover').value=u})">⊞</button></div></div>
     </div>
     <div class="btn-group"><button class="btn btn-primary" onclick="saveBlog()">Guardar</button><button class="btn btn-outline" onclick="hideBlogForm()">Cancelar</button></div>
   </div>
@@ -344,7 +362,7 @@
     <input type="hidden" id="seoId">
     <div class="form-row full"><div class="form-group"><label class="form-label">Meta Title</label><input class="form-input" id="seoTitle"></div></div>
     <div class="form-row full"><div class="form-group"><label class="form-label">Meta Description</label><textarea class="form-input" id="seoDesc" style="min-height:60px"></textarea></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">OG Image URL</label><input class="form-input" id="seoOG"></div><div class="form-group"><label class="form-label">Canonical URL</label><input class="form-input" id="seoCan"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">OG Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="seoOG" style="flex:1"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){$('seoOG').value=u})">⊞</button></div></div><div class="form-group"><label class="form-label">Canonical URL</label><input class="form-input" id="seoCan"></div></div>
     <div class="form-row"><div class="form-group"><label class="form-label">No Index</label><select class="form-input" id="seoNoindex"><option value="false">No</option><option value="true">Sí</option></select></div></div>
     <div class="btn-group"><button class="btn btn-primary" onclick="saveSeo()">Guardar SEO</button></div>
   </div>
@@ -386,6 +404,21 @@
 </main>
 </div>
 
+<!-- IMAGE BROWSER MODAL -->
+<div id="imgBrowser" class="img-browser">
+  <div class="ibw">
+    <div class="ibw-head">
+      <h2 class="ibw-title">Explorador de Imágenes</h2>
+      <button class="btn btn-outline" onclick="closeImgBrowser()">✕ Cerrar</button>
+    </div>
+    <div class="ibw-ctrl">
+      <input id="imgSearch" class="form-input" placeholder="Buscar por nombre…" oninput="ibFilter()" style="flex:1;min-width:0">
+      <label class="btn btn-primary" style="cursor:pointer">↑ Subir<input id="ibUploadInput" type="file" accept="image/*" multiple style="display:none" onchange="ibUpload(this.files)"></label>
+    </div>
+    <div class="tabs" id="imgBrowserTabs"></div>
+    <div id="imgBrowserGrid" class="ibw-grid"></div>
+  </div>
+</div>
 <div id="toast" class="toast"></div>
 
 <script>
@@ -494,7 +527,7 @@ async function saveSettings(){const{data:ex}=await sb.from('site_settings').sele
 
 // PAGES
 async function loadPages(){const{data}=await sb.from('page_sections').select('*').order('page_slug').order('sort_order');const pages={};(data||[]).forEach(s=>{if(!pages[s.page_slug])pages[s.page_slug]=[];pages[s.page_slug].push(s)});const slugs=Object.keys(pages);$('pageTabs').innerHTML=slugs.map((s,i)=>`<button class="tab ${i===0?'active':''}" onclick="selPage('${s}',this)">${s}</button>`).join('')||'<div class="empty">No hay secciones de página configuradas.</div>';if(slugs.length)selPage(slugs[0],$('pageTabs').querySelector('.tab'))}
-function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div>${s.image_url?`<div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><input class="form-input" value="${s.image_url}" onchange="updSection('${s.id}','image_url',this.value)"></div></div>`:''}</div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
+function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="si-${s.id}" value="${s.image_url||''}" style="flex:1" onchange="updSection('${s.id}','image_url',this.value)"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){document.getElementById('si-${s.id}').value=u;updSection('${s.id}','image_url',u)})">⊞</button></div></div></div></div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
 async function updSection(id,field,val){await sb.from('page_sections').update({[field]:val}).eq('id',id);toast('Actualizado','success')}
 
 // DRAG & DROP REORDER
@@ -512,6 +545,27 @@ async function saveNavOrder(){const els=$('navBody').querySelectorAll('[data-id]
 
 // TOAST
 function toast(m,t='success'){const el=$('toast');el.textContent=m;el.className='toast '+t;requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>el.classList.remove('show'),3000)}
+
+// SIDEBAR HELPERS
+function navTo(s){const a=document.querySelector(`.sb-nav a[data-s="${s}"]`);if(a)a.click()}
+async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new').catch(()=>({count:0})),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread').catch(()=>({count:0}))]);if(qc){$('badgeQuotes').textContent=qc;$('badgeQuotes').style.display='inline-flex'}else $('badgeQuotes').style.display='none';if(mc){$('badgeMsgs').textContent=mc;$('badgeMsgs').style.display='inline-flex'}else $('badgeMsgs').style.display='none'}
+
+// IMAGE BROWSER
+let _ibCb=null,_ibAll=[],_ibCol=null;
+async function openImageBrowser(cb){
+  _ibCb=cb;$('imgBrowser').classList.add('open');document.body.style.overflow='hidden';$('imgSearch').value='';
+  const[{data:co},{data:ph}]=await Promise.all([sb.from('collections').select('*').order('sort_order'),sb.from('photos').select('*').order('collection_id,sort_order')]);
+  _ibAll=ph||[];_ibCol=null;
+  $('imgBrowserTabs').innerHTML=[{id:null,name:'Todas'},...(co||[])].map((c,i)=>`<button class="tab ${i===0?'active':''}" data-col="${c.id||''}" onclick="ibSetCol(this)">${c.name}</button>`).join('');
+  ibRender(_ibAll);
+}
+function closeImgBrowser(){$('imgBrowser').classList.remove('open');document.body.style.overflow='';_ibCb=null}
+function ibSetCol(el){_ibCol=el.dataset.col||null;$('imgBrowserTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');ibFilter()}
+function ibFilter(){const q=($('imgSearch').value||'').toLowerCase();let list=_ibAll;if(_ibCol)list=list.filter(p=>p.collection_id===_ibCol);if(q)list=list.filter(p=>(p.filename||p.image_url||'').toLowerCase().includes(q));ibRender(list)}
+function ibRender(photos){const g=$('imgBrowserGrid');if(!photos.length){g.innerHTML='<div class="ibw-empty">No hay fotos. Sube una imagen arriba.</div>';return}g.innerHTML=photos.map(p=>{const nm=(p.filename||p.image_url||'').split('/').pop().split('?')[0];return`<div class="ibw-item" data-url="${(p.image_url||'').replace(/"/g,'&quot;')}" onclick="ibSelect(this.dataset.url)"><img src="${(p.image_url||'').replace(/"/g,'&quot;')}" loading="lazy" alt=""><span class="ibw-check">✓</span><span class="ibw-fname">${nm}</span></div>`}).join('')}
+function ibSelect(url){if(_ibCb)_ibCb(url);closeImgBrowser()}
+async function ibUpload(files){if(!files||!files.length)return;for(let i=0;i<files.length;i++){const f=files[i],path=`uploads/${Date.now()}-${i}.${f.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,f);if(error){toast('Error: '+error.message,'error');continue}const{data:u}=sb.storage.from('photos').getPublicUrl(path);const{data:ph}=await sb.from('photos').insert({image_url:u.publicUrl,filename:f.name,sort_order:0}).select().single();if(ph)_ibAll.unshift(ph)}toast(files.length+' subida(s)','success');$('ibUploadInput').value='';ibFilter()}
+async function browseForHero(){openImageBrowser(async function(url){const label=prompt('Location label (ej: Monterrey · Calles)')||'';await sb.from('hero_slides').insert({image_url:url,location_label:label,sort_order:0});toast('Slide agregado','success');loadHero()})}
 
 // INIT
 checkAuth();
