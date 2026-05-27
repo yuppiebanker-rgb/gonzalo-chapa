@@ -40,6 +40,7 @@
   </style>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"/>
   <meta name="theme-color" content="#0b0906"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <!-- PAGE WIPE TRANSITION -->
@@ -101,12 +102,12 @@
   <main class="about-page">
     <div class="about-hero fi">
       <div class="about-portrait">
-        <img src="../assets/images/retratos/_DSC8665.jpg" alt="Gonzalo Chapa" loading="eager" style="object-position:center 15%;"/>
+        <img id="aboutPortrait" src="../assets/images/retratos/_DSC8665.jpg" alt="Gonzalo Chapa" loading="eager" style="object-position:center 15%;"/>
       </div>
       <div class="about-text">
-        <span class="about-label">Fotógrafo · Monterrey, México</span>
-        <h1 class="about-headline">Every frame is a<br><em>declaration</em><br>of where we are.</h1>
-        <div class="about-bio">
+        <span id="aboutLabel" class="about-label">Fotógrafo · Monterrey, México</span>
+        <h1 id="aboutHeadline" class="about-headline">Every frame is a<br><em>declaration</em><br>of where we are.</h1>
+        <div id="aboutBio" class="about-bio">
           <p>Gonzalo Chapa is a photographer based in San Pedro Garza García, Monterrey. His work documents the energy of northern México — from the masked characters of its streets to the neon-lit underground of its nightlife and the raw landscape of the Sierra Madre.</p>
           <p>His practice is built on trust, patience, and a refusal to pose the world. Whether documenting a concert, shooting a portrait, or walking a carretera at dusk, he brings the same editorial eye: honest, bold, and rooted in place.</p>
         </div>
@@ -152,6 +153,26 @@
   <script src="../assets/js/main.js?v=202603311659"></script>
   <script src="../assets/js/content-loader.js?v=20260527"></script>
   
+  <script>
+  (function(){
+    var SB_URL = 'https://pxqugqerodswtkgxzipw.supabase.co';
+    var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cXVncWVyb2Rzd3RrZ3h6aXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjI2MDgsImV4cCI6MjA5NTM5ODYwOH0.A_78sl-5gcAVuhCR4cBwRbipWcPS7OV0xXhb57Uv_rk';
+    var sb = supabase.createClient(SB_URL, SB_KEY);
+
+    sb.from('about_content').select('*').limit(1).single().then(function(res) {
+      var d = res.data;
+      if (!d) return;
+      var portrait = document.getElementById('aboutPortrait');
+      var label    = document.getElementById('aboutLabel');
+      var headline = document.getElementById('aboutHeadline');
+      var bio      = document.getElementById('aboutBio');
+      if (d.portrait_url && portrait) portrait.src = d.portrait_url;
+      if (d.subheadline && label)     label.textContent = d.subheadline;
+      if (d.headline && headline)     headline.innerHTML = d.headline;
+      if (d.bio_text && bio)          bio.innerHTML = d.bio_text;
+    });
+  })();
+  </script>
   <script>
   (function(){
     var btn = document.getElementById('langToggle');
