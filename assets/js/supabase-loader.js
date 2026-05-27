@@ -113,6 +113,51 @@
       var igHandleEl = qs('.ig-handle');
       if (igHandleEl) igHandleEl.textContent = '@' + handle + ' ↗';
     }
+
+    /* Additional social links */
+    if (s.social_tiktok)   qsa('[href*="tiktok.com"]').forEach(function (el) { el.href = s.social_tiktok; });
+    if (s.social_youtube)  qsa('[href*="youtube.com"]').forEach(function (el) { el.href = s.social_youtube; });
+    if (s.social_facebook) qsa('[href*="facebook.com/"]').forEach(function (el) { el.href = s.social_facebook; });
+    if (s.social_twitter)  qsa('[href*="twitter.com"],[href*="x.com/"]').forEach(function (el) { el.href = s.social_twitter; });
+    if (s.social_linkedin) qsa('[href*="linkedin.com"]').forEach(function (el) { el.href = s.social_linkedin; });
+
+    /* Footer text */
+    if (s.footer_text) {
+      qsa('.footer-copy,.footer-copyright').forEach(function (el) { el.textContent = s.footer_text; });
+    }
+
+    /* Custom CSS */
+    if (s.custom_css) {
+      var cssEl = document.getElementById('gcsl-custom-css');
+      if (!cssEl) {
+        cssEl    = document.createElement('style');
+        cssEl.id = 'gcsl-custom-css';
+        document.head.appendChild(cssEl);
+      }
+      cssEl.textContent = s.custom_css;
+    }
+
+    /* Custom JS */
+    if (s.custom_js) {
+      var oldJs = document.getElementById('gcsl-custom-js');
+      if (oldJs) oldJs.parentNode.removeChild(oldJs);
+      var jsEl        = document.createElement('script');
+      jsEl.id         = 'gcsl-custom-js';
+      jsEl.textContent = s.custom_js;
+      document.body.appendChild(jsEl);
+    }
+
+    /* Maintenance mode — fullscreen Coming Soon overlay */
+    if (s.maintenance_mode && !document.getElementById('gcsl-maintenance')) {
+      var mo = document.createElement('div');
+      mo.id  = 'gcsl-maintenance';
+      mo.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0b0906;' +
+                         'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0';
+      mo.innerHTML = '<div style="font-family:serif;font-style:italic;font-size:2rem;color:#c0a46e;margin-bottom:12px">' +
+                     escHtml(s.logo_text || 'G. Chapa') + '</div>' +
+                     '<div style="font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(244,239,230,.45)">Coming Soon</div>';
+      document.body.appendChild(mo);
+    }
   }
 
   /* ── 2. HERO SLIDESHOW (index only) ──────────────── */

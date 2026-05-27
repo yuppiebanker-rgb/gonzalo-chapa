@@ -164,6 +164,26 @@
     .ibw-item:hover .ibw-fname{opacity:1}
     .ibw-empty{grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-style:italic;font-size:.8rem}
 
+    /* FILTER TABS */
+    .filter-tabs{display:flex;gap:0;overflow-x:auto;border-bottom:1px solid var(--border);margin-bottom:18px}
+    .ftab{padding:8px 14px;font-size:.7rem;letter-spacing:.06em;color:var(--muted);cursor:pointer;border:none;border-bottom:2px solid transparent;transition:all .2s;background:none;font-family:inherit;white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+    .ftab:hover{color:var(--cream)}.ftab.active{color:var(--dust);border-bottom-color:var(--dust)}
+    .ftab-count{background:rgba(192,164,110,.12);color:var(--dust);font-size:.54rem;padding:1px 6px;border-radius:9px;font-weight:700;min-width:16px;text-align:center}
+    /* DETAIL PANEL */
+    .detail-panel{background:rgba(192,164,110,.025);border:1px solid var(--border);border-top:2px solid var(--dust);padding:22px;display:none}
+    .detail-panel.open{display:block;animation:dpIn .18s ease}
+    @keyframes dpIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .dp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+    .dp-field{display:flex;flex-direction:column;gap:3px}
+    .dp-label{font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+    .dp-value{font-size:.83rem;color:var(--cream);word-break:break-word}
+    .dp-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:.5px solid var(--border)}
+    .msg-body-text{white-space:pre-wrap;font-size:.82rem;line-height:1.7;padding:14px;background:rgba(244,239,230,.03);border:.5px solid var(--border);margin-bottom:14px;max-height:220px;overflow-y:auto}
+    .data-table tr[data-id]{cursor:pointer}
+    .data-table tr.selected>td{background:rgba(192,164,110,.06)!important}
+    .section-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+    .section-toolbar .filter-tabs{margin-bottom:0;border:none;flex:1}
+
     @media(max-width:900px){.dash-lower{grid-template-columns:1fr}}
     @media(max-width:768px){
       .sidebar{width:56px;padding:12px 0}.sb-head,.sb-nav li a span,.sb-sub{display:none}
@@ -211,8 +231,8 @@
     <li><a href="#" data-s="seo"><span class="ic">◎</span><span>SEO</span></a></li>
     <li><a href="#" data-s="analiticas"><span class="ic">▥</span><span>Analíticas</span></a></li>
     <div class="divider"></div>
-    <li><a href="#" data-s="cotizaciones"><span class="ic">$</span><span>Cotizaciones</span><span class="sb-badge" id="badgeQuotes" style="display:none">0</span></a></li>
-    <li><a href="#" data-s="mensajes"><span class="ic">✉</span><span>Mensajes</span><span class="sb-badge" id="badgeMsgs" style="display:none">0</span></a></li>
+    <li><a href="#" data-s="cotizaciones"><span class="ic" style="position:relative">$<span id="dotQuotes" style="display:none;position:absolute;top:-3px;right:-4px;width:6px;height:6px;background:var(--danger);border-radius:50%"></span></span><span>Cotizaciones</span><span class="sb-badge" id="badgeQuotes" style="display:none">0</span></a></li>
+    <li><a href="#" data-s="mensajes"><span class="ic" style="position:relative">✉<span id="dotMsgs" style="display:none;position:absolute;top:-3px;right:-4px;width:6px;height:6px;background:var(--danger);border-radius:50%"></span></span><span>Mensajes</span><span class="sb-badge" id="badgeMsgs" style="display:none">0</span></a></li>
     <li><a href="#" data-s="settings"><span class="ic">⚙</span><span>Settings</span></a></li>
   </ul>
   <div class="sb-foot"><button onclick="doLogout()">Cerrar Sesión</button></div>
@@ -415,12 +435,48 @@
   <div class="card"><div class="card-title">Branding</div>
     <div class="form-row"><div class="form-group"><label class="form-label">Logo Text</label><input class="form-input" id="setLogo"></div><div class="form-group"><label class="form-label">Site Title</label><input class="form-input" id="setTitle"></div></div>
     <div class="form-row full"><div class="form-group"><label class="form-label">Site Description</label><textarea class="form-input" id="setDesc" style="min-height:60px"></textarea></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Idioma por Defecto</label><select class="form-input" id="setLang"><option value="es">Español (ES)</option><option value="en">English (EN)</option></select></div><div class="form-group"><label class="form-label">Footer Text</label><input class="form-input" id="setFooter" placeholder="© 2025 Gonzalo Chapa..."></div></div>
   </div>
   <div class="card"><div class="card-title">Contacto</div>
     <div class="form-row"><div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="setPhone"></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" id="setEmail"></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="setIG"></div><div class="form-group"><label class="form-label">WhatsApp</label><input class="form-input" id="setWA"></div></div>
+  </div>
+  <div class="card"><div class="card-title">Redes Sociales</div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Instagram (handle)</label><input class="form-input" id="setIG" placeholder="my_memories.jpeg"></div><div class="form-group"><label class="form-label">WhatsApp (número)</label><input class="form-input" id="setWA" placeholder="528187997500"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">TikTok URL</label><input class="form-input" id="setTT" placeholder="https://tiktok.com/@..."></div><div class="form-group"><label class="form-label">YouTube URL</label><input class="form-input" id="setYT" placeholder="https://youtube.com/..."></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Facebook URL</label><input class="form-input" id="setFB" placeholder="https://facebook.com/..."></div><div class="form-group"><label class="form-label">Twitter / X URL</label><input class="form-input" id="setTW" placeholder="https://x.com/..."></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">LinkedIn URL</label><input class="form-input" id="setLI" placeholder="https://linkedin.com/in/..."></div><div class="form-group"></div></div>
+  </div>
+  <div class="card"><div class="card-title">Analytics & Tracking</div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Google Analytics ID</label><input class="form-input" id="setGA" placeholder="G-XXXXXXXXXX"></div><div class="form-group"><label class="form-label">Facebook Pixel ID</label><input class="form-input" id="setFBP" placeholder="XXXXXXXXXXXXXXXXX"></div></div>
+  </div>
+  <div class="card"><div class="card-title">Custom Code</div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Custom CSS (inyectado en sitio público)</label><textarea class="form-input" id="setCSS" style="min-height:120px;font-family:monospace;font-size:12px" placeholder="/* CSS adicional */"></textarea></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Custom JS (inyectado en sitio público)</label><textarea class="form-input" id="setJS" style="min-height:120px;font-family:monospace;font-size:12px" placeholder="// JavaScript adicional"></textarea></div></div>
+  </div>
+  <div class="card"><div class="card-title">Mantenimiento</div>
+    <div style="display:flex;align-items:center;gap:14px"><label class="toggle"><input type="checkbox" id="setMaintenance"><span class="slider"></span></label><div><strong style="font-size:.82rem">Modo Mantenimiento</strong><div style="font-size:.7rem;color:var(--muted);margin-top:2px">Muestra pantalla "Coming Soon" en el sitio público</div></div></div>
   </div>
   <div class="btn-group"><button class="btn btn-primary" onclick="saveSettings()">Guardar</button></div>
+</div>
+
+<!-- ACERCA DE -->
+<div id="s-about" class="section">
+  <div class="page-head"><h1 class="page-title">Acerca de</h1><p class="page-sub">Perfil, bio y equipamiento</p></div>
+  <div class="card"><div class="card-title">Retrato</div>
+    <div style="display:flex;gap:20px;align-items:flex-start">
+      <div style="flex-shrink:0"><img id="aboutPortraitPreview" src="" alt="Portrait" style="width:120px;height:120px;object-fit:cover;display:none;border:1px solid var(--border)"><div id="aboutPortraitEmpty" style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:rgba(244,239,230,.04);border:1px dashed var(--border);color:var(--muted);font-size:.7rem">Sin foto</div></div>
+      <div style="flex:1"><div class="form-group" style="margin-bottom:8px"><label class="form-label">Portrait URL</label><div style="display:flex;gap:6px"><input class="form-input" id="aboutPortraitUrl" style="flex:1" oninput="prevPortrait(this.value)"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){$('aboutPortraitUrl').value=u;prevPortrait(u)})">⊞ Galería</button></div></div><label class="btn btn-outline btn-sm" style="cursor:pointer;margin-top:4px">↑ Subir Retrato<input type="file" accept="image/*" style="display:none" onchange="uploadPortrait(this.files[0])"></label></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">Texto</div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Headline</label><input class="form-input" id="aboutHeadline"></div></div>
+    <div class="form-row full"><div class="form-group"><label class="form-label">Subheadline</label><input class="form-input" id="aboutSubheadline"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Bio (Español)</label><textarea class="form-input" id="aboutBioEs" style="min-height:160px"></textarea></div><div class="form-group"><label class="form-label">Bio (English)</label><textarea class="form-input" id="aboutBioEn" style="min-height:160px"></textarea></div></div>
+  </div>
+  <div class="card"><div class="card-title">Equipamiento <button class="btn btn-sm btn-outline" onclick="addEquipment()" style="margin-left:8px;vertical-align:middle">+ Agregar</button></div><div id="equipmentList" style="display:flex;flex-direction:column;gap:6px;margin-top:8px"></div></div>
+  <div class="card"><div class="card-title">Logros / Prensa <button class="btn btn-sm btn-outline" onclick="addAchievement()" style="margin-left:8px;vertical-align:middle">+ Agregar</button></div><div id="achievementList" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"></div></div>
+  <div class="card"><div class="card-title">Fun Facts <button class="btn btn-sm btn-outline" onclick="addFunFact()" style="margin-left:8px;vertical-align:middle">+ Agregar</button></div><div id="funFactList" style="display:flex;flex-direction:column;gap:6px;margin-top:8px"></div></div>
+  <div class="btn-group"><button class="btn btn-primary" onclick="saveAbout()">Guardar</button></div>
 </div>
 
 </main>
@@ -459,11 +515,11 @@ function showApp(){$('authScreen').style.display='none';$('app').style.display='
 async function cleanupTestData(){const{data:c}=await sb.from('collections').select('id,name').eq('slug','kkkk').maybeSingle();if(!c)return;const{data:photos}=await sb.from('photos').select('id,image_url').eq('collection_id',c.id);if(photos?.length){const paths=photos.map(p=>{try{return new URL(p.image_url).pathname.split('/public/photos/')[1]}catch{return null}}).filter(Boolean);if(paths.length)await sb.storage.from('photos').remove(paths);await sb.from('photos').delete().eq('collection_id',c.id)}await sb.from('collections').delete().eq('id',c.id);console.log('[admin] Removed test collection: kkkk')}
 
 // NAV
-document.querySelectorAll('.sb-nav a[data-s]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');const s=a.dataset.s;document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}));
+document.querySelectorAll('.sb-nav a[data-s]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));a.classList.add('active');const s=a.dataset.s;document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,about:loadAbout,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}));
 
 // DASHBOARD HELPERS
 function relTime(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'hace unos segundos';if(s<3600)return`hace ${Math.floor(s/60)} min`;if(s<86400)return`hace ${Math.floor(s/3600)} h`;if(s<604800)return`hace ${Math.floor(s/86400)} días`;return new Date(d).toLocaleDateString('es-MX')}
-function navTo(s){document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));const a=document.querySelector(`.sb-nav a[data-s="${s}"]`);if(a)a.classList.add('active');document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}
+function navTo(s){document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));const a=document.querySelector(`.sb-nav a[data-s="${s}"]`);if(a)a.classList.add('active');document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,about:loadAbout,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}
 async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new'),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread')]);const bq=$('badgeQuotes'),bm=$('badgeMsgs');if(bq){bq.textContent=qc||0;bq.style.display=qc?'inline-flex':'none'}if(bm){bm.textContent=mc||0;bm.style.display=mc?'inline-flex':'none'}}
 // DASHBOARD
 async function loadDashboard(){
@@ -565,13 +621,28 @@ async function readMsg(id){const{data:m}=await sb.from('messages').select('*').e
 async function delMsg(id){if(!confirm('¿Eliminar?'))return;await sb.from('messages').delete().eq('id',id);toast('Eliminado','success');loadMessages()}
 
 // SETTINGS
-async function loadSettings(){const{data}=await sb.from('site_settings').select('*').limit(1).single();if(!data)return;$('setLogo').value=data.logo_text||'';$('setTitle').value=data.site_title||'';$('setDesc').value=data.site_description||'';$('setPhone').value=data.phone||'';$('setEmail').value=data.email||'';$('setIG').value=data.instagram_handle||'';$('setWA').value=data.whatsapp_number||''}
-async function saveSettings(){const{data:ex}=await sb.from('site_settings').select('id').limit(1).single();const d={logo_text:$('setLogo').value,site_title:$('setTitle').value,site_description:$('setDesc').value,phone:$('setPhone').value,email:$('setEmail').value,instagram_handle:$('setIG').value,whatsapp_number:$('setWA').value};if(ex)await sb.from('site_settings').update(d).eq('id',ex.id);else await sb.from('site_settings').insert(d);toast('Guardado','success')}
+async function loadSettings(){const{data}=await sb.from('site_settings').select('*').limit(1).single();if(!data)return;$('setLogo').value=data.logo_text||'';$('setTitle').value=data.site_title||'';$('setDesc').value=data.site_description||'';$('setLang').value=data.site_language||'es';$('setFooter').value=data.footer_text||'';$('setPhone').value=data.phone||'';$('setEmail').value=data.email||'';$('setIG').value=data.instagram_handle||'';$('setWA').value=data.whatsapp_number||'';$('setTT').value=data.social_tiktok||'';$('setYT').value=data.social_youtube||'';$('setFB').value=data.social_facebook||'';$('setTW').value=data.social_twitter||'';$('setLI').value=data.social_linkedin||'';$('setGA').value=data.google_analytics_id||'';$('setFBP').value=data.facebook_pixel_id||'';$('setCSS').value=data.custom_css||'';$('setJS').value=data.custom_js||'';$('setMaintenance').checked=!!data.maintenance_mode}
+async function saveSettings(){const{data:ex}=await sb.from('site_settings').select('id').limit(1).single();const d={logo_text:$('setLogo').value,site_title:$('setTitle').value,site_description:$('setDesc').value,site_language:$('setLang').value,footer_text:$('setFooter').value,phone:$('setPhone').value,email:$('setEmail').value,instagram_handle:$('setIG').value,whatsapp_number:$('setWA').value,social_tiktok:$('setTT').value,social_youtube:$('setYT').value,social_facebook:$('setFB').value,social_twitter:$('setTW').value,social_linkedin:$('setLI').value,google_analytics_id:$('setGA').value,facebook_pixel_id:$('setFBP').value,custom_css:$('setCSS').value,custom_js:$('setJS').value,maintenance_mode:$('setMaintenance').checked};if(ex)await sb.from('site_settings').update(d).eq('id',ex.id);else await sb.from('site_settings').insert(d);toast('Guardado','success')}
 
 // PAGES
 async function loadPages(){const{data}=await sb.from('page_sections').select('*').order('page_slug').order('sort_order');const pages={};(data||[]).forEach(s=>{if(!pages[s.page_slug])pages[s.page_slug]=[];pages[s.page_slug].push(s)});const slugs=Object.keys(pages);$('pageTabs').innerHTML=slugs.map((s,i)=>`<button class="tab ${i===0?'active':''}" onclick="selPage('${s}',this)">${s}</button>`).join('')||'<div class="empty">No hay secciones de página configuradas.</div>';if(slugs.length)selPage(slugs[0],$('pageTabs').querySelector('.tab'))}
 function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="si-${s.id}" value="${s.image_url||''}" style="flex:1" onchange="updSection('${s.id}','image_url',this.value)"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){document.getElementById('si-${s.id}').value=u;updSection('${s.id}','image_url',u)})">⊞</button></div></div></div></div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
 async function updSection(id,field,val){await sb.from('page_sections').update({[field]:val}).eq('id',id);toast('Actualizado','success')}
+
+// ABOUT
+let aboutData={};
+async function loadAbout(){const{data}=await sb.from('about_content').select('*').limit(1).single();if(!data){aboutData={id:null,equipment_list:[],achievements:[],fun_facts:[]};return}aboutData={id:data.id,equipment_list:data.equipment_list||[],achievements:data.achievements||[],fun_facts:data.fun_facts||[]};const prev=$('aboutPortraitPreview'),empty=$('aboutPortraitEmpty');if(data.portrait_url){prev.src=data.portrait_url;prev.style.display='block';empty.style.display='none'}else{prev.style.display='none';empty.style.display='flex'}$('aboutPortraitUrl').value=data.portrait_url||'';$('aboutHeadline').value=data.headline||'';$('aboutSubheadline').value=data.subheadline||'';$('aboutBioEs').value=data.bio_text||'';$('aboutBioEn').value=data.bio_text_en||'';renderEquipment(aboutData.equipment_list);renderAchievements(aboutData.achievements);renderFunFacts(aboutData.fun_facts)}
+function prevPortrait(url){const prev=$('aboutPortraitPreview'),empty=$('aboutPortraitEmpty');if(url){prev.src=url;prev.style.display='block';empty.style.display='none'}else{prev.style.display='none';empty.style.display='flex'}}
+async function uploadPortrait(file){if(!file)return;const path=`portraits/${Date.now()}.${file.name.split('.').pop()}`;const{error}=await sb.storage.from('photos').upload(path,file);if(error){toast('Error: '+error.message,'error');return}const{data:u}=sb.storage.from('photos').getPublicUrl(path);$('aboutPortraitUrl').value=u.publicUrl;prevPortrait(u.publicUrl);toast('Retrato subido','success')}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function renderEquipment(list){$('equipmentList').innerHTML=(list||[]).map((item,i)=>`<div style="display:flex;gap:6px"><input class="form-input" style="flex:1" value="${escH(item)}" oninput="aboutData.equipment_list[${i}]=this.value"><button class="btn btn-sm btn-danger" onclick="removeAboutItem('equipment_list',${i})">✕</button></div>`).join('')||'<div class="empty">Sin items.</div>'}
+function renderAchievements(list){$('achievementList').innerHTML=(list||[]).map((item,i)=>`<div class="card" style="padding:12px"><div style="display:flex;gap:6px;margin-bottom:6px"><input class="form-input" style="flex:1" placeholder="Título" value="${escH(item.title||'')}" oninput="aboutData.achievements[${i}].title=this.value"><button class="btn btn-sm btn-danger" onclick="removeAboutItem('achievements',${i})">✕</button></div><input class="form-input" placeholder="Descripción" value="${escH(item.description||'')}" style="width:100%" oninput="aboutData.achievements[${i}].description=this.value"></div>`).join('')||'<div class="empty">Sin items.</div>'}
+function renderFunFacts(list){$('funFactList').innerHTML=(list||[]).map((item,i)=>`<div style="display:flex;gap:6px"><input class="form-input" style="flex:1" value="${escH(item)}" oninput="aboutData.fun_facts[${i}]=this.value"><button class="btn btn-sm btn-danger" onclick="removeAboutItem('fun_facts',${i})">✕</button></div>`).join('')||'<div class="empty">Sin items.</div>'}
+function addEquipment(){(aboutData.equipment_list=aboutData.equipment_list||[]).push('');renderEquipment(aboutData.equipment_list)}
+function addAchievement(){(aboutData.achievements=aboutData.achievements||[]).push({title:'',description:''});renderAchievements(aboutData.achievements)}
+function addFunFact(){(aboutData.fun_facts=aboutData.fun_facts||[]).push('');renderFunFacts(aboutData.fun_facts)}
+function removeAboutItem(key,i){aboutData[key].splice(i,1);if(key==='equipment_list')renderEquipment(aboutData.equipment_list);else if(key==='achievements')renderAchievements(aboutData.achievements);else renderFunFacts(aboutData.fun_facts)}
+async function saveAbout(){const d={headline:$('aboutHeadline').value,subheadline:$('aboutSubheadline').value,bio_text:$('aboutBioEs').value,bio_text_en:$('aboutBioEn').value,portrait_url:$('aboutPortraitUrl').value,equipment_list:aboutData.equipment_list||[],achievements:aboutData.achievements||[],fun_facts:aboutData.fun_facts||[]};if(aboutData.id)await sb.from('about_content').update(d).eq('id',aboutData.id);else{const{data:r}=await sb.from('about_content').insert(d).select().single();if(r)aboutData.id=r.id}toast('Guardado','success')}
 
 // DRAG & DROP REORDER
 function initDrag(containerId,itemSel,onDrop){
