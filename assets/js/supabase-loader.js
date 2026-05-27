@@ -107,6 +107,25 @@
         document.documentElement.style.setProperty('--dust', s.primary_color);
       if (s.accent_color)
         document.documentElement.style.setProperty('--cream', s.accent_color);
+      if (s.text_color)
+        document.documentElement.style.setProperty('--cream', s.text_color);
+      if (s.bg_color)
+        document.documentElement.style.setProperty('--ink', s.bg_color);
+      if (s.card_bg_color)
+        document.documentElement.style.setProperty('--card', s.card_bg_color);
+      if (s.border_color) {
+        var bdrVal = (s.border_color.charAt(0) === '#' && s.border_color.length === 7)
+          ? s.border_color + '1f' : s.border_color;
+        document.documentElement.style.setProperty('--border', bdrVal);
+      }
+      if (s.hover_color)
+        document.documentElement.style.setProperty('--dust-hover', s.hover_color);
+    }
+    if (s.font_logo) {
+      loadGoogleFont(s.font_logo);
+      var logoSty = document.getElementById('gcsl-font-logo');
+      if (!logoSty) { logoSty = document.createElement('style'); logoSty.id = 'gcsl-font-logo'; document.head.appendChild(logoSty); }
+      logoSty.textContent = ".nav-logo,.wipe-text,.footer-left,.footer-logo{font-family:'" + s.font_logo + "',serif !important}";
     }
 
     /* Typography */

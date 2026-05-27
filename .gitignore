@@ -1,1 +1,3 @@
 node_modules/
+admin/_theme_patch.js
+admin/_patch_runner.js
