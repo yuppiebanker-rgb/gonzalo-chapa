@@ -97,11 +97,17 @@
       });
     }
 
-    /* CSS custom properties */
-    if (s.primary_color)
-      document.documentElement.style.setProperty('--dust', s.primary_color);
-    if (s.accent_color)
-      document.documentElement.style.setProperty('--cream', s.accent_color);
+    /* CSS custom properties — skip in light mode: JS inline styles override
+       [data-theme=light] stylesheet rules, which would make body text invisible
+       (cream colour on cream/beige background). Dark-mode values from the DB
+       are only meaningful when the dark palette is active. */
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (!isLight) {
+      if (s.primary_color)
+        document.documentElement.style.setProperty('--dust', s.primary_color);
+      if (s.accent_color)
+        document.documentElement.style.setProperty('--cream', s.accent_color);
+    }
 
     /* Typography */
     if (s.font_heading) {
@@ -237,9 +243,11 @@
       return (lang === 'en' && item.label_en) ? item.label_en : (item.label || '');
     }
 
-    /* Rebuild .nav-links — replace children, preserve wrapper */
+    /* Rebuild .nav-links — clear first so stale/duplicate static links are
+       gone even if the map() below throws, then replace with DB items. */
     var navLinks = qs('.nav-links');
-    if (navLinks) {
+    if (navLinks && regular.length) {
+      navLinks.innerHTML = '';
       var isUl = navLinks.tagName.toLowerCase() === 'ul';
       navLinks.innerHTML = regular.map(function (item) {
         var a = '<a href="' + escAttr(item.href || '#') + '"' +
@@ -250,9 +258,10 @@
       }).join('');
     }
 
-    /* Rebuild overlay links */
+    /* Rebuild overlay links — same clear-before-insert pattern */
     var overlayLinks = qs('.nav-overlay-links') || qs('.overlay-links');
-    if (overlayLinks) {
+    if (overlayLinks && regular.length) {
+      overlayLinks.innerHTML = '';
       overlayLinks.innerHTML = regular.map(function (item) {
         return '<a href="' + escAttr(item.href || '#') + '" class="overlay-link">' +
                escHtml(labelFor(item)) + '</a>';

@@ -296,7 +296,8 @@
   /* ── 12. IMAGE REVEAL ON SCROLL ── */
   var revealTargets = document.querySelectorAll(
     '.photo-item, .work-card, .bs-opener, .bs-wide, .bs-duo-cell, ' +
-    '.bs-trio-cell, .bs-cell, .bs-bw, .rt-hero, .rt-cell, .rt-single, .page-hero'
+    '.bs-trio-cell, .bs-cell, .bs-bw, .rt-hero, .rt-cell, .rt-single, .page-hero, ' +
+    '.narr-item, .narr-full, .narr-peak'
   );
 
   if (revealTargets.length) {

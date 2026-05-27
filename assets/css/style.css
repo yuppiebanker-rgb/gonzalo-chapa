@@ -2023,21 +2023,17 @@ img.ph {
 .narr-full img.ph,
 .editorial-full img.ph,
 .ed-panel img.ph,
-.editorial-closer 
-.photo-item img.ph { position: relative; height: auto; min-height: 200px; filter: brightness(.88) contrast(1.05) saturate(.9); }
+.editorial-closer img.ph { position: relative; height: auto; min-height: 200px; filter: brightness(.88) contrast(1.05) saturate(.9); }
 .photo-item:hover img.ph { transform: scale(1.04); filter: brightness(.96) contrast(1.06); }
 .narr-item img.ph, .narr-full img.ph { filter: brightness(.84) contrast(1.06) saturate(.82); }
 .narr-item:hover img.ph, .narr-full:hover img.ph { transform: scale(1.05); filter: brightness(.94) contrast(1.08); }
 .editorial-full img.ph, .ed-panel img.ph, .editorial-closer img.ph { filter: brightness(.86) contrast(1.07) saturate(.88); }
 .editorial-full:hover img.ph, .ed-panel:hover img.ph, .editorial-closer:hover img.ph { transform: scale(1.04); filter: brightness(.96) contrast(1.08); }
 .narr-peak img.ph { filter: saturate(0) contrast(1.15) brightness(.88) !important; }
-.photo-item.img-revealed img.ph, .narr-item.img-revealed img.ph, .narr-full.img-revealed img.ph,
-.editorial-full.img-revealed img.ph, .ed-panel.img-revealed img.ph, .editorial-closer.img-revealed 
 @media (hover:none) and (pointer:coarse) {
   .photo-item img.ph, .narr-item img.ph, .narr-full img.ph,
   .editorial-full img.ph, .ed-panel img.ph { transform: none !important; }
 }
-@media (prefers-reduced-motion:reduce) {  }
 
 /* ── Language toggle ───────────────────────────────── */
 .lang-toggle {
