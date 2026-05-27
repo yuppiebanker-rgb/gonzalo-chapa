@@ -11,12 +11,14 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const [settings, collections, heroSlides, services, about] = await Promise.all([
+    const [settings, collections, heroSlides, services, about, navItems, sections] = await Promise.all([
       supabase.from('site_settings').select('*').limit(1).single(),
       supabase.from('collections').select('*, photos(*)').eq('active', true).order('sort_order'),
       supabase.from('hero_slides').select('*').eq('active', true).order('sort_order'),
       supabase.from('services').select('*').eq('active', true).order('sort_order'),
-      supabase.from('about_content').select('*').limit(1).single()
+      supabase.from('about_content').select('*').limit(1).single(),
+      supabase.from('nav_items').select('*').eq('visible', true).order('sort_order'),
+      supabase.from('section_visibility').select('*').order('sort_order')
     ]);
 
     // Sort photos within each collection
@@ -37,7 +39,9 @@ module.exports = async function handler(req, res) {
         price_display: (s.base_price_mxn / 100).toLocaleString('es-MX'),
         price_mxn: s.base_price_mxn / 100
       })),
-      about: about.data || {}
+      about: about.data || {},
+      nav: navItems.data || [],
+      sections: sections.data || []
     });
   } catch (err) {
     console.error('Content API error:', err);

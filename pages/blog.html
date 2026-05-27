@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="Blog — Gonzalo Chapa Photography. Notes on light, place, and the act of seeing."/>
+  <meta property="og:title" content="Blog — Gonzalo Chapa"/>
+  <meta property="og:url" content="https://gchapa.com/pages/blog.html"/>
+  <meta property="og:image" content="https://gchapa.com/assets/images/retratos/_DSC8665.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://gchapa.com/pages/blog.html"/>
+  <title>Blog — Gonzalo Chapa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Mr+De+Haviland&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/css/style.css?v=202603311659"/>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"/>
+  <meta name="theme-color" content="#0b0906"/>
+  <style>
+    /* ── BLOG PAGE ── */
+    .blog-page {
+      padding: calc(var(--pad-y) + 80px) var(--pad-x) var(--pad-y);
+      min-height: 100vh;
+    }
+
+    /* header */
+    .blog-header {
+      max-width: 640px;
+      margin-bottom: 72px;
+    }
+    .blog-eyebrow {
+      display: block;
+      font-size: .58rem;
+      letter-spacing: .44em;
+      text-transform: uppercase;
+      color: var(--dust);
+      margin-bottom: 20px;
+    }
+    .blog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 6vw, 80px);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 20px;
+    }
+    .blog-title em {
+      font-style: italic;
+      color: var(--dust);
+    }
+    .blog-desc {
+      font-size: .85rem;
+      line-height: 1.9;
+      color: rgba(244,239,230,.45);
+      max-width: 480px;
+    }
+
+    /* category filter */
+    .blog-filters {
+      display: flex;
+      gap: 0;
+      margin-bottom: 56px;
+      border-bottom: .5px solid rgba(192,164,110,.1);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .blog-filters::-webkit-scrollbar { display: none; }
+    .blog-filter-btn {
+      padding: 10px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .62rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(244,239,230,.4);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color .25s, border-color .25s;
+    }
+    .blog-filter-btn:hover { color: var(--cream); }
+    .blog-filter-btn.active {
+      color: var(--dust);
+      border-bottom-color: var(--dust);
+    }
+
+    /* posts grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px 28px;
+    }
+
+    /* post card */
+    .post-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .post-card-cover {
+      position: relative;
+      aspect-ratio: 3/2;
+      overflow: hidden;
+      margin-bottom: 22px;
+      background: rgba(192,164,110,.05);
+    }
+    .post-card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(.82) contrast(1.06) saturate(.78);
+      transition: transform .75s var(--r), filter .4s ease;
+      display: block;
+    }
+    .post-card:hover .post-card-cover img {
+      transform: scale(1.05);
+      filter: brightness(.94);
+    }
+    .post-card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,9,6,.55) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .post-card-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      font-size: .52rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--dust);
+      padding: 3px 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+    .post-card-date {
+      font-size: .58rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(192,164,110,.55);
+      margin-bottom: 10px;
+    }
+    .post-card-title {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--cream);
+      margin-bottom: 12px;
+      transition: color .25s;
+    }
+    .post-card:hover .post-card-title { color: var(--dust); }
+    .post-card-excerpt {
+      font-size: .8rem;
+      line-height: 1.85;
+      color: rgba(244,239,230,.42);
+      flex: 1;
+      margin-bottom: 18px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-card-read {
+      font-size: .58rem;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--dust);
+      border-bottom: .5px solid rgba(192,164,110,.3);
+      padding-bottom: 2px;
+      display: inline-block;
+      transition: border-color .25s;
+    }
+    .post-card:hover .post-card-read { border-color: var(--dust); }
+
+    /* placeholder cover when no image */
+    .post-card-cover.no-img {
+      background: linear-gradient(135deg, rgba(192,164,110,.06) 0%, rgba(11,9,6,.9) 100%);
+    }
+    .post-card-cover.no-img::before {
+      content: 'G. Chapa';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bodoni Moda', serif;
+      font-style: italic;
+      font-size: 1.6rem;
+      color: rgba(192,164,110,.2);
+    }
+
+    /* empty state */
+    .blog-empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 80px 0;
+    }
+    .blog-empty-icon {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+      opacity: .2;
+    }
+    .blog-empty p {
+      font-size: .78rem;
+      color: rgba(244,239,230,.3);
+      letter-spacing: .08em;
+    }
+
+    /* error state */
+    .blog-error {
+      grid-column: 1/-1;
+      padding: 40px;
+      border: .5px solid rgba(229,57,53,.2);
+      text-align: center;
+    }
+    .blog-error p {
+      font-size: .78rem;
+      color: rgba(229,57,53,.7);
+    }
+
+    /* skeleton */
+    .post-skeleton {
+      animation: skel-pulse 1.6s ease-in-out infinite;
+    }
+    .post-skeleton .skel-cover {
+      aspect-ratio: 3/2;
+      background: rgba(192,164,110,.06);
+      margin-bottom: 22px;
+    }
+    .skel-line {
+      background: rgba(192,164,110,.06);
+      border-radius: 2px;
+      margin-bottom: 10px;
+    }
+    @keyframes skel-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
+
+    @media (max-width: 900px) {
+      .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 20px; }
+    }
+    @media (max-width: 560px) {
+      .blog-grid { grid-template-columns: 1fr; gap: 40px; }
+      .blog-filters { margin-bottom: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- PAGE WIPE -->
+  <div class="page-wipe" id="pageWipe">
+    <div class="wipe-text">G. Chapa</div>
+  </div>
+
+  <div id="progress"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-scene">
+      <img src="../assets/images/silhouette.png" alt="Gonzalo Chapa" class="loader-silhouette" width="160" height="240"/>
+    </div>
+    <div class="loader-text">Gonzalo Chapa &middot; Photography</div>
+    <div class="loader-flash"></div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lb-close" aria-label="Close">✕</button>
+    <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
+    <img id="lb-img" src="" alt=""/>
+    <button class="lb-nav lb-next" aria-label="Next">›</button>
+    <p id="lb-caption" class="lb-caption"></p>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="../index.html" class="nav-logo">G. Chapa</a>
+    <ul class="nav-links">
+      <li><a href="street.html">Street</a></li>
+      <li><a href="eventos.html">Eventos</a></li>
+      <li><a href="retratos.html">Retratos</a></li>
+      <li><a href="brookside.html">Brookside</a></li>
+      <li><a href="hire.html">Services</a></li>
+      <li><a href="blog.html" class="active">Blog</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." class="nav-hire-landing" target="_blank" rel="noopener"><span>Hire Me</span></a>
+      <button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma" title="Switch language">ES</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- MOBILE OVERLAY -->
+  <div class="nav-overlay" id="navOverlay" role="dialog" aria-label="Navigation">
+    <button class="overlay-close" id="overlayClose" aria-label="Close">✕</button>
+    <div class="overlay-links">
+      <a href="street.html" class="overlay-link">Street</a>
+      <a href="eventos.html" class="overlay-link">Eventos</a>
+      <a href="retratos.html" class="overlay-link">Retratos</a>
+      <a href="brookside.html" class="overlay-link">Brookside</a>
+      <a href="hire.html" class="overlay-link">Services</a>
+      <a href="blog.html" class="overlay-link active">Blog</a>
+      <a href="about.html" class="overlay-link">About</a>
+    </div>
+    <a href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20vi%20tu%20portafolio%20y%20me%20gustar%C3%ADa%20contratarte." class="overlay-hire" target="_blank" rel="noopener"><span>Hire Me on WhatsApp</span></a>
+    <div class="overlay-footer">
+      <a href="https://wa.me/528187997500">+52 81 8799 7500</a>
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank">@my_memories.jpeg</a>
+      <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="blog-page">
+    <header class="blog-header fi">
+      <span class="blog-eyebrow" data-es="Notas · Fotografía" data-en="Notes · Photography">Notas · Fotografía</span>
+      <h1 class="blog-title">Light, place,<br>and <em>seeing</em>.</h1>
+      <p class="blog-desc" data-es="Reflexiones sobre el oficio, el paisaje y el instante capturado." data-en="Reflections on the craft, the landscape, and the captured instant.">Reflexiones sobre el oficio, el paisaje y el instante capturado.</p>
+    </header>
+
+    <!-- FILTERS -->
+    <div class="blog-filters fi d1" id="blogFilters">
+      <button class="blog-filter-btn active" data-cat="all" data-es="Todo" data-en="All">Todo</button>
+    </div>
+
+    <!-- GRID -->
+    <div class="blog-grid" id="blogGrid">
+      <!-- skeleton placeholders -->
+      <div class="post-skeleton">
+        <div class="skel-cover"></div>
+        <div class="skel-line" style="height:10px;width:60px;"></div>
+        <div class="skel-line" style="height:20px;width:85%;"></div>
+        <div class="skel-line" style="height:12px;width:100%;"></div>
+        <div class="skel-line" style="height:12px;width:78%;"></div>
+      </div>
+      <div class="post-skeleton">
+        <div class="skel-cover"></div>
+        <div class="skel-line" style="height:10px;width:60px;"></div>
+        <div class="skel-line" style="height:20px;width:92%;"></div>
+        <div class="skel-line" style="height:12px;width:100%;"></div>
+        <div class="skel-line" style="height:12px;width:65%;"></div>
+      </div>
+      <div class="post-skeleton">
+        <div class="skel-cover"></div>
+        <div class="skel-line" style="height:10px;width:60px;"></div>
+        <div class="skel-line" style="height:20px;width:75%;"></div>
+        <div class="skel-line" style="height:12px;width:100%;"></div>
+        <div class="skel-line" style="height:12px;width:82%;"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:80px;border-top:.5px solid rgba(192,164,110,.1);">
+    <div class="footer-logo">G. Chapa</div>
+    <p class="footer-copy">© 2026 Gonzalo Chapa · Monterrey, México</p>
+    <div class="footer-links">
+      <a href="https://instagram.com/my_memories.jpeg" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://wa.me/528187997500" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="hire.html">Hire</a>
+      <a href="privacy.html">Privacidad</a>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <div class="wa-float" style="position:fixed;">
+    <div class="wa-pulse"></div>
+    <a id="waFloat" href="https://wa.me/528187997500?text=Hola%20Gonzalo%2C%20le%C3%AD%20tu%20blog%20y%20me%20gustar%C3%ADa%20contratarte." target="_blank" rel="noopener">
+      <svg class="wa-icon" viewBox="0 0 32 32" fill="none"><path fill="#fff" d="M16 2C8.27 2 2 8.27 2 16c0 2.44.65 4.73 1.78 6.72L2 30l7.47-1.75A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.5a11.45 11.45 0 01-5.82-1.58l-.42-.25-4.34 1.02.98-4.23-.27-.44A11.48 11.48 0 014.5 16C4.5 9.6 9.6 4.5 16 4.5S27.5 9.6 27.5 16 22.4 27.5 16 27.5zm6.3-8.57c-.35-.17-2.05-1.01-2.37-1.13-.32-.11-.55-.17-.78.17-.23.35-.88 1.13-1.08 1.36-.2.23-.4.26-.74.09-.35-.17-1.47-.54-2.8-1.73a10.52 10.52 0 01-1.94-2.42c-.2-.35-.02-.53.15-.7.15-.15.35-.4.52-.6.17-.2.23-.35.35-.58.12-.23.06-.43-.03-.6-.09-.17-.78-1.88-1.07-2.57-.28-.67-.57-.58-.78-.59H9.7c-.2 0-.52.07-.8.35-.26.28-1.02 1-1.02 2.44s1.05 2.83 1.2 3.02c.14.2 2.07 3.16 5.02 4.43.7.3 1.25.48 1.67.61.7.22 1.34.19 1.84.12.56-.08 1.73-.71 1.97-1.39.25-.68.25-1.27.17-1.39-.07-.12-.28-.19-.6-.35z"/></svg>
+      <span class="wa-label" id="waText">Hire Me</span>
+    </a>
+  </div>
+
+  <button class="back-top" aria-label="Back to top">↑</button>
+
+  <script src="../assets/js/main.js?v=202603311659"></script>
+  <script src="../assets/js/content-loader.js?v=20260527"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+  (function () {
+    /* ── Supabase ── */
+    var SB_URL = 'YOUR_SUPABASE_URL';
+    var SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    var sb = supabase.createClient(SB_URL, SB_KEY);
+
+    /* ── State ── */
+    var allPosts = [];
+    var activeCat = 'all';
+
+    /* ── DOM refs ── */
+    var grid = document.getElementById('blogGrid');
+    var filters = document.getElementById('blogFilters');
+
+    /* ── Helpers ── */
+    function fmtDate(str) {
+      if (!str) return '';
+      var d = new Date(str);
+      return d.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function coverHtml(post) {
+      if (post.cover_image_url) {
+        return '<img src="' + post.cover_image_url + '" alt="' + escHtml(post.title) + '" loading="lazy"/>';
+      }
+      return '';
+    }
+
+    function escHtml(str) {
+      return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function cardHtml(post) {
+      var catName = post.blog_categories ? post.blog_categories.name : '';
+      var date = post.published_at || post.created_at;
+      var hasCover = !!post.cover_image_url;
+      return '<a class="post-card fi" href="blog-post.html?slug=' + encodeURIComponent(post.slug) + '">' +
+        '<div class="post-card-cover' + (hasCover ? '' : ' no-img') + '">' +
+          (hasCover ? '<img src="' + escHtml(post.cover_image_url) + '" alt="' + escHtml(post.title) + '" loading="lazy"/>' : '') +
+          (catName ? '<span class="post-card-badge">' + escHtml(catName) + '</span>' : '') +
+        '</div>' +
+        '<div class="post-card-date">' + fmtDate(date) + '</div>' +
+        '<h2 class="post-card-title">' + escHtml(post.title) + '</h2>' +
+        '<p class="post-card-excerpt">' + escHtml(post.excerpt || '') + '</p>' +
+        '<span class="post-card-read" data-es="Leer más →" data-en="Read more →">Leer más →</span>' +
+      '</a>';
+    }
+
+    function renderGrid(posts) {
+      if (!posts || !posts.length) {
+        grid.innerHTML = '<div class="blog-empty">' +
+          '<div class="blog-empty-icon">◻</div>' +
+          '<p data-es="No hay publicaciones aún." data-en="No posts yet.">No hay publicaciones aún.</p>' +
+        '</div>';
+        return;
+      }
+      grid.innerHTML = posts.map(cardHtml).join('');
+
+      /* Re-trigger fi observer for new elements */
+      var newFi = grid.querySelectorAll('.fi');
+      if (newFi.length && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('vis'); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.08 });
+        newFi.forEach(function(el) { io.observe(el); });
+      }
+
+      /* Re-apply language */
+      var lang = localStorage.getItem('gcLang') || 'es';
+      grid.querySelectorAll('[data-es]').forEach(function(el) {
+        el.textContent = el.getAttribute('data-' + lang);
+      });
+    }
+
+    function filterPosts(catSlug) {
+      activeCat = catSlug;
+      filters.querySelectorAll('.blog-filter-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-cat') === catSlug);
+      });
+      var filtered = catSlug === 'all'
+        ? allPosts
+        : allPosts.filter(function(p) { return p.blog_categories && p.blog_categories.slug === catSlug; });
+      renderGrid(filtered);
+    }
+
+    function buildFilters(cats) {
+      var btns = '<button class="blog-filter-btn active" data-cat="all" data-es="Todo" data-en="All">Todo</button>';
+      cats.forEach(function(c) {
+        btns += '<button class="blog-filter-btn" data-cat="' + escHtml(c.slug) + '">' + escHtml(c.name) + '</button>';
+      });
+      filters.innerHTML = btns;
+      filters.querySelectorAll('.blog-filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { filterPosts(btn.getAttribute('data-cat')); });
+      });
+    }
+
+    /* ── Fetch ── */
+    async function load() {
+      try {
+        var postsQ = sb.from('blog_posts')
+          .select('id,title,slug,excerpt,cover_image_url,published_at,created_at,category_id,blog_categories(name,slug)')
+          .eq('status', 'published')
+          .order('published_at', { ascending: false });
+
+        var catsQ = sb.from('blog_categories')
+          .select('id,name,slug')
+          .eq('active', true)
+          .order('sort_order');
+
+        var results = await Promise.all([postsQ, catsQ]);
+        var posts = results[0].data || [];
+        var cats  = results[1].data || [];
+
+        allPosts = posts;
+        buildFilters(cats);
+        renderGrid(posts);
+      } catch (err) {
+        console.error('Blog load error:', err);
+        grid.innerHTML = '<div class="blog-error"><p>No se pudo cargar el blog. Intenta de nuevo.</p></div>';
+      }
+    }
+
+    load();
+
+    /* ── Language toggle ── */
+    var langBtn = document.getElementById('langToggle');
+    var lang = localStorage.getItem('gcLang') || 'es';
+    function applyLang(l) {
+      document.documentElement.lang = l;
+      document.querySelectorAll('[data-es]').forEach(function(el) { el.textContent = el.getAttribute('data-' + l); });
+      if (langBtn) langBtn.textContent = l === 'es' ? 'EN' : 'ES';
+      localStorage.setItem('gcLang', l);
+    }
+    applyLang(lang);
+    if (langBtn) langBtn.addEventListener('click', function() {
+      applyLang(localStorage.getItem('gcLang') === 'es' ? 'en' : 'es');
+    });
+  })();
+  </script>
+</body>
+</html>

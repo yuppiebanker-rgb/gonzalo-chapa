@@ -101,9 +101,150 @@
     font-size: 50vw;
   }
 }
+
+/* ── Toast ── */
+.toast-wrap {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.toast {
+  background: var(--ink);
+  border: 0.5px solid rgba(192,164,110,0.4);
+  color: var(--cream);
+  padding: 14px 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  max-width: 320px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { border-color: rgba(76,175,80,0.5); }
+.toast.error   { border-color: rgba(229,57,53,0.5); }
+.toast-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  background: var(--dust);
+}
+.toast.success .toast-dot { background: #4caf50; }
+.toast.error   .toast-dot { background: #e53935; }
+
+/* ── Quote request section ── */
+.quote-section {
+  padding: var(--pad-y) var(--pad-x);
+  background: #0d0b08;
+  position: relative;
+  overflow: hidden;
+}
+.quote-section::before {
+  content: 'QUOTE';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(120px, 18vw, 300px);
+  color: rgba(244,239,230,0.02);
+  pointer-events: none;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.quote-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.quote-header {
+  text-align: center;
+  margin-bottom: 52px;
+}
+.quote-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--dust);
+  display: block;
+  margin-bottom: 14px;
+}
+.quote-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(30px, 4.5vw, 54px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--cream);
+}
+.quote-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.quote-form .span-2 { grid-column: 1 / -1; }
+.quote-form input,
+.quote-form select,
+.quote-form textarea {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(244,239,230,0.05);
+  border: 0.5px solid rgba(192,164,110,0.14);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.3s, background 0.3s;
+}
+.quote-form input::placeholder,
+.quote-form textarea::placeholder { color: rgba(244,239,230,0.3); }
+.quote-form input:focus,
+.quote-form select:focus,
+.quote-form textarea:focus {
+  border-color: var(--dust);
+  background: rgba(244,239,230,0.07);
+}
+.quote-form select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c0a46e' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.quote-form select option { background: var(--ink); color: var(--cream); }
+.quote-form textarea { resize: vertical; min-height: 120px; }
+.quote-form .btn-quote {
+  padding: 14px 40px;
+  background: var(--dust);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  justify-self: start;
+}
+.quote-form .btn-quote:hover { background: #d4b87a; }
+.quote-form .btn-quote:disabled { opacity: 0.6; cursor: not-allowed; }
+
+@media (max-width: 640px) {
+  .quote-form { grid-template-columns: 1fr; }
+  .quote-form .span-2 { grid-column: 1; }
+  .quote-form .btn-quote { width: 100%; justify-self: stretch; padding: 18px; }
+}
   </style>
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b0906">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="inner-page">
   <!-- PAGE WIPE TRANSITION -->
@@ -262,6 +403,37 @@
     </div>
   </section>
 
+  <!-- ═══ QUOTE REQUEST SECTION ═══ -->
+  <section class="quote-section fi">
+    <div class="quote-inner">
+      <div class="quote-header">
+        <span class="quote-label">Cotización</span>
+        <h2>Solicita una<br>propuesta personalizada</h2>
+      </div>
+      <form id="quoteForm" class="quote-form" novalidate>
+        <input type="text"  name="name"         placeholder="Nombre completo *" required>
+        <input type="email" name="email"        placeholder="Email *" required>
+        <input type="tel"   name="phone"        placeholder="Teléfono">
+        <select name="service_type" required>
+          <option value="" disabled selected>Tipo de servicio *</option>
+          <option value="Street Photography">Street Photography</option>
+          <option value="Eventos &amp; Nightlife">Eventos &amp; Nightlife</option>
+          <option value="Retratos">Retratos</option>
+          <option value="Festivals">Festivales</option>
+          <option value="Restaurantes &amp; F&amp;B">Restaurantes &amp; F&amp;B</option>
+          <option value="Sports Media">Sports Media</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input type="date"   name="event_date"  placeholder="Fecha del evento">
+        <input type="text"   name="budget"      placeholder="Presupuesto estimado (MXN)">
+        <textarea name="message" class="span-2" placeholder="Cuéntame sobre tu proyecto: lugar, duración, entregables esperados..." rows="4" required></textarea>
+        <div class="span-2">
+          <button type="submit" class="btn-quote">Solicitar Cotización &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
   <!-- ═══ CONTACT SECTION ═══ -->
   <section class="contact-section">
     <div class="contact-ghost">HIRE</div>
@@ -279,21 +451,13 @@
         </div>
       </div>
       <div class="contact-right fi d1">
-        <form id="contactForm" class="contact-form">
-          <input type="text" name="name" placeholder="Nombre" required>
-          <input type="email" name="email" placeholder="Email">
-          <select name="service" required>
-            <option value="" disabled selected>Selecciona un servicio</option>
-            <option value="Street Photography">Street Photography</option>
-            <option value="Eventos & Nightlife">Eventos & Nightlife</option>
-            <option value="Retratos">Retratos</option>
-            <option value="Festivals">Festivals</option>
-            <option value="Restaurantes & F&B">Restaurantes & F&B</option>
-            <option value="Sports Media">Sports Media</option>
-          </select>
-          <textarea name="message" placeholder="Cuéntame sobre tu proyecto..." rows="4"></textarea>
-          <button type="submit" class="btn-submit">Send via WhatsApp &rarr;</button>
-          <p class="alt-email">or email directly &rarr; <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a></p>
+        <form id="contactForm" class="contact-form" novalidate>
+          <input type="text"  name="name"    placeholder="Nombre *" required>
+          <input type="email" name="email"   placeholder="Email *" required>
+          <input type="tel"   name="phone"   placeholder="Teléfono (opcional)">
+          <textarea name="message" placeholder="Cuéntame sobre tu proyecto..." rows="4" required></textarea>
+          <button type="submit" class="btn-submit">Enviar Mensaje &rarr;</button>
+          <p class="alt-email">o directamente &rarr; <a href="mailto:gchapa2602@gmail.com">gchapa2602@gmail.com</a></p>
         </form>
       </div>
     </div>
@@ -318,7 +482,87 @@
     </div>
   </footer>
 
+  <!-- Toast -->
+  <div class="toast-wrap" aria-live="polite">
+    <div class="toast" id="toastEl" role="status">
+      <span class="toast-dot"></span>
+      <span class="toast-msg"></span>
+    </div>
+  </div>
+
   <script src="../assets/js/main.js?v=202603311659"></script>
+  <script src="../assets/js/content-loader.js?v=20260527"></script>
+
+  <script>
+  // ── Supabase forms ──────────────────────────────────────────────
+  (function(){
+    var SB_URL = 'YOUR_SUPABASE_URL';
+    var SB_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    var sb = supabase.createClient(SB_URL, SB_KEY);
+
+    var toastTimer;
+    function showToast(msg, type) {
+      var el = document.getElementById('toastEl');
+      el.querySelector('.toast-msg').textContent = msg;
+      el.className = 'toast ' + (type || 'success') + ' show';
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4500);
+    }
+
+    function setLoading(btn, loading) {
+      btn.disabled = loading;
+      btn.dataset.orig = btn.dataset.orig || btn.textContent;
+      btn.textContent = loading ? 'Enviando...' : btn.dataset.orig;
+    }
+
+    // Contact form → messages table
+    var contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!this.name.value.trim() || !this.email.value.trim() || !this.message.value.trim()) {
+          showToast('Por favor completa los campos requeridos.', 'error'); return;
+        }
+        var btn = this.querySelector('[type=submit]');
+        setLoading(btn, true);
+        var _a = await sb.from('messages').insert({
+          name: this.name.value.trim(),
+          email: this.email.value.trim(),
+          phone: this.phone.value.trim() || null,
+          message: this.message.value.trim()
+        }), error = _a.error;
+        setLoading(btn, false);
+        if (error) { showToast('Error al enviar. Intenta de nuevo.', 'error'); }
+        else { showToast('¡Mensaje enviado! Te responderemos pronto.', 'success'); this.reset(); }
+      });
+    }
+
+    // Quote form → quotes table
+    var quoteForm = document.getElementById('quoteForm');
+    if (quoteForm) {
+      quoteForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!this.name.value.trim() || !this.email.value.trim() || !this.service_type.value || !this.message.value.trim()) {
+          showToast('Por favor completa los campos requeridos.', 'error'); return;
+        }
+        var btn = this.querySelector('[type=submit]');
+        setLoading(btn, true);
+        var _a = await sb.from('quotes').insert({
+          name: this.name.value.trim(),
+          email: this.email.value.trim(),
+          phone: this.phone.value.trim() || null,
+          service_type: this.service_type.value,
+          event_date: this.event_date.value || null,
+          budget: this.budget.value.trim() || null,
+          message: this.message.value.trim()
+        }), error = _a.error;
+        setLoading(btn, false);
+        if (error) { showToast('Error al enviar. Intenta de nuevo.', 'error'); }
+        else { showToast('¡Cotización enviada! Te contactamos en 24 horas.', 'success'); this.reset(); }
+      });
+    }
+  })();
+  </script>
 
   <script>
   (function(){
