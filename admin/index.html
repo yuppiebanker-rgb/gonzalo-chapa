@@ -194,6 +194,43 @@
       .stat-grid{grid-template-columns:1fr 1fr}
       .quick-actions{grid-template-columns:1fr 1fr}
     }
+
+    /* ── THEME EDITOR ── */
+    .theme-editor-layout{display:grid;grid-template-columns:420px 1fr;gap:16px;align-items:start}
+    .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .preset-card{border:1.5px solid var(--border);padding:10px 8px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;background:rgba(244,239,230,.01)}
+    .preset-card:hover{border-color:rgba(192,164,110,.4);background:rgba(192,164,110,.04)}
+    .preset-card.preset-active{border-color:var(--dust);background:rgba(192,164,110,.06)}
+    .preset-swatches{display:flex;gap:4px;justify-content:center;margin-bottom:6px}
+    .preset-swatch{width:14px;height:14px;border-radius:50%}
+    .preset-name{font-size:.63rem;letter-spacing:.08em;color:var(--cream)}
+    .preset-fonts{font-size:.52rem;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .color-control{display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(244,239,230,.02);border:.5px solid var(--border);margin-bottom:6px}
+    .color-swatch-wrap{position:relative;width:34px;height:34px;flex-shrink:0;border:.5px solid rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
+    .color-swatch-wrap input[type=color]{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;padding:0;cursor:pointer;opacity:0;z-index:2}
+    .color-swatch-bg{width:100%;height:100%;pointer-events:none}
+    .color-info{flex:1;min-width:0}
+    .color-label-txt{font-size:.56rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px}
+    .color-hex-input{font-size:.78rem;font-family:'Courier New',monospace;color:var(--cream);background:none;border:none;outline:none;width:100%;padding:0}
+    .color-hex-input:focus{color:var(--dust)}
+    .font-control{margin-bottom:14px}
+    .font-preview-txt{margin-top:5px;padding:7px 10px;background:rgba(244,239,230,.025);border:.5px solid var(--border);font-size:15px;color:var(--cream);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-height:35px}
+    .preview-toolbar{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:rgba(255,255,255,.02);border:.5px solid var(--border);border-bottom:none;font-size:.6rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+    .preview-frame{border:1px solid var(--border);overflow:hidden}
+    .pv-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .pv-logo{font-style:italic;font-size:1.1rem}
+    .pv-links{display:flex;gap:16px;font-size:.62rem;letter-spacing:.04em;opacity:.7}
+    .pv-hero{padding:44px 24px 32px;text-align:center}
+    .pv-hero-eyebrow{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px}
+    .pv-hero-title{font-style:italic;font-size:1.7rem;line-height:1.15;margin-bottom:14px}
+    .pv-hero-btn{display:inline-block;padding:9px 24px;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;cursor:default;font-weight:500}
+    .pv-section{padding:16px 20px}
+    .pv-section-label{font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:10px;opacity:.4}
+    .pv-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+    .pv-card{padding:12px 10px}
+    .pv-card-title{font-size:.72rem;font-weight:500;margin-bottom:3px}
+    .pv-card-body{font-size:.6rem;line-height:1.4;opacity:.55}
+    @media(max-width:1100px){.theme-editor-layout{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -380,19 +417,78 @@
 
 <!-- TEMA -->
 <div id="s-tema" class="section">
-  <div class="page-head"><h1 class="page-title">Tema</h1><p class="page-sub">Colores, fuentes y presets del sitio</p></div>
-  <div class="card"><div class="card-title">Presets</div><div id="themePresets" class="stat-grid"></div></div>
-  <div class="card">
-    <div class="card-title">Personalizar</div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Color Primario</label><div class="color-row"><input type="color" id="thColor1" value="#c0a46e"><input class="form-input" id="thColor1T" style="flex:1"></div></div>
-      <div class="form-group"><label class="form-label">Color Acento</label><div class="color-row"><input type="color" id="thColor2" value="#f4efe6"><input class="form-input" id="thColor2T" style="flex:1"></div></div>
+  <div class="page-head"><h1 class="page-title">Tema</h1><p class="page-sub">Editor de tema en vivo — colores, fuentes y presets</p></div>
+  <div class="theme-editor-layout">
+    <!-- Controls -->
+    <div>
+      <div class="card">
+        <div class="card-title">Presets</div>
+        <div id="themePresets" class="preset-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Colores</div>
+        <div id="colorControls"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tipografía</div>
+        <div class="form-group font-control">
+          <label class="form-label">Heading Font</label>
+          <select class="form-input" id="thFontH" onchange="thFontChange('heading',this.value)">
+            <option>Bodoni Moda</option><option>Playfair Display</option><option>Cinzel</option>
+            <option>Cormorant Garamond</option><option>Libre Baskerville</option>
+            <option>Mr De Haviland</option><option>Great Vibes</option>
+            <option>Marcellus</option><option>Bebas Neue</option>
+          </select>
+          <div id="pvFontH" class="font-preview-txt">Gonzalo Chapa · Fotografía de Arquitectura</div>
+        </div>
+        <div class="form-group font-control">
+          <label class="form-label">Body Font</label>
+          <select class="form-input" id="thFontB" onchange="thFontChange('body',this.value)">
+            <option>DM Sans</option><option>Work Sans</option><option>Source Sans 3</option>
+            <option>Lato</option><option>Open Sans</option><option>Nunito Sans</option>
+          </select>
+          <div id="pvFontB" class="font-preview-txt">Fotografía de espacios residenciales y comerciales de alto nivel.</div>
+        </div>
+        <div class="form-group font-control">
+          <label class="form-label">Logo Font</label>
+          <select class="form-input" id="thFontL" onchange="thFontChange('logo',this.value)">
+            <option>Bodoni Moda</option><option>Playfair Display</option><option>Cinzel</option>
+            <option>Cormorant Garamond</option><option>Libre Baskerville</option>
+            <option>Mr De Haviland</option><option>Great Vibes</option><option>Marcellus</option>
+          </select>
+          <div id="pvFontL" class="font-preview-txt" style="font-style:italic">G. Chapa</div>
+        </div>
+      </div>
+      <div class="btn-group" style="flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="saveTheme()">Guardar Tema</button>
+        <button class="btn btn-outline" onclick="resetTheme()">&#8635; Reset</button>
+        <button class="btn btn-outline" onclick="exportTheme()">&#8595; Exportar JSON</button>
+        <label class="btn btn-outline" style="cursor:pointer">&#8593; Importar JSON<input type="file" accept=".json" style="display:none" onchange="importTheme(this.files[0])"></label>
+      </div>
     </div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Font Heading</label><input class="form-input" id="thFontH"></div>
-      <div class="form-group"><label class="form-label">Font Body</label><input class="form-input" id="thFontB"></div>
+    <!-- Live Preview -->
+    <div>
+      <div class="preview-toolbar"><span>Vista Previa en Vivo</span><span style="font-size:.55rem;opacity:.5">Actualiza en tiempo real</span></div>
+      <div class="preview-frame" id="themePreviewFrame">
+        <div class="pv-nav" id="pvNav">
+          <div class="pv-logo" id="pvLogo">G. Chapa</div>
+          <div class="pv-links"><span>Portafolio</span><span>Servicios</span><span>Blog</span><span>Contacto</span></div>
+        </div>
+        <div class="pv-hero" id="pvHero">
+          <div class="pv-hero-eyebrow" id="pvEyebrow">Fotografía de Arquitectura</div>
+          <div class="pv-hero-title" id="pvTitle">Gonzalo Chapa</div>
+          <div id="pvBtn" class="pv-hero-btn">Contratar</div>
+        </div>
+        <div class="pv-section" id="pvSection">
+          <div class="pv-section-label">Servicios</div>
+          <div class="pv-cards">
+            <div class="pv-card" id="pvCard1"><div class="pv-card-title" id="pvCardTitle1">Residencial</div><div class="pv-card-body">Fotografía de interiores y exteriores de alto nivel.</div></div>
+            <div class="pv-card" id="pvCard2"><div class="pv-card-title" id="pvCardTitle2">Comercial</div><div class="pv-card-body">Espacios de trabajo y restaurantes.</div></div>
+            <div class="pv-card" id="pvCard3"><div class="pv-card-title" id="pvCardTitle3">Editorial</div><div class="pv-card-body">Para revistas y publicaciones de diseño.</div></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="btn-group"><button class="btn btn-primary" onclick="saveTheme()">Guardar Tema</button></div>
   </div>
 </div>
 
@@ -420,13 +516,17 @@
 <!-- COTIZACIONES -->
 <div id="s-cotizaciones" class="section">
   <div class="page-head"><h1 class="page-title">Cotizaciones</h1><p class="page-sub">Solicitudes de servicio</p></div>
-  <table class="data-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="quoteBody"></tbody></table>
+  <div class="section-toolbar"><div class="filter-tabs" id="quoteTabs"></div><button class="btn btn-outline btn-sm" onclick="exportQuotesCSV()" style="flex-shrink:0">↓ Exportar CSV</button></div>
+  <table class="data-table"><thead><tr><th>Cliente</th><th>Servicio</th><th>Fecha Evento</th><th>Estado</th></tr></thead><tbody id="quoteBody"></tbody></table>
+  <div id="quotesDetailPanel" class="detail-panel"></div>
 </div>
 
 <!-- MENSAJES -->
 <div id="s-mensajes" class="section">
   <div class="page-head"><h1 class="page-title">Mensajes</h1><p class="page-sub">Mensajes de contacto</p></div>
-  <table class="data-table"><thead><tr><th>De</th><th>Asunto</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="msgBody"></tbody></table>
+  <div class="filter-tabs" id="msgTabs"></div>
+  <table class="data-table"><thead><tr><th>De</th><th>Asunto</th><th>Fecha</th><th>Estado</th></tr></thead><tbody id="msgBody"></tbody></table>
+  <div id="msgDetailPanel" class="detail-panel"></div>
 </div>
 
 <!-- SETTINGS -->
@@ -520,7 +620,7 @@ document.querySelectorAll('.sb-nav a[data-s]').forEach(a=>a.addEventListener('cl
 // DASHBOARD HELPERS
 function relTime(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'hace unos segundos';if(s<3600)return`hace ${Math.floor(s/60)} min`;if(s<86400)return`hace ${Math.floor(s/3600)} h`;if(s<604800)return`hace ${Math.floor(s/86400)} días`;return new Date(d).toLocaleDateString('es-MX')}
 function navTo(s){document.querySelectorAll('.sb-nav a').forEach(x=>x.classList.remove('active'));const a=document.querySelector(`.sb-nav a[data-s="${s}"]`);if(a)a.classList.add('active');document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('s-'+s).classList.add('active');const fn={dashboard:loadDashboard,gallery:loadGallery,hero:loadHero,secciones:loadSections,navegacion:loadNav,blog:loadBlog,categorias:loadCats,servicios:loadSvcs,about:loadAbout,tema:loadTheme,seo:loadSeo,analiticas:loadAnalytics,cotizaciones:loadQuotes,mensajes:loadMessages,settings:loadSettings,paginas:loadPages};if(fn[s])fn[s]()}
-async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new'),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread')]);const bq=$('badgeQuotes'),bm=$('badgeMsgs');if(bq){bq.textContent=qc||0;bq.style.display=qc?'inline-flex':'none'}if(bm){bm.textContent=mc||0;bm.style.display=mc?'inline-flex':'none'}}
+async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new').catch(()=>({count:0})),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread').catch(()=>({count:0}))]);const bq=$('badgeQuotes'),bm=$('badgeMsgs'),dq=$('dotQuotes'),dm=$('dotMsgs');if(bq){bq.textContent=qc||0;bq.style.display=qc?'inline-flex':'none'}if(bm){bm.textContent=mc||0;bm.style.display=mc?'inline-flex':'none'}if(dq)dq.style.display=qc?'inline-block':'none';if(dm)dm.style.display=mc?'inline-block':'none'}
 // DASHBOARD
 async function loadDashboard(){
   const[p,c,s,h,b,q,m]=await Promise.all([sb.from('photos').select('id',{count:'exact',head:true}),sb.from('collections').select('id',{count:'exact',head:true}),sb.from('services').select('id',{count:'exact',head:true}),sb.from('hero_slides').select('id',{count:'exact',head:true}),sb.from('blog_posts').select('id',{count:'exact',head:true}),sb.from('quotes').select('id',{count:'exact',head:true}),sb.from('messages').select('id',{count:'exact',head:true})]);
@@ -612,13 +712,32 @@ async function saveSeo(){const id=$('seoId').value;await sb.from('page_seo').upd
 async function loadAnalytics(){const{data:views}=await sb.from('page_views').select('*').order('date',{ascending:false}).limit(100);const total=(views||[]).reduce((a,v)=>a+v.views,0);const unique=(views||[]).reduce((a,v)=>a+v.unique_visitors,0);const pages={};(views||[]).forEach(v=>{if(!pages[v.page])pages[v.page]={views:0,unique:0};pages[v.page].views+=v.views;pages[v.page].unique+=v.unique_visitors});$('analyticsStats').innerHTML=`<div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total Views</div></div><div class="stat-card"><div class="stat-num">${unique}</div><div class="stat-label">Únicos</div></div><div class="stat-card"><div class="stat-num">${Object.keys(pages).length}</div><div class="stat-label">Páginas</div></div>`;$('analyticsBody').innerHTML=Object.entries(pages).sort((a,b)=>b[1].views-a[1].views).map(([p,v])=>`<tr><td>${p}</td><td>${v.views}</td><td>${v.unique}</td></tr>`).join('')||'<tr><td colspan="3" class="empty">No hay datos.</td></tr>'}
 
 // QUOTES
-async function loadQuotes(){const{data}=await sb.from('quotes').select('*').order('created_at',{ascending:false});$('quoteBody').innerHTML=(data||[]).map(q=>`<tr><td>${q.client_name}<br><span style="font-size:.7rem;color:var(--muted)">${q.client_email||''}</span></td><td>${q.service_type||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${q.event_date||'—'}</td><td><span class="badge badge-${q.status==='new'?'new':q.status==='accepted'?'active':'read'}">${q.status}</span></td><td><button class="btn btn-sm btn-outline" onclick="updQuote('${q.id}','viewed')">Vista</button><button class="btn btn-sm btn-outline" onclick="updQuote('${q.id}','accepted')">Aceptar</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay cotizaciones.</td></tr>'}
-async function updQuote(id,s){await sb.from('quotes').update({status:s}).eq('id',id);toast('Actualizada','success');loadQuotes();loadSidebarBadges()}
+let allQuotes=[],quoteFilter=null,openQuoteId=null;
+async function loadQuotes(){const{data}=await sb.from('quotes').select('*').order('created_at',{ascending:false});allQuotes=data||[];renderQuoteTabs();renderQuoteTable()}
+function qSL(s){return{new:'Nueva',viewed:'Vista',accepted:'Aceptada',rejected:'Declinada'}[s]||s}
+function qSB(s){return{new:'badge-new',viewed:'badge-read',accepted:'badge-active',rejected:'badge-inactive'}[s]||'badge-read'}
+function renderQuoteTabs(){const stats=[{k:null,l:'Todas'},{k:'new',l:'Nuevas'},{k:'viewed',l:'Vistas'},{k:'accepted',l:'Aceptadas'},{k:'rejected',l:'Declinadas'}];$('quoteTabs').innerHTML=stats.map(s=>{const c=s.k===null?allQuotes.length:allQuotes.filter(q=>q.status===s.k).length;return'<button class="ftab'+(quoteFilter===s.k?' active':'')+'" onclick="setQF('+(s.k===null?'null':"'"+s.k+"'")+')">'+s.l+'<span class="ftab-count">'+c+'</span></button>'}).join('')}
+function setQF(f){quoteFilter=f;renderQuoteTabs();renderQuoteTable();closeQuoteDetail()}
+function renderQuoteTable(){const list=quoteFilter?allQuotes.filter(q=>q.status===quoteFilter):allQuotes;$('quoteBody').innerHTML=list.map(q=>`<tr data-id="${q.id}" class="${openQuoteId===q.id?'selected':''}" onclick="toggleQD('${q.id}')"><td>${escH(q.client_name)}<br><span style="font-size:.7rem;color:var(--muted)">${escH(q.client_email)}</span></td><td>${escH(q.service_type)||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${escH(q.event_date)||'—'}</td><td><span class="badge ${qSB(q.status)}">${qSL(q.status)}</span></td></tr>`).join('')||'<tr><td colspan="4" class="empty">No hay cotizaciones.</td></tr>'}
+function toggleQD(id){if(openQuoteId===id){closeQuoteDetail();return}openQuoteId=id;const q=allQuotes.find(x=>x.id===id);if(!q)return;if(q.status==='new'){sb.from('quotes').update({status:'viewed'}).eq('id',id).then(()=>{q.status='viewed';renderQuoteTabs();loadSidebarBadges()})}renderQuoteTable();showQuoteDetail(q)}
+function closeQuoteDetail(){openQuoteId=null;const p=$('quotesDetailPanel');p.classList.remove('open');p.innerHTML='';renderQuoteTable()}
+function showQuoteDetail(q){const wp=(q.client_phone||'').replace(/\D/g,'');const wm=encodeURIComponent('Hola '+q.client_name+', gracias por tu consulta'+(q.service_type?' sobre '+q.service_type:'')+'. Me comunico para coordinar los detalles.');const wu=wp?'https://wa.me/'+wp+'?text='+wm:'#';const ms=encodeURIComponent('Re: Cotización'+(q.service_type?' — '+q.service_type:''));const mb=encodeURIComponent('Hola '+q.client_name+',\n\nGracias por contactarme.\n\nSaludos,\nGonzalo Chapa');const mu=q.client_email?'mailto:'+q.client_email+'?subject='+ms+'&body='+mb:'#';const so=['new','viewed','accepted','rejected'].map(s=>'<option value="'+s+'"'+(q.status===s?' selected':'')+'>'+qSL(s)+'</option>').join('');const fields=[{l:'Nombre',v:escH(q.client_name)},{l:'Email',v:escH(q.client_email)||'—'},{l:'Teléfono',v:escH(q.client_phone)||'—'},{l:'Servicio',v:escH(q.service_type)||'—'},{l:'Fecha Evento',v:escH(q.event_date)||'—'},{l:'Presupuesto',v:escH(q.budget)||'—'},{l:'Ubicación',v:escH(q.location)||'—'},{l:'Horas',v:q.hours?String(q.hours):'—'}];const p=$('quotesDetailPanel');p.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><strong style="color:var(--dust)">'+escH(q.client_name)+'</strong><button class="btn btn-sm btn-outline" onclick="closeQuoteDetail()">✕ Cerrar</button></div>'+'<div class="dp-grid">'+fields.map(f=>'<div class="dp-field"><span class="dp-label">'+f.l+'</span><span class="dp-value">'+f.v+'</span></div>').join('')+'</div>'+(q.message?'<div style="margin-bottom:14px"><div class="dp-label" style="margin-bottom:5px">Mensaje del Cliente</div><div class="msg-body-text">'+escH(q.message)+'</div></div>':'')+'<div class="form-row"><div class="form-group"><label class="form-label">Estado</label><select class="form-input" id="qpStatus" style="max-width:200px">'+so+'</select></div></div>'+'<div class="form-row full"><div class="form-group"><label class="form-label">Notas Internas</label><textarea class="form-input" id="qpNotes" style="min-height:80px" placeholder="Notas privadas...">'+escH(q.notes)+'</textarea></div></div>'+'<div class="dp-actions"><button class="btn btn-primary btn-sm" onclick="saveQuoteNotes(\''+q.id+'\')">Guardar</button>'+'<a class="btn btn-outline btn-sm" href="'+wu+'" target="_blank"'+(wp?'':' style="opacity:.5;pointer-events:none"')+'>📱 WhatsApp</a>'+'<a class="btn btn-outline btn-sm" href="'+mu+'"'+(q.client_email?'':' style="opacity:.5;pointer-events:none"')+'>✉ Email</a></div>';p.classList.add('open')}
+async function saveQuoteNotes(id){const st=$('qpStatus').value,n=$('qpNotes').value;await sb.from('quotes').update({status:st,notes:n}).eq('id',id);const q=allQuotes.find(x=>x.id===id);if(q){q.status=st;q.notes=n}renderQuoteTabs();renderQuoteTable();loadSidebarBadges();toast('Guardado','success')}
+function exportQuotesCSV(){const h=['ID','Nombre','Email','Teléfono','Servicio','Fecha Evento','Presupuesto','Ubicación','Horas','Estado','Notas','Creado'];const r=allQuotes.map(q=>[q.id,q.client_name,q.client_email,q.client_phone,q.service_type,q.event_date,q.budget,q.location,q.hours,q.status,q.notes,q.created_at].map(v=>'"'+(v||'').toString().replace(/"/g,'""')+'"'));const csv=[h,...r].map(x=>x.join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));a.download='cotizaciones-'+new Date().toISOString().slice(0,10)+'.csv';a.click()}
 
 // MESSAGES
-async function loadMessages(){const{data}=await sb.from('messages').select('*').order('created_at',{ascending:false});$('msgBody').innerHTML=(data||[]).map(m=>`<tr><td>${m.sender_name}<br><span style="font-size:.7rem;color:var(--muted)">${m.sender_email||''}</span></td><td>${m.subject||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${new Date(m.created_at).toLocaleDateString('es-MX')}</td><td><span class="badge badge-${m.status==='unread'?'new':'read'}">${m.status}</span></td><td><button class="btn btn-sm btn-outline" onclick="readMsg('${m.id}')">Ver</button><button class="btn btn-sm btn-danger" onclick="delMsg('${m.id}')">✕</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No hay mensajes.</td></tr>'}
-async function readMsg(id){const{data:m}=await sb.from('messages').select('*').eq('id',id).single();if(!m)return;await sb.from('messages').update({status:'read'}).eq('id',id);alert(`De: ${m.sender_name}\nEmail: ${m.sender_email}\nAsunto: ${m.subject}\n\n${m.body}`);loadMessages();loadSidebarBadges()}
-async function delMsg(id){if(!confirm('¿Eliminar?'))return;await sb.from('messages').delete().eq('id',id);toast('Eliminado','success');loadMessages()}
+let allMessages=[],msgFilter=null,openMsgId=null;
+async function loadMessages(){const{data}=await sb.from('messages').select('*').order('created_at',{ascending:false});allMessages=data||[];renderMsgTabs();renderMsgTable()}
+function mSL(s){return{unread:'No Leído',read:'Leído',replied:'Respondido',archived:'Archivado'}[s]||s}
+function mSB(s){return{unread:'badge-new',read:'badge-read',replied:'badge-active',archived:'badge-inactive'}[s]||'badge-read'}
+function renderMsgTabs(){const stats=[{k:null,l:'Todos'},{k:'unread',l:'No Leídos'},{k:'read',l:'Leídos'},{k:'replied',l:'Respondidos'},{k:'archived',l:'Archivados'}];$('msgTabs').innerHTML=stats.map(s=>{const c=s.k===null?allMessages.length:allMessages.filter(m=>m.status===s.k).length;return'<button class="ftab'+(msgFilter===s.k?' active':'')+'" onclick="setMF('+(s.k===null?'null':"'"+s.k+"'")+')">'+s.l+'<span class="ftab-count">'+c+'</span></button>'}).join('')}
+function setMF(f){msgFilter=f;renderMsgTabs();renderMsgTable();closeMsgDetail()}
+function renderMsgTable(){const list=msgFilter?allMessages.filter(m=>m.status===msgFilter):allMessages;$('msgBody').innerHTML=list.map(m=>`<tr data-id="${m.id}" class="${openMsgId===m.id?'selected':''}" onclick="toggleMD('${m.id}')"><td>${escH(m.sender_name)}${m.status==='unread'?'<span style="display:inline-block;width:6px;height:6px;background:var(--danger);border-radius:50%;margin-left:5px;vertical-align:middle"></span>':''}<br><span style="font-size:.7rem;color:var(--muted)">${escH(m.sender_email)}</span></td><td>${escH(m.subject)||'—'}</td><td style="font-size:.72rem;color:var(--muted)">${new Date(m.created_at).toLocaleDateString('es-MX')}</td><td><span class="badge ${mSB(m.status)}">${mSL(m.status)}</span></td></tr>`).join('')||'<tr><td colspan="4" class="empty">No hay mensajes.</td></tr>'}
+function toggleMD(id){if(openMsgId===id){closeMsgDetail();return}openMsgId=id;const m=allMessages.find(x=>x.id===id);if(!m)return;if(m.status==='unread'){sb.from('messages').update({status:'read'}).eq('id',id).then(()=>{m.status='read';renderMsgTabs();loadSidebarBadges()})}renderMsgTable();showMsgDetail(m)}
+function closeMsgDetail(){openMsgId=null;const p=$('msgDetailPanel');p.classList.remove('open');p.innerHTML='';renderMsgTable()}
+function showMsgDetail(m){const wp=(m.sender_phone||'').replace(/\D/g,'');const wm=encodeURIComponent('Hola '+m.sender_name+', gracias por tu mensaje.');const wu=wp?'https://wa.me/'+wp+'?text='+wm:'#';const ms=encodeURIComponent('Re: '+(m.subject||'Tu mensaje'));const mu=m.sender_email?'mailto:'+m.sender_email+'?subject='+ms:'#';const p=$('msgDetailPanel');p.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><strong style="color:var(--dust)">'+escH(m.sender_name)+' — '+escH(m.subject||'Sin asunto')+'</strong><button class="btn btn-sm btn-outline" onclick="closeMsgDetail()">✕ Cerrar</button></div>'+'<div class="dp-grid" style="margin-bottom:14px"><div class="dp-field"><span class="dp-label">Email</span><span class="dp-value">'+escH(m.sender_email||'—')+'</span></div><div class="dp-field"><span class="dp-label">Fecha</span><span class="dp-value">'+new Date(m.created_at).toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'})+'</span></div><div class="dp-field"><span class="dp-label">Estado</span><span class="dp-value">'+mSL(m.status)+'</span></div></div>'+'<div class="msg-body-text">'+escH(m.body||'(sin mensaje)')+'</div>'+(m.reply_text?'<div style="margin-bottom:12px"><div class="dp-label" style="margin-bottom:5px">Respuesta Enviada</div><div class="msg-body-text" style="border-color:rgba(192,164,110,.25)">'+escH(m.reply_text)+'</div></div>':'')+'<div class="form-row full"><div class="form-group"><label class="form-label">Respuesta</label><textarea class="form-input" id="mpReply" style="min-height:100px" placeholder="Escribe tu respuesta..."></textarea></div></div>'+'<div class="dp-actions"><button class="btn btn-primary btn-sm" onclick="sendMsgReply(\''+m.id+'\')">Enviar Respuesta</button>'+(wp?'<a class="btn btn-outline btn-sm" href="'+wu+'" target="_blank">📱 WhatsApp</a>':'<span class="btn btn-outline btn-sm" style="opacity:.4">📱 WhatsApp</span>')+'<a class="btn btn-outline btn-sm" href="'+mu+'"'+(m.sender_email?'':' style="opacity:.4;pointer-events:none"')+'>✉ Email</a>'+(m.status!=='archived'?'<button class="btn btn-outline btn-sm" onclick="archiveMsg(\''+m.id+'\')">Archivar</button>':'')+'</div>';p.classList.add('open')}
+async function sendMsgReply(id){const reply=($('mpReply').value||'').trim();if(!reply){toast('Escribe una respuesta','error');return}await sb.from('messages').update({status:'replied',reply_text:reply,replied_at:new Date().toISOString()}).eq('id',id);const m=allMessages.find(x=>x.id===id);if(m){m.status='replied';m.reply_text=reply}renderMsgTabs();renderMsgTable();showMsgDetail(m);loadSidebarBadges();toast('Respuesta guardada','success')}
+async function archiveMsg(id){await sb.from('messages').update({status:'archived'}).eq('id',id);const m=allMessages.find(x=>x.id===id);if(m)m.status='archived';closeMsgDetail();renderMsgTabs();renderMsgTable();loadSidebarBadges();toast('Archivado','success')}
 
 // SETTINGS
 async function loadSettings(){const{data}=await sb.from('site_settings').select('*').limit(1).single();if(!data)return;$('setLogo').value=data.logo_text||'';$('setTitle').value=data.site_title||'';$('setDesc').value=data.site_description||'';$('setLang').value=data.site_language||'es';$('setFooter').value=data.footer_text||'';$('setPhone').value=data.phone||'';$('setEmail').value=data.email||'';$('setIG').value=data.instagram_handle||'';$('setWA').value=data.whatsapp_number||'';$('setTT').value=data.social_tiktok||'';$('setYT').value=data.social_youtube||'';$('setFB').value=data.social_facebook||'';$('setTW').value=data.social_twitter||'';$('setLI').value=data.social_linkedin||'';$('setGA').value=data.google_analytics_id||'';$('setFBP').value=data.facebook_pixel_id||'';$('setCSS').value=data.custom_css||'';$('setJS').value=data.custom_js||'';$('setMaintenance').checked=!!data.maintenance_mode}
@@ -662,7 +781,7 @@ function toast(m,t='success'){const el=$('toast');el.textContent=m;el.className=
 
 // SIDEBAR HELPERS
 function navTo(s){const a=document.querySelector(`.sb-nav a[data-s="${s}"]`);if(a)a.click()}
-async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new').catch(()=>({count:0})),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread').catch(()=>({count:0}))]);if(qc){$('badgeQuotes').textContent=qc;$('badgeQuotes').style.display='inline-flex'}else $('badgeQuotes').style.display='none';if(mc){$('badgeMsgs').textContent=mc;$('badgeMsgs').style.display='inline-flex'}else $('badgeMsgs').style.display='none'}
+async function loadSidebarBadges(){const[{count:qc},{count:mc}]=await Promise.all([sb.from('quotes').select('id',{count:'exact',head:true}).eq('status','new').catch(()=>({count:0})),sb.from('messages').select('id',{count:'exact',head:true}).eq('status','unread').catch(()=>({count:0}))]);const bq=$('badgeQuotes'),bm=$('badgeMsgs'),dq=$('dotQuotes'),dm=$('dotMsgs');if(bq){bq.textContent=qc||0;bq.style.display=qc?'inline-flex':'none'}if(bm){bm.textContent=mc||0;bm.style.display=mc?'inline-flex':'none'}if(dq)dq.style.display=qc?'inline-block':'none';if(dm)dm.style.display=mc?'inline-block':'none'}
 
 // IMAGE BROWSER
 let _ibCb=null,_ibAll=[],_ibCol=null;
