@@ -240,6 +240,10 @@
     }, { passive: true });
   }
 
+  /* expose for supabase-loader gallery reinit */
+  window._gcGallery = gallery;
+  window._gcOpenLb  = openLb;
+
   /* ── 8. CONTACT FORM ── */
   var form = document.getElementById('contactForm');
   if (form) {
