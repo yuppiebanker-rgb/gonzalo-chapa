@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   Gonzalo Chapa · Supabase Content Loader
+   Gonzalo Chapa · Supabase Content Loader v2
    Fetches directly from Supabase and patches the DOM.
    Falls back silently to static HTML on any error.
    ═══════════════════════════════════════════════════ */
@@ -7,16 +7,29 @@
 (function () {
   'use strict';
 
-  var SB_URL = 'https://pxqugqerodswtkgxzipw.supabase.co';
-  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cXVncWVyb2Rzd3RrZ3h6aXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjI2MDgsImV4cCI6MjA5NTM5ODYwOH0.A_78sl-5gcAVuhCR4cBwRbipWcPS7OV0xXhb57Uv_rk';
+  var SB_URL  = 'https://pxqugqerodswtkgxzipw.supabase.co';
+  var SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4cXVncWVyb2Rzd3RrZ3h6aXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjI2MDgsImV4cCI6MjA5NTM5ODYwOH0.A_78sl-5gcAVuhCR4cBwRbipWcPS7OV0xXhb57Uv_rk';
   var CDN_URL = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
 
-  /* ── Page slug detection ─────────────────────────── */
+  /* ── Page detection ──────────────────────────────── */
   var pathParts = window.location.pathname.replace(/\/$/, '').split('/');
   var pageSlug  = (pathParts[pathParts.length - 1] || 'index').replace('.html', '') || 'index';
 
   var isIndex      = (pageSlug === 'index' || pageSlug === '');
+  var isHire       = (pageSlug === 'hire');
+  var isAbout      = (pageSlug === 'about');
   var hasPhotoGrid = !!document.querySelector('.photo-grid');
+  var isEditorial  = (pageSlug === 'retratos' || pageSlug === 'brookside');
+
+  /* ── Loading state: hide body until DB data applied ─ */
+  document.body.style.opacity    = '0';
+  document.body.style.transition = 'opacity 0.25s ease';
+  var revealTimer = setTimeout(reveal, 1200);
+
+  function reveal() {
+    clearTimeout(revealTimer);
+    document.body.style.opacity = '1';
+  }
 
   /* ── Helpers ─────────────────────────────────────── */
   function qs(sel)  { return document.querySelector(sel); }
@@ -31,6 +44,7 @@
     return String(s || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
+  function pad2(n) { return ('0' + n).slice(-2); }
 
   /* ── Section key → CSS selector ──────────────────── */
   var SECTION_MAP = {
@@ -72,21 +86,24 @@
     document.head.appendChild(style);
   }
 
-  /* ── 1. SITE SETTINGS ─────────────────────────────── */
+  /* ── 1. SITE SETTINGS — ALL pages ────────────────── */
   function applySettings(s) {
     if (!s) return;
 
+    /* Logo text → nav, footer variants, wipe overlay */
     if (s.logo_text) {
-      qsa('.nav-logo, .footer-left, .wipe-text').forEach(function (el) {
+      qsa('.nav-logo, .footer-left, .footer-logo, .wipe-text').forEach(function (el) {
         el.textContent = s.logo_text;
       });
     }
 
+    /* CSS custom properties */
     if (s.primary_color)
       document.documentElement.style.setProperty('--dust', s.primary_color);
     if (s.accent_color)
       document.documentElement.style.setProperty('--cream', s.accent_color);
 
+    /* Typography */
     if (s.font_heading) {
       loadGoogleFont(s.font_heading);
       injectFontOverride('heading', s.font_heading);
@@ -101,7 +118,16 @@
       var num = String(s.whatsapp_number).replace(/\D/g, '');
       qsa('[href*="wa.me/"]').forEach(function (el) {
         var href = el.getAttribute('href') || '';
-        el.href = href.replace(/wa\.me\/[0-9]+/, 'wa.me/' + num);
+        el.href  = href.replace(/wa\.me\/[0-9]+/, 'wa.me/' + num);
+      });
+    }
+
+    /* Phone — update visible phone-number text in overlay-footer + contact-info */
+    if (s.phone) {
+      qsa('.overlay-footer a[href*="wa.me/"], .contact-info a[href*="wa.me/"]').forEach(function (el) {
+        if (/^[\+\d\s\(\)\-\.]+$/.test(el.textContent.trim())) {
+          el.textContent = s.phone;
+        }
       });
     }
 
@@ -110,20 +136,36 @@
       var handle = s.instagram_handle.replace(/^@/, '');
       var igUrl  = 'https://instagram.com/' + handle;
       qsa('[href*="instagram.com/"]').forEach(function (el) { el.href = igUrl; });
+      qsa('.overlay-footer a[href*="instagram.com/"]').forEach(function (el) {
+        el.textContent = '@' + handle;
+      });
       var igHandleEl = qs('.ig-handle');
       if (igHandleEl) igHandleEl.textContent = '@' + handle + ' ↗';
     }
 
-    /* Additional social links */
+    /* Email — update mailto hrefs + visible email text */
+    if (s.email) {
+      qsa('a[href^="mailto:"]').forEach(function (el) {
+        el.href = 'mailto:' + s.email;
+        var t = el.textContent.trim();
+        if (t.indexOf('@') !== -1 && t.indexOf('://') === -1) {
+          el.textContent = s.email;
+        }
+      });
+    }
+
+    /* Additional social links (no-op if fields absent) */
     if (s.social_tiktok)   qsa('[href*="tiktok.com"]').forEach(function (el) { el.href = s.social_tiktok; });
     if (s.social_youtube)  qsa('[href*="youtube.com"]').forEach(function (el) { el.href = s.social_youtube; });
     if (s.social_facebook) qsa('[href*="facebook.com/"]').forEach(function (el) { el.href = s.social_facebook; });
     if (s.social_twitter)  qsa('[href*="twitter.com"],[href*="x.com/"]').forEach(function (el) { el.href = s.social_twitter; });
     if (s.social_linkedin) qsa('[href*="linkedin.com"]').forEach(function (el) { el.href = s.social_linkedin; });
 
-    /* Footer text */
+    /* Footer copy line */
     if (s.footer_text) {
-      qsa('.footer-copy,.footer-copyright').forEach(function (el) { el.textContent = s.footer_text; });
+      qsa('.footer-center, .footer-copy, .footer-copyright').forEach(function (el) {
+        el.textContent = s.footer_text;
+      });
     }
 
     /* Custom CSS */
@@ -141,13 +183,13 @@
     if (s.custom_js) {
       var oldJs = document.getElementById('gcsl-custom-js');
       if (oldJs) oldJs.parentNode.removeChild(oldJs);
-      var jsEl        = document.createElement('script');
-      jsEl.id         = 'gcsl-custom-js';
+      var jsEl         = document.createElement('script');
+      jsEl.id          = 'gcsl-custom-js';
       jsEl.textContent = s.custom_js;
       document.body.appendChild(jsEl);
     }
 
-    /* Maintenance mode — fullscreen Coming Soon overlay */
+    /* Maintenance mode — fullscreen overlay */
     if (s.maintenance_mode && !document.getElementById('gcsl-maintenance')) {
       var mo = document.createElement('div');
       mo.id  = 'gcsl-maintenance';
@@ -161,9 +203,6 @@
   }
 
   /* ── 2. HERO SLIDESHOW (index only) ──────────────── */
-  /*   Updates img src on existing slides. Does NOT     */
-  /*   change slide count — main.js slideshow timer     */
-  /*   captured the NodeList at init time.              */
   function applyHero(slides) {
     if (!slides || !slides.length) return;
     var deck = document.getElementById('heroDeck');
@@ -184,7 +223,7 @@
     });
   }
 
-  /* ── 3. NAV ITEMS ─────────────────────────────────── */
+  /* ── 3. NAV ITEMS — ALL pages ────────────────────── */
   function applyNav(items) {
     if (!items || !items.length) return;
     var lang    = localStorage.getItem('gcLang') || 'es';
@@ -198,7 +237,7 @@
       return (lang === 'en' && item.label_en) ? item.label_en : (item.label || '');
     }
 
-    /* Rebuild .nav-links — preserve <ul>/<div> wrapper, replace children */
+    /* Rebuild .nav-links — replace children, preserve wrapper */
     var navLinks = qs('.nav-links');
     if (navLinks) {
       var isUl = navLinks.tagName.toLowerCase() === 'ul';
@@ -211,7 +250,7 @@
       }).join('');
     }
 
-    /* Rebuild overlay links — .nav-overlay-links (index) or .overlay-links (pages) */
+    /* Rebuild overlay links */
     var overlayLinks = qs('.nav-overlay-links') || qs('.overlay-links');
     if (overlayLinks) {
       overlayLinks.innerHTML = regular.map(function (item) {
@@ -227,9 +266,9 @@
         var btn = qs(sel);
         if (!btn) return;
         var span = btn.querySelector('span');
-        if (span && lbl)      span.textContent = lbl;
-        else if (lbl)         btn.textContent  = lbl;
-        if (cta.href)         btn.href          = cta.href;
+        if (span && lbl)  span.textContent = lbl;
+        else if (lbl)     btn.textContent  = lbl;
+        if (cta.href)     btn.href         = cta.href;
       });
     }
   }
@@ -244,16 +283,14 @@
         var isHome = isIndex && (p === 'home' || p === 'index');
         if (p !== pageSlug && !isHome) return;
       }
-
       var sel = SECTION_MAP[sec.section_key];
       if (!sel) return;
-
       var el = qs(sel);
       if (el) el.style.display = sec.visible ? '' : 'none';
     });
   }
 
-  /* ── 5. PER-PAGE SEO ─────────────────────────────── */
+  /* ── 5. PER-PAGE SEO — ALL pages ─────────────────── */
   function applySeo(s) {
     if (!s) return;
 
@@ -290,7 +327,7 @@
     }
   }
 
-  /* ── 6. GALLERY PHOTOS ───────────────────────────── */
+  /* ── 6. GALLERY — .photo-grid pages (street, eventos) */
   function applyGallery(photos) {
     if (!photos || !photos.length) return;
     var grid = qs('.photo-grid');
@@ -298,7 +335,6 @@
 
     var cap0 = pageSlug.charAt(0).toUpperCase() + pageSlug.slice(1) + ' · GC';
 
-    /* Rebuild gallery DOM */
     grid.innerHTML = photos.map(function (p, i) {
       var src = p.image_url || '';
       var alt = p.alt_text  || cap0;
@@ -312,15 +348,11 @@
              '</div>';
     }).join('');
 
-    /* Wire up lightbox — use main.js internals if exposed, else direct DOM */
+    /* Wire lightbox — use main.js internals if available */
     if (window._gcGallery && window._gcOpenLb) {
-      /* Update main.js gallery array in-place so prev/next nav keeps working */
       window._gcGallery.splice(0, window._gcGallery.length);
       photos.forEach(function (p) {
-        window._gcGallery.push({
-          src:     p.image_url || '',
-          caption: p.caption   || p.alt_text || ''
-        });
+        window._gcGallery.push({ src: p.image_url || '', caption: p.caption || p.alt_text || '' });
       });
       qsa('.photo-item[data-src]').forEach(function (el, i) {
         el.addEventListener('click', (function (idx) {
@@ -328,7 +360,6 @@
         }(i)));
       });
     } else {
-      /* Fallback: open lightbox directly (no prev/next via main.js) */
       var sbGallery = photos.map(function (p) {
         return { src: p.image_url || '', caption: p.caption || p.alt_text || '' };
       });
@@ -340,9 +371,9 @@
       qsa('.photo-item[data-src]').forEach(function (el, i) {
         el.addEventListener('click', function () {
           if (!lb) return;
-          if (lbImg)     lbImg.src                = sbGallery[i].src;
-          if (lbCaption) lbCaption.textContent    = sbGallery[i].caption;
-          if (lbCounter) lbCounter.textContent    = (i + 1) + ' / ' + sbGallery.length;
+          if (lbImg)     lbImg.src             = sbGallery[i].src;
+          if (lbCaption) lbCaption.textContent  = sbGallery[i].caption;
+          if (lbCounter) lbCounter.textContent  = (i + 1) + ' / ' + sbGallery.length;
           lb.classList.add('open');
           document.body.style.overflow = 'hidden';
         });
@@ -350,62 +381,178 @@
     }
   }
 
+  /* ── 7. EDITORIAL PHOTOS — retratos & brookside ──── */
+  /*   Updates img.ph elements in document order from   */
+  /*   DB photos, preserving the editorial layout DOM.  */
+  function applyEditorialPhotos(photos) {
+    if (!photos || !photos.length) return;
+    var containers = [].slice.call(qsa(
+      '.editorial-full, .ed-panel, .editorial-closer,' +
+      '.narr-item, .narr-full, .narr-peak'
+    ));
+    if (!containers.length) return;
+
+    photos.forEach(function (p, i) {
+      if (i >= containers.length || !p.image_url) return;
+      var el  = containers[i];
+      var img = el.querySelector('img.ph');
+      if (img) {
+        img.src = p.image_url;
+        if (p.alt_text) img.alt = p.alt_text;
+      }
+      el.setAttribute('data-src', p.image_url);
+      var cap = p.caption || p.alt_text || '';
+      if (cap) el.setAttribute('data-caption', cap);
+      var captionEl = el.querySelector('.caption-overlay');
+      if (captionEl && p.caption) captionEl.textContent = p.caption;
+    });
+  }
+
+  /* ── 8. SERVICES (hire.html) ─────────────────────── */
+  function applyServices(services) {
+    if (!services || !services.length) return;
+    var container = qs('.service-rows');
+    if (!container) return;
+
+    container.innerHTML = services.map(function (svc, i) {
+      var isActive  = !!svc.active;
+      var priceNum  = svc.base_price_mxn ? Math.round(svc.base_price_mxn / 100) : 0;
+      var priceHtml = priceNum > 0
+        ? '<span style="display:block;margin-top:6px;font-size:.7rem;letter-spacing:.1em;color:var(--dust);">desde $' +
+          priceNum.toLocaleString('es-MX') + ' MXN</span>'
+        : '';
+      var badge = isActive ? 'badge-active' : 'badge-soon';
+      var tag   = isActive ? (svc.type || svc.name || '') : 'Coming Soon';
+
+      return '<div class="service-row fi">' +
+        '<div class="service-num">' + pad2(i + 1) + '</div>' +
+        '<div class="service-name">' + escHtml(svc.name || '') + '</div>' +
+        '<div class="service-desc">' + escHtml(svc.description || '') + priceHtml + '</div>' +
+        '<div class="service-tags"><span class="service-tag ' + badge + '">' +
+        escHtml(tag) + '</span></div>' +
+        '</div>';
+    }).join('');
+  }
+
+  /* ── 9. ABOUT CONTENT (about.html) ───────────────── */
+  function applyAbout(d) {
+    if (!d) return;
+    var portrait = document.getElementById('aboutPortrait');
+    var label    = document.getElementById('aboutLabel');
+    var headline = document.getElementById('aboutHeadline');
+    var bio      = document.getElementById('aboutBio');
+    if (d.portrait_url && portrait) portrait.src      = d.portrait_url;
+    if (d.subheadline  && label)    label.textContent  = d.subheadline;
+    if (d.headline     && headline) headline.innerHTML  = d.headline;
+    if (d.bio_text     && bio)      bio.innerHTML       = d.bio_text;
+  }
+
   /* ── Main: fire all fetches in parallel ──────────── */
   function run(sb) {
-    var fetches = [
-      sb.from('site_settings').select('*').limit(1).single(),
-      sb.from('nav_items').select('*').eq('visible', true).order('sort_order'),
-      sb.from('page_seo').select('*').eq('page_slug', pageSlug).maybeSingle()
-    ];
+
+    /* Named fetch map — avoids fragile positional indexing */
+    var fetches = {
+      settings: sb.from('site_settings').select('*').limit(1).single(),
+      nav:      sb.from('nav_items').select('*').eq('visible', true).order('sort_order'),
+      seo:      sb.from('page_seo').select('*').eq('page_slug', pageSlug).maybeSingle()
+    };
 
     if (isIndex) {
-      fetches.push(
-        sb.from('hero_slides').select('*').eq('active', true).order('sort_order'),
-        sb.from('section_visibility').select('*').order('sort_order')
-      );
+      fetches.hero     = sb.from('hero_slides').select('*').eq('active', true).order('sort_order');
+      fetches.sections = sb.from('section_visibility').select('*').order('sort_order');
+    }
+    if (isHire) {
+      fetches.services = sb.from('services').select('*').order('sort_order');
+    }
+    if (isAbout) {
+      fetches.about = sb.from('about_content').select('*').limit(1).single();
     }
 
-    Promise.all(fetches).then(function (results) {
-      try { applySettings(results[0].data); } catch (e) {}
-      try { applyNav(results[1].data);      } catch (e) {}
-      try { applySeo(results[2].data);      } catch (e) {}
-      if (isIndex) {
-        try { applyHero(results[3].data);     } catch (e) {}
-        try { applySections(results[4].data); } catch (e) {}
-      }
-    }).catch(function () {});
+    var keys = Object.keys(fetches);
 
-    /* Gallery pages: collection lookup → photos (two-step) */
+    Promise.all(keys.map(function (k) { return fetches[k]; }))
+      .then(function (results) {
+        var data = {};
+        keys.forEach(function (k, i) { data[k] = results[i].data; });
+
+        try { applySettings(data.settings); } catch (e) { console.warn('[gcsl] settings', e); }
+        try { applyNav(data.nav);           } catch (e) { console.warn('[gcsl] nav', e); }
+        try { applySeo(data.seo);           } catch (e) { console.warn('[gcsl] seo', e); }
+
+        if (isIndex) {
+          try { applyHero(data.hero);         } catch (e) { console.warn('[gcsl] hero', e); }
+          try { applySections(data.sections); } catch (e) { console.warn('[gcsl] sections', e); }
+        }
+        if (isHire) {
+          try { applyServices(data.services); } catch (e) { console.warn('[gcsl] services', e); }
+        }
+        if (isAbout) {
+          try { applyAbout(data.about);       } catch (e) { console.warn('[gcsl] about', e); }
+        }
+
+        reveal();
+      })
+      .catch(function (e) {
+        console.warn('[gcsl] main fetch failed', e);
+        reveal();
+      });
+
+    /* Gallery pages with .photo-grid (street, eventos) */
     if (hasPhotoGrid) {
       sb.from('collections').select('id').eq('slug', pageSlug).maybeSingle()
         .then(function (res) {
           if (!res || !res.data) return null;
-          return sb.from('photos')
-            .select('*')
-            .eq('collection_id', res.data.id)
-            .order('sort_order');
+          return sb.from('photos').select('*')
+            .eq('collection_id', res.data.id).order('sort_order');
         })
         .then(function (res) {
           if (res && res.data && res.data.length) {
-            try { applyGallery(res.data); } catch (e) {}
+            try { applyGallery(res.data); } catch (e) { console.warn('[gcsl] gallery', e); }
           }
         })
-        .catch(function () {});
+        .catch(function (e) { console.warn('[gcsl] gallery fetch', e); });
+    }
+
+    /* Editorial pages: update existing img.ph elements (retratos, brookside) */
+    if (isEditorial) {
+      sb.from('collections').select('id').eq('slug', pageSlug).maybeSingle()
+        .then(function (res) {
+          if (!res || !res.data) return null;
+          return sb.from('photos').select('*')
+            .eq('collection_id', res.data.id).order('sort_order');
+        })
+        .then(function (res) {
+          if (res && res.data && res.data.length) {
+            try { applyEditorialPhotos(res.data); } catch (e) { console.warn('[gcsl] editorial', e); }
+          }
+        })
+        .catch(function (e) { console.warn('[gcsl] editorial fetch', e); });
     }
   }
 
   /* ── Bootstrap: load SDK if needed, then run ─────── */
   function boot() {
-    try { run(window.supabase.createClient(SB_URL, SB_KEY)); } catch (e) {}
+    try {
+      /* Cache-Control headers prevent browser/CDN from serving stale API responses */
+      run(window.supabase.createClient(SB_URL, SB_KEY, {
+        global: { headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } }
+      }));
+    } catch (e) {
+      console.warn('[gcsl] boot failed', e);
+      reveal();
+    }
   }
 
   if (window.supabase && typeof window.supabase.createClient === 'function') {
     boot();
   } else {
-    var sdkScript    = document.createElement('script');
-    sdkScript.src    = CDN_URL;
-    sdkScript.onload = boot;
-    sdkScript.onerror = function () {};
+    var sdkScript     = document.createElement('script');
+    sdkScript.src     = CDN_URL;
+    sdkScript.onload  = boot;
+    sdkScript.onerror = function () {
+      console.warn('[gcsl] SDK load failed');
+      reveal();
+    };
     document.head.appendChild(sdkScript);
   }
 
