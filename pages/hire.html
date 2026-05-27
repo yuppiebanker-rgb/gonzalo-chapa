@@ -534,7 +534,17 @@
         }), error = _a.error;
         setLoading(btn, false);
         if (error) { showToast('Error al enviar. Intenta de nuevo.', 'error'); }
-        else { showToast('¡Mensaje enviado! Te responderemos pronto.', 'success'); this.reset(); }
+        else {
+          var msgPayload = { name: this.name.value.trim(), email: this.email.value.trim(),
+            phone: this.phone.value.trim() || null, message: this.message.value.trim() };
+          showToast('¡Mensaje enviado! Te responderemos pronto.', 'success');
+          this.reset();
+          fetch('/api/notify-message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(msgPayload)
+          }).catch(function(){});
+        }
       });
     }
 
@@ -559,7 +569,19 @@
         }), error = _a.error;
         setLoading(btn, false);
         if (error) { showToast('Error al enviar. Intenta de nuevo.', 'error'); }
-        else { showToast('¡Cotización enviada! Te contactamos en 24 horas.', 'success'); this.reset(); }
+        else {
+          var qPayload = { name: this.name.value.trim(), email: this.email.value.trim(),
+            phone: this.phone.value.trim() || null, service_type: this.service_type.value,
+            event_date: this.event_date.value || null, budget: this.budget.value.trim() || null,
+            message: this.message.value.trim() };
+          showToast('¡Cotización enviada! Te contactamos en 24 horas.', 'success');
+          this.reset();
+          fetch('/api/notify-quote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(qPayload)
+          }).catch(function(){});
+        }
       });
     }
   })();
