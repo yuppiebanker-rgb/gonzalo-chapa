@@ -184,6 +184,27 @@
     .section-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px}
     .section-toolbar .filter-tabs{margin-bottom:0;border:none;flex:1}
 
+    /* PAGE BUILDER */
+    .pb-page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+    .pb-page-card{background:var(--card);border:1px solid var(--border);padding:22px 20px;cursor:pointer;transition:border-color .2s,background .2s}
+    .pb-page-card:hover{border-color:var(--dust);background:rgba(192,164,110,.04)}
+    .pb-page-name{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.1rem;color:var(--dust);margin-bottom:6px}
+    .pb-page-meta{font-size:.63rem;color:var(--muted);letter-spacing:.04em;margin-top:2px}
+    .pb-back{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding:0;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+    .pb-back:hover{color:var(--cream)}
+    .pb-section-card{background:var(--card);border:1px solid var(--border);margin-bottom:7px}
+    .pb-section-head{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;user-select:none;transition:background .15s}
+    .pb-section-head:hover{background:rgba(192,164,110,.04)}
+    .pb-drag-handle{color:var(--muted);font-size:13px;cursor:grab;flex-shrink:0;opacity:.6}
+    .pb-section-key{font-size:.82rem;font-weight:500;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pb-type-badge{font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;background:rgba(192,164,110,.1);color:var(--dust);border-radius:2px;flex-shrink:0}
+    .pb-section-body{padding:0 14px 14px;border-top:1px solid var(--border);display:none}
+    .pb-section-body.open{display:block}
+    .pb-bilingual{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .pb-lang-label{font-size:.53rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dust);margin-bottom:4px;font-weight:600}
+    .pb-add-form{background:rgba(192,164,110,.04);border:1px solid var(--dust);padding:18px;margin-top:12px}
+    @media(max-width:900px){.pb-bilingual{grid-template-columns:1fr}}
+
     @media(max-width:900px){.dash-lower{grid-template-columns:1fr}}
     @media(max-width:768px){
       .sidebar{width:56px;padding:12px 0}.sb-head,.sb-nav li a span,.sb-sub{display:none}
@@ -306,9 +327,30 @@
 
 <!-- PÁGINAS -->
 <div id="s-paginas" class="section">
-  <div class="page-head"><h1 class="page-title">Páginas</h1><p class="page-sub">Edita el contenido de cada página por sección</p></div>
-  <div class="tabs" id="pageTabs"></div>
-  <div id="pageContent"></div>
+  <!-- LIST VIEW -->
+  <div id="pb-list">
+    <div class="page-head"><h1 class="page-title">Páginas</h1><p class="page-sub">Selecciona una página para editar sus secciones</p></div>
+    <div id="pb-page-grid" class="pb-page-grid"></div>
+  </div>
+  <!-- EDITOR VIEW -->
+  <div id="pb-editor" style="display:none">
+    <button class="pb-back" onclick="pbBack()">← Páginas</button>
+    <div class="page-head" style="margin-bottom:18px"><h1 class="page-title" id="pb-editor-title"></h1><p class="page-sub" id="pb-editor-sub"></p></div>
+    <div id="pb-sections-list"></div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="pbShowAdd()">+ Nueva Sección</button>
+    </div>
+    <div id="pb-add-form" class="pb-add-form" style="display:none">
+      <div class="card-title" style="margin-bottom:12px">Nueva Sección</div>
+      <div class="form-row tri">
+        <div class="form-group"><label class="form-label">Section Key</label><input class="form-input" id="pba-key" placeholder="ej: hero_title" oninput="pbAutoKey(this)"></div>
+        <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="pba-type"><option value="text">text</option><option value="image">image</option><option value="html">html</option><option value="gallery">gallery</option><option value="cta">cta</option></select></div>
+        <div class="form-group"><label class="form-label">Título</label><input class="form-input" id="pba-title"></div>
+      </div>
+      <div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" id="pba-content" style="min-height:60px"></textarea></div></div>
+      <div class="btn-group"><button class="btn btn-primary" onclick="pbAddSection()">Agregar</button><button class="btn btn-outline" onclick="pbHideAdd()">Cancelar</button></div>
+    </div>
+  </div>
 </div>
 
 <!-- GALERÍA -->
@@ -743,9 +785,87 @@ async function archiveMsg(id){await sb.from('messages').update({status:'archived
 async function loadSettings(){const{data}=await sb.from('site_settings').select('*').limit(1).single();if(!data)return;$('setLogo').value=data.logo_text||'';$('setTitle').value=data.site_title||'';$('setDesc').value=data.site_description||'';$('setLang').value=data.site_language||'es';$('setFooter').value=data.footer_text||'';$('setPhone').value=data.phone||'';$('setEmail').value=data.email||'';$('setIG').value=data.instagram_handle||'';$('setWA').value=data.whatsapp_number||'';$('setTT').value=data.social_tiktok||'';$('setYT').value=data.social_youtube||'';$('setFB').value=data.social_facebook||'';$('setTW').value=data.social_twitter||'';$('setLI').value=data.social_linkedin||'';$('setGA').value=data.google_analytics_id||'';$('setFBP').value=data.facebook_pixel_id||'';$('setCSS').value=data.custom_css||'';$('setJS').value=data.custom_js||'';$('setMaintenance').checked=!!data.maintenance_mode}
 async function saveSettings(){const{data:ex}=await sb.from('site_settings').select('id').limit(1).single();const d={logo_text:$('setLogo').value,site_title:$('setTitle').value,site_description:$('setDesc').value,site_language:$('setLang').value,footer_text:$('setFooter').value,phone:$('setPhone').value,email:$('setEmail').value,instagram_handle:$('setIG').value,whatsapp_number:$('setWA').value,social_tiktok:$('setTT').value,social_youtube:$('setYT').value,social_facebook:$('setFB').value,social_twitter:$('setTW').value,social_linkedin:$('setLI').value,google_analytics_id:$('setGA').value,facebook_pixel_id:$('setFBP').value,custom_css:$('setCSS').value,custom_js:$('setJS').value,maintenance_mode:$('setMaintenance').checked};if(ex)await sb.from('site_settings').update(d).eq('id',ex.id);else await sb.from('site_settings').insert(d);toast('Guardado','success')}
 
-// PAGES
-async function loadPages(){const{data}=await sb.from('page_sections').select('*').order('page_slug').order('sort_order');const pages={};(data||[]).forEach(s=>{if(!pages[s.page_slug])pages[s.page_slug]=[];pages[s.page_slug].push(s)});const slugs=Object.keys(pages);$('pageTabs').innerHTML=slugs.map((s,i)=>`<button class="tab ${i===0?'active':''}" onclick="selPage('${s}',this)">${s}</button>`).join('')||'<div class="empty">No hay secciones de página configuradas.</div>';if(slugs.length)selPage(slugs[0],$('pageTabs').querySelector('.tab'))}
-function selPage(slug,el){$('pageTabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');sb.from('page_sections').select('*').eq('page_slug',slug).order('sort_order').then(({data})=>{$('pageContent').innerHTML=(data||[]).map(s=>`<div class="card"><div class="card-title">${s.section_key} <span style="font-size:.6rem;color:var(--muted)">${s.section_type}</span></div><div class="form-row full"><div class="form-group"><label class="form-label">Título</label><input class="form-input" value="${s.title||''}" onchange="updSection('${s.id}','title',this.value)"></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" onchange="updSection('${s.id}','content',this.value)">${s.content||''}</textarea></div></div><div class="form-row full"><div class="form-group"><label class="form-label">Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="si-${s.id}" value="${s.image_url||''}" style="flex:1" onchange="updSection('${s.id}','image_url',this.value)"><button type="button" class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){document.getElementById('si-${s.id}').value=u;updSection('${s.id}','image_url',u)})">⊞</button></div></div></div></div>`).join('')||'<div class="empty">No hay secciones para esta página.</div>'})}
+// PAGE BUILDER
+const PB_PAGES=[{slug:'home',name:'Home'},{slug:'street',name:'Street'},{slug:'eventos',name:'Eventos'},{slug:'retratos',name:'Retratos'},{slug:'brookside',name:'Brookside'},{slug:'about',name:'About'},{slug:'hire',name:'Hire'},{slug:'blog',name:'Blog'}];
+let pbPage=null,pbSecs=[],pbColls=[];
+function pbEsc(v){return(v||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+async function loadPages(){
+  $('pb-list').style.display='block';$('pb-editor').style.display='none';
+  const{data}=await sb.from('page_sections').select('*').order('page_slug');
+  const cnt={},upd={};
+  (data||[]).forEach(s=>{cnt[s.page_slug]=(cnt[s.page_slug]||0)+1;if(s.updated_at&&(!upd[s.page_slug]||s.updated_at>upd[s.page_slug]))upd[s.page_slug]=s.updated_at});
+  $('pb-page-grid').innerHTML=PB_PAGES.map(p=>{const n=cnt[p.slug]||0,d=upd[p.slug];return`<div class="pb-page-card" onclick="pbOpen('${p.slug}','${p.name}')"><div class="pb-page-name">${p.name}</div><div class="pb-page-meta">${n} sección${n!==1?'es':''}</div>${d?`<div class="pb-page-meta">${relTime(d)}</div>`:''}</div>`}).join('')
+}
+
+async function pbOpen(slug,name){pbPage=slug;$('pb-editor-title').textContent=name;$('pb-editor-sub').textContent=slug;$('pb-list').style.display='none';$('pb-editor').style.display='block';pbHideAdd();await pbLoad()}
+function pbBack(){$('pb-list').style.display='block';$('pb-editor').style.display='none';pbPage=null}
+
+async function pbLoad(){
+  const[{data:s},{data:co}]=await Promise.all([sb.from('page_sections').select('*').eq('page_slug',pbPage).order('sort_order'),sb.from('collections').select('*').order('sort_order')]);
+  pbSecs=s||[];pbColls=co||[];pbRender()
+}
+
+function pbRender(){
+  const l=$('pb-sections-list');
+  l._pbDrag=false;
+  l.innerHTML=pbSecs.length?pbSecs.map(s=>pbCard(s)).join(''):'<div class="empty">No hay secciones. Agrega la primera abajo.</div>';
+  pbInitDrag()
+}
+
+function pbCard(s){return`<div class="pb-section-card" data-id="${s.id}" draggable="true"><div class="pb-section-head" onclick="pbToggle('${s.id}')"><span class="pb-drag-handle" ondragstart="event.stopPropagation()" draggable="false">⠿</span><span class="pb-section-key">${pbEsc(s.section_key)}</span><span class="pb-type-badge">${s.section_type||'text'}</span><label class="toggle" onclick="event.stopPropagation()" style="margin:0;flex-shrink:0"><input type="checkbox" ${s.visible!==false?'checked':''} onchange="pbVis('${s.id}',this.checked)"><span class="slider"></span></label><button class="btn btn-sm btn-outline" style="flex-shrink:0" onclick="event.stopPropagation();pbDup('${s.id}')" title="Duplicar">⧉</button><button class="btn btn-sm btn-danger" style="flex-shrink:0" onclick="event.stopPropagation();pbDel('${s.id}')" title="Eliminar">✕</button><span id="pbarr-${s.id}" style="font-size:10px;color:var(--muted);transition:transform .2s;flex-shrink:0">▼</span></div><div class="pb-section-body" id="pbbody-${s.id}">${pbFields(s)}</div></div>`}
+
+function pbFields(s){const t=s.section_type||'text',id=s.id;
+  if(t==='text')return`<div class="pb-bilingual" style="margin-top:12px"><div><div class="pb-lang-label">ES</div><div class="form-group" style="margin-bottom:8px"><label class="form-label">Título</label><input class="form-input" value="${pbEsc(s.title)}" onchange="pbSave('${id}','title',this.value)"></div><div class="form-group"><label class="form-label">Contenido</label><textarea class="form-input" style="min-height:90px" onchange="pbSave('${id}','content',this.value)">${pbEsc(s.content)}</textarea></div></div><div><div class="pb-lang-label">EN</div><div class="form-group" style="margin-bottom:8px"><label class="form-label">Title</label><input class="form-input" value="${pbEsc(s.title_en)}" onchange="pbSave('${id}','title_en',this.value)"></div><div class="form-group"><label class="form-label">Content</label><textarea class="form-input" style="min-height:90px" onchange="pbSave('${id}','content_en',this.value)">${pbEsc(s.content_en)}</textarea></div></div></div>`;
+  if(t==='image')return`<div style="margin-top:12px"><div class="pb-bilingual"><div class="form-group"><label class="form-label">Título ES</label><input class="form-input" value="${pbEsc(s.title)}" onchange="pbSave('${id}','title',this.value)"></div><div class="form-group"><label class="form-label">Title EN</label><input class="form-input" value="${pbEsc(s.title_en)}" onchange="pbSave('${id}','title_en',this.value)"></div></div><div class="form-group" style="margin-top:8px"><label class="form-label">Image URL</label><div style="display:flex;gap:6px"><input class="form-input" id="pbimg-${id}" value="${pbEsc(s.image_url)}" style="flex:1" onchange="pbSave('${id}','image_url',this.value)"><button class="btn btn-outline btn-sm" onclick="openImageBrowser(function(u){document.getElementById('pbimg-${id}').value=u;pbSave('${id}','image_url',u)})">⊞</button></div></div>${s.image_url?`<img src="${pbEsc(s.image_url)}" style="max-height:110px;margin-top:8px;object-fit:cover;border:1px solid var(--border)">`:''}</div>`;
+  if(t==='html')return`<div style="margin-top:12px"><div class="form-group"><label class="form-label">HTML</label><textarea class="form-input" style="min-height:160px;font-family:monospace;font-size:12px;line-height:1.5" onchange="pbSave('${id}','content',this.value)">${pbEsc(s.content)}</textarea></div></div>`;
+  if(t==='gallery')return`<div style="margin-top:12px"><div class="form-group"><label class="form-label">Colección</label><select class="form-input" onchange="pbSave('${id}','collection_id',this.value)"><option value="">— Sin colección —</option>${pbColls.map(c=>`<option value="${c.id}"${s.collection_id===c.id?' selected':''}>${pbEsc(c.name)}</option>`).join('')}</select></div></div>`;
+  if(t==='cta')return`<div style="margin-top:12px"><div class="pb-bilingual"><div class="form-group"><label class="form-label">Título ES</label><input class="form-input" value="${pbEsc(s.title)}" onchange="pbSave('${id}','title',this.value)"></div><div class="form-group"><label class="form-label">Title EN</label><input class="form-input" value="${pbEsc(s.title_en)}" onchange="pbSave('${id}','title_en',this.value)"></div></div><div class="form-row tri" style="margin-top:8px"><div class="form-group"><label class="form-label">Link URL</label><input class="form-input" value="${pbEsc(s.link_url)}" onchange="pbSave('${id}','link_url',this.value)"></div><div class="form-group"><label class="form-label">Texto del Link</label><input class="form-input" value="${pbEsc(s.link_text)}" onchange="pbSave('${id}','link_text',this.value)"></div><div class="form-group"><label class="form-label">Estilo</label><select class="form-input" onchange="pbSave('${id}','button_style',this.value)"><option value="primary"${s.button_style==='primary'?' selected':''}>Primary</option><option value="outline"${s.button_style==='outline'?' selected':''}>Outline</option><option value="ghost"${s.button_style==='ghost'?' selected':''}>Ghost</option></select></div></div></div>`;
+  return`<div style="padding:12px 0;color:var(--muted);font-size:.78rem">Tipo desconocido: ${pbEsc(t)}</div>`;
+}
+
+function pbToggle(id){const b=$('pbbody-'+id),a=$('pbarr-'+id),o=b.classList.toggle('open');if(a)a.style.transform=o?'rotate(180deg)':''}
+
+async function pbSave(id,field,val){const{error}=await sb.from('page_sections').update({[field]:val}).eq('id',id);if(error)toast('Error: '+error.message,'error');else toast('Guardado','success')}
+async function pbVis(id,v){const{error}=await sb.from('page_sections').update({visible:v}).eq('id',id);if(error)toast('Error: '+error.message,'error');else toast(v?'Visible':'Oculto','success')}
+
+async function pbDel(id){if(!confirm('¿Eliminar esta sección? Esta acción no se puede deshacer.'))return;const{error}=await sb.from('page_sections').delete().eq('id',id);if(error){toast('Error: '+error.message,'error');return}toast('Sección eliminada','success');await pbLoad()}
+
+async function pbDup(id){
+  const o=pbSecs.find(s=>s.id===id);if(!o)return;
+  const{error}=await sb.from('page_sections').insert({page_slug:o.page_slug,section_key:o.section_key+'_copy',section_type:o.section_type,title:o.title,content:o.content,image_url:o.image_url,sort_order:(o.sort_order||0)+1,visible:o.visible});
+  if(error)toast('Error: '+error.message,'error');else{toast('Sección duplicada','success');await pbLoad()}
+}
+
+function pbShowAdd(){$('pb-add-form').style.display='block'}
+function pbHideAdd(){$('pb-add-form').style.display='none';['pba-key','pba-title','pba-content'].forEach(x=>$(x)&&($(x).value=''));$('pba-type')&&($('pba-type').value='text')}
+function pbAutoKey(el){el.value=el.value.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'')}
+
+async function pbAddSection(){
+  const key=($('pba-key').value||'').trim();
+  if(!key){toast('Section key requerido','error');return}
+  const mx=pbSecs.reduce((m,s)=>Math.max(m,s.sort_order||0),0);
+  const{error}=await sb.from('page_sections').insert({page_slug:pbPage,section_key:key,section_type:$('pba-type').value,title:$('pba-title').value,content:$('pba-content').value,sort_order:mx+1,visible:true});
+  if(error)toast('Error: '+error.message,'error');else{pbHideAdd();toast('Sección creada','success');await pbLoad()}
+}
+
+function pbInitDrag(){
+  const c=$('pb-sections-list');if(!c||c._pbDrag)return;c._pbDrag=true;
+  let dr=null;
+  c.addEventListener('dragstart',e=>{dr=e.target.closest('.pb-section-card');if(!dr)return;dr.style.opacity='.3';e.dataTransfer.effectAllowed='move'});
+  c.addEventListener('dragend',()=>{if(dr){dr.style.opacity='';dr=null}});
+  c.addEventListener('dragover',e=>{e.preventDefault();if(!dr)return;const t=e.target.closest('.pb-section-card');if(!t||t===dr)return;const r=t.getBoundingClientRect();c.insertBefore(dr,e.clientY>r.top+r.height/2?t.nextSibling:t)});
+  c.addEventListener('drop',e=>{e.preventDefault();pbSaveOrder()});
+}
+async function pbSaveOrder(){
+  const els=$('pb-sections-list').querySelectorAll('[data-id]');
+  const updates=Array.from(els).map((el,i)=>sb.from('page_sections').update({sort_order:i}).eq('id',el.dataset.id));
+  await Promise.all(updates);
+  toast('Orden guardado','success');
+  const order=[...els].map(el=>el.dataset.id);
+  pbSecs.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+}
+
 async function updSection(id,field,val){await sb.from('page_sections').update({[field]:val}).eq('id',id);toast('Actualizado','success')}
 
 // ABOUT
