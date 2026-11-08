@@ -125,10 +125,10 @@
     }
   });
 
-  // Close overlay on link click — handle both naming conventions
+  // Close overlay on link click — event delegation survives supabase-loader DOM replacement
   if (overlay) {
-    overlay.querySelectorAll('a, .overlay-link, .overlay-hire, .nav-overlay-links a, .nav-overlay-cta').forEach(function (a) {
-      a.addEventListener('click', closeNav);
+    overlay.addEventListener('click', function(e) {
+      if (e.target.closest('a')) closeNav();
     });
   }
 
